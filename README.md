@@ -19,4 +19,11 @@
 
 ## 开发背景  
 >这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室，但是由于某些原因，它被开发者魔改成了现在的小张聊天室。  
->XChat基于[HackChat](https://hack.chat/)，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main
+
+XChat基于[HackChat](https://hack.chat/)，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main  
+小张聊天室源代码：https://github.com/ZhangChat-Dev-Group/ZhangChat
+
+## 贡献者  
+- [HackChat](https://github.com/Hack-Chat) 编写底层代码  
+- [MrZhang365](https://blog.mrzhang365.cf) 汉化前端与后端，并在前后端上编写了许多新功能  
+- [纸片君ee](https://paperee.guru) 为前端编写CSS
