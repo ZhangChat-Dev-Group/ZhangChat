@@ -46,7 +46,7 @@ export const info = {
   name: 'removehome',
   description: '删除某人的个人空间',
   usage: `
-    API: {cmd: 'home', trip: '<target trip>'}
+    API: {cmd: 'removehome', trip: '<target trip>'}
     文本：以聊天形式发送 /removehome 目标识别码`,
   fastcmd:[
     {
