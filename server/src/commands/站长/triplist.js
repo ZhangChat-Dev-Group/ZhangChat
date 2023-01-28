@@ -15,8 +15,9 @@ export async function run(core, server, socket, data) {
     return server.police.frisk(socket.address, 20);
   }
   var new_list=''
-  for (var i=0; i<core.config.trips.length; i++) {
-    new_list+=`${core.config.trips[i].old_trip} 被替换为：${core.config.trips[i].new_trip}\n`
+  var i
+  for (i in core.config.trips) {
+    new_list+=`${i} 被替换为：${core.config.trips[i]}\n`
   }
   server.reply({
     cmd:'info',
