@@ -1053,7 +1053,7 @@ var schemes = [
 	'default',
 	'hacker',
 	'railscasts',
-	'ocean',
+	'bright',
 ];
 
 var highlights = [
