@@ -1,0 +1,57 @@
+body {
+  background: #202320;
+  color: #ccd3cc;
+}
+textarea {
+  color: #ccd3cc;
+}
+.message {
+  border-left: 1px solid #555;
+}
+.refmessage {
+  border-left: 1px solid #555;
+}
+.nick {
+  color: #7ba;
+}
+.trip {
+  color: #565;
+}
+.text a {
+  color: #e2eee6;
+}
+.admin .nick {
+  color: #e88;
+}
+.mod .nick {
+  color: #7cc;
+}
+.channelOwner .nick {
+  color: #ea5;
+}
+.trusted .nick {
+  color: #8c8;
+}
+.me .nick {
+  color: #d9b;
+}
+.info .nick,.info .text {
+  color: #9c9;
+}
+.captcha {
+  color: #9c9;
+}
+.warn .nick,.warn .text {
+  color: #ec6;
+}
+#footer {
+  background: #202320;
+}
+#sidebar {
+  background: #202320;
+  border-color: #555;
+}
+#chatform {
+  border-color: #555;
+  background-color: #202320;
+}
