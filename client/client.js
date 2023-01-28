@@ -57,6 +57,7 @@ var imgHostWhitelist = [    //这些是由小张添加的
 	'i.postimg.cc',		//postimages图床
 	'gimg2.baidu.com',	//百度
 	'xq.kzw.ink',	//XChat
+	'catbox.moe', 'img.thz.cool', 'img.liyuv.top',  //这些是ee加的(被打)
 	document.domain,
 ];
 
@@ -1043,19 +1044,21 @@ function userIgnore(nick) {
 /* color scheme switcher */
 
 var schemes = [
-	'atelier-dune',
-	'bright',
+	'electron',
 	'eighties',
+	'atelier-dune',
 	'lax',
 	'monokai',
+	'tomorrow',
+	'default',
+	'hacker',
+	'railscasts',
 	'ocean',
-	'solarized',
-	'Ubuntu'
 ];
 
 var highlights = [
-	'agate',
 	'androidstudio',
+	'agate',
 	'atom-one-dark',
 	'darcula',
 	'github',
@@ -1066,8 +1069,8 @@ var highlights = [
 	'zenburn'
 ]
 
-var currentScheme = 'atelier-dune';
-var currentHighlight = 'darcula';
+var currentScheme = 'electron';
+var currentHighlight = 'androidstudio';
 
 function setScheme(scheme) {
 	currentScheme = scheme;
