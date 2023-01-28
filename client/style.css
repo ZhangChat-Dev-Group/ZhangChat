@@ -255,7 +255,8 @@ pre,code {
     margin-bottom: 3px;
   }
   #sidebar {
-    right: 0.3em;
+    bottom: auto;
+    border-bottom: solid 1px;
   }
   pre {
     margin-top: 10px;
