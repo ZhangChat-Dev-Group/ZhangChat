@@ -1,51 +1,45 @@
 @font-face
 {
-    font-family: myFont;
-    src: url(/fonts/font1.woff);
+  font-family: myFont;
+  src: url(/fonts/font1.woff);
+}
+:root {
+  color-scheme: dark!important;
+}
+* {
+  outline: none;
+  line-height: 2;
+  font-family: "Consolas","Microsoft Yahei UI";
 }
 body {
   padding: 0;
   margin: 0;
   overflow-y: scroll;
-  font-family: myFont;
 }
-body,
-input,
-textarea {
-  /* font-family: 'DejaVu Sans Mono', monospace; */
+body,input,textarea {
   font-size: 12px;
   tab-size: 4;
   -moz-tab-size: 4;
   -o-tab-size: 4;
-  font-family: myFont;
 }
 input[type="checkbox"] {
   margin: 0;
   margin-right: 1em;
 }
 label {
-  vertical-align: 3px;
+  vertical-align: 2px;
 }
-input,
-textarea {
+input,textarea {
   background: none;
   border: none;
   outline: none;
   resize: none;
-  font-family: myFont;
+  max-height: 400px;
 }
 h4 {
   font-size: 12px;
   margin: 1em 0;
   font-weight: bold;
-}
-pre {
-  tab-size: 2;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  tab-size: 4;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
 }
 a {
   color: inherit;
@@ -134,24 +128,17 @@ ul li {
   overflow-y: auto;
 }
 #sidebar-content {
-  width: 180px;
+  width: 200px;
   padding-bottom: 10%;
 }
 h1,h2,h3,h4,h5,h6 {
   margin: 3px;
-  margin-top: 0px;
+  margin-top: 5px;
 }
 blockquote {
   padding: 3px 10px;
   margin: 3px;
   border-left: 5px solid #4e4e4e;
-}
-code {
-  padding: 2px 4px;
-  font-size: 90%;
-  color: #000000;
-  background-color: #4e4e4e;
-  border-radius: 4px;
 }
 hr {
   margin-top: 20px;
@@ -160,15 +147,20 @@ hr {
   border-top: 1px solid #4e4e4e;
 }
 mark {
-  background-color: #60ac39;
+  background-color: #80cc59;
   color: black;
 }
 pre {
+  tab-size: 2;
+  white-space: pre-wrap;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
   display: block;
   padding: 9.5px;
   margin: 0 0 10px;
   font-size: 13px;
-  line-height: 1.42857143;
+  line-height: 1.5;
   color: #797979;
   word-break: break-all;
   word-wrap: break-word;
@@ -219,7 +211,6 @@ img {
   max-width: 50%;
   max-height: 800px;
 }
-
 ul, ol {
   padding: 0;
   margin: 0;
@@ -227,30 +218,46 @@ ul, ol {
 ul ul, ol ol {
   padding-left: 2em;
 }
-
-@media only screen and (max-width: 600px) {
+button,select,input {
+  background: #fafafa;
+  border: 0;
+  color: #202320;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+select:focus {
+  box-shadow: none;
+}
+pre,code {
+  padding: 2px 4px;
+  font-size: 90%;
+  border-radius: 4px;
+  color:#ccc;
+  background-color: #282b2e;
+  border-color: #555;
+}
+@media only screen and (max-width: 720px) {
   .messages {
     border: none;
-  }
-  #messages {
-    padding: 0.5em;
   }
   .message {
     padding-bottom: 0.5em;
   }
   .nick {
-    margin: 0;
+    margin: 5px;
     float: none;
     text-align: left;
     display: inline;
   }
   .text {
-    display: inline;
+    margin-left: 5px;
+    margin-bottom: 3px;
   }
   #sidebar {
-    top: 0.5em;
-    bottom: auto;
-    right: 0.5em;
-    border: none;
+    right: 0.3em;
+  }
+  pre {
+    margin-top: 10px;
   }
 }
