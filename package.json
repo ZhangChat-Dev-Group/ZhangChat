@@ -1,0 +1,29 @@
+{
+  "name": "zhangchat",
+  "version": "2.0.0",
+  "description": "小张聊天室",
+  "main": "index.js",
+  "engines": {
+    "node": ">= 10.15.1",
+    "npm": ">= 6.7.0"
+  },
+  "scripts": {
+    "start": "pm2 startOrReload pm2.config.js",
+    "stop": "pm2 stop pm2.config.js && pm2 delete pm2.config.js",
+    "logs": "pm2 logs",
+    "clear": "pm2 flush",
+    "status": "pm2 list",
+    "refresh": "pm2 flush && pm2 stop pm2.config.js && pm2 delete pm2.config.js",
+    "postinstall": "cd ./server && npm install && npm run config"
+  },
+  "author": "MrZhang365",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "esm": "^3.2.25",
+    "http-server": "^0.12.1",
+    "pm2": "^5.2.0",
+    "sqlite3": "^5.1.4",
+    "xss": "^1.0.14"
+  }
+}

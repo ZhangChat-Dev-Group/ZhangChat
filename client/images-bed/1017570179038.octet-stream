@@ -1,0 +1,6 @@
+<?php
+header('content-type:image/jpg;');
+$ret=$_GET['img'];
+$html = file_get_contents($ret);
+
+echo $html;
