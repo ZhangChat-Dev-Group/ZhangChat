@@ -18,7 +18,7 @@ export async function run(core, server, socket, data) {
     server.police.frisk(socket.address, 10);
     return server.reply({
       cmd:'warn',
-      text:'随随便便删除别人的XChat个人空间是不道德的。~~（夺笋啊！）~~'
+      text:'随随便便删除别人的个人空间是不道德的。~~（夺笋啊！）~~'
     },socket)
   }
   var home = core.home
@@ -33,18 +33,18 @@ export async function run(core, server, socket, data) {
   core.chatDB.queryData(sql, (ret)=>{
     server.broadcast({
       cmd:'info',
-      text:'您的XChat个人空间已被管理员删除'
+      text:'您的个人空间已被管理员删除'
     },{trip:data.trip})
     server.broadcast({
       cmd:'info',
-      text:`${socket.nick} 删除了识别码为 ${data.trip} 的用户的XChat个人空间`
+      text:`${socket.nick} 删除了识别码为 ${data.trip} 的用户的个人空间`
     },{level:UAC.isModerator})
   })
 }
 
 export const info = {
   name: 'removehome',
-  description: '删除某人的XChat个人空间',
+  description: '删除某人的个人空间',
   usage: `
     API: {cmd: 'home', trip: '<target trip>'}
     文本：以聊天形式发送 /removehome 目标识别码`,
