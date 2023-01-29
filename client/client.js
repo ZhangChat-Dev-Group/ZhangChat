@@ -138,6 +138,7 @@ var frontpage = [
 	'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室，但是由于某些原因，它被开发者魔改成了现在的小张聊天室。',
 	'XChat基于[HackChat](https://hack.chat/)，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main',
 	'在此对hackchat的开发者深表感谢。',
+	'小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat',
 	'---',
 	'友情链接：',
 	'[小张（本聊天室开发者）的博客](https://blog.mrzhang365.cf/)',
@@ -147,7 +148,7 @@ var frontpage = [
 	'[HackChat聊天室](https://hack.chat/)',
 	'[TanChat聊天室](https://tanchat.fun/)',
 	'---',
-	'2023 小张软件',
+	'2023 小张聊天室开发组',
 ].join("\n");
 
 function $(query) {
