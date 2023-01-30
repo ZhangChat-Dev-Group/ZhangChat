@@ -67,7 +67,7 @@ export function addTokenToSocket(core,server,socket,payload){
   if (targetTokens.length === 0){
     server.reply({
       cmd:'warn',
-      text:'您提供的token无效，请联系XChat管理员获取你的token，谢谢合作。'
+      text:'您提供的token无效，请联系小张聊天室管理员获取你的token，谢谢合作。'
     },socket)
     socket.terminate()
     return false
