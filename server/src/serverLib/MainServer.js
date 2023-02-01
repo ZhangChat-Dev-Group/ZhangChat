@@ -129,9 +129,7 @@ class MainServer extends WsServer {
   newConnection(socket, request) {
     const newSocket = socket;
 
-    newSocket.address = request.headers['x-forwarded-for'] ? request.headers['x-forwarded-for'].split(',')[0] : request.connection.remoteAddress;
-
-    //newSocket.address = request.headers['x-forwarded-for'].split(',')[0] || request.connection.remoteAddress;
+    newSocket.address = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
 
     newSocket.on('message', (data) => {
       this.handleData(socket, data);

@@ -337,16 +337,14 @@ function tokenCallback(token){
 */
 
 function join(channel) {
-	/*
+	
 	var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
 	// if you changed the port during the server config, change 'wsPath'
 	// to the new port (example: ':8080')
 	// if you are reverse proxying, change 'wsPath' to the new location
 	// (example: '/chat-ws')
-	var wsPath = ':6060';
+	var wsPath = '/ws';
 	const url = protocol + '//' + document.domain + wsPath
-	*/
-	const url = 'wss://ws.zhangsoft.cf/'
 
 	ws = new WebSocket(url);
 
