@@ -141,6 +141,7 @@ var frontpage = [
 	'小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat',
 	'---',
 	'友情链接：',
+	'[物美价廉的云服务器——星云](https://cloud.nuee.cn/aff/FMOKBCMZ)',
 	'[小张（本聊天室开发者）的博客](https://blog.mrzhang365.cf/)',
 	'[纸片君ee的个人主页](https://paperee.guru/)',
 	'[Maggie\'s Personal Website](https://www.thz.cool/)',
