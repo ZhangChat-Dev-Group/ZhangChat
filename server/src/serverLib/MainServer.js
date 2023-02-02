@@ -131,7 +131,7 @@ class MainServer extends WsServer {
 
     newSocket.address = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
 
-    if (newSocket.address.startsWith('::ffff:'){    //去除IPv4里面多余的东西，防止后面识别IP的代码报错。
+    if (newSocket.address.startsWith('::ffff:')){    //去除IPv4里面多余的东西，防止后面识别IP的代码报错。
       newSocket.address = newSocket.address.replace('::ffff:','')
     }
 
