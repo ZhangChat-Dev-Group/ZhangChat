@@ -469,6 +469,13 @@ var COMMANDS = {
 			nick: '*',
 			text:'——以上是历史记录——'
 		})
+	},
+	changeNick: function (args) {
+                userChange(args.nick,args.text);
+		pushMessage({
+			nick: '*',
+			text: `${args.nick} 更名为 ${args.text}`
+		})
 	}
 }
 
@@ -1021,6 +1028,26 @@ function userRemove(nick) {
 	if (index >= 0) {
 		onlineUsers.splice(index, 1);
 	}
+}
+
+function userChange(nick,text) {
+    var users = $('#users');
+    var children = users.children;
+
+    for (var i = 0; i < children.length; i++) {
+        var user = children[i];
+        if (user.textContent == nick) {
+	    user.textContent = text;
+	    user.onclick = function (e) {
+	        userInvite(text)
+	    }
+        }
+    }
+
+    var index = onlineUsers.indexOf(nick);
+    if (index >= 0) {
+        onlineUsers[index] = text;
+    }
 }
 
 function usersClear() {

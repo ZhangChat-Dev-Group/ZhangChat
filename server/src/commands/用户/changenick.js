@@ -52,7 +52,8 @@ export async function run(core, server, socket, data) {
       text: '昵称重复',
     }, socket);
   }
-
+  
+  /*
   // build join and leave notices
   // TODO: this is a legacy client holdover, name changes in the future will
   //       have thieir own event
@@ -71,11 +72,13 @@ export async function run(core, server, socket, data) {
   // broadcast remove event and join event with new name, this is to support legacy clients and bots
   server.broadcast(leaveNotice, { channel: socket.channel });
   server.broadcast(joinNotice, { channel: socket.channel });
+  */
 
   // notify channel that the user has changed their name
   server.broadcast({
-    cmd: 'info',
-    text: `${socket.nick} 现在修改昵称为 ${newNick}`,
+    cmd: 'changeNick',
+    nick: socket.nick,
+    text: newNick,
   }, { channel: socket.channel });
 
   // commit change to nickname
