@@ -1,4 +1,5 @@
 import * as UAC from '../utility/UAC/_info';
+const sqlString = require('sqlstring')
 
 // module main
 export async function run(core, server, socket, data) {
@@ -6,7 +7,7 @@ export async function run(core, server, socket, data) {
   if (!UAC.isModerator(socket.level)) {
     return server.police.frisk(socket.address, 20);
   }
-  var querySql = `update chat set show = 0 where channel='${socket.channel}';`;
+  var querySql = sqlString.format('update chat set show = 0 where channel = ?',[socket.channel])
   core.chatDB.queryData(querySql, (ret)=>{
     server.broadcast({
       cmd: 'info',
@@ -19,10 +20,10 @@ export async function run(core, server, socket, data) {
 
 //export const requiredData = ['channel'];
 export const info = {
-  name: 'rm_history',
-  description: '删除你所在的房间地所有历史记录',
+  name: 'rm-history',
+  description: '清除你所在的频道的历史记录（被清除的记录会保存在数据库中，但对他人不可见）',
   usage: `
-    API: { cmd: 'rm_history' }
-    文本：以聊天形式发送 /rm_history`,
+    API: { cmd: 'rm-history' }
+    文本：以聊天形式发送 /rm-history`,
   fastcmd:[]
 };
