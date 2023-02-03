@@ -743,7 +743,13 @@ function pushWelcomeButton() {
 	var buttonEl = document.createElement('a')
 	buttonEl.textContent = '欢迎一下'
 	buttonEl.onclick = () => {
-		const welcomes = ['hi yo','hi','hi yoooooooooooooooo','hello','来了老弟~','awa!','uwu!','awa!!!','uwu!!!','awa','uwu']
+		var hiyo = 'hi y'
+		var i = 0
+		var max = Math.round(Math.random()*20)
+		while (i < max){    //@ee 你想累死我啊
+			hiyo += 'o'
+		}
+		const welcomes = ['hi',hiyo,'hello','来了老弟~','awa!','uwu!']
 		var txt = welcomes[Math.round(Math.random()*welcomes.length)]
 		send({
 			cmd:'chat',
