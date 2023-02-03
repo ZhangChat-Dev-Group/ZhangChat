@@ -738,14 +738,15 @@ function pushWelcomeButton() {
 	textEl.classList.add('text');
 	
 	//Button
-	var buttonEl = document.createElement('button')
+	var buttonEl = document.createElement('a')
 	buttonEl.textContent = '欢迎一下'
 	buttonEl.onclick = () => {
-		const welcomes = ['hi yo','hi','hi yoooooooooooooooo','hello','来了老弟']
+		const welcomes = ['hi yo','hi','hi yoooooooooooooooo','hello','来了老弟~','awa!','uwu!','awa!!!','uwu!!!','awa','uwu']
 		var txt = welcomes[Math.round(Math.random()*welcomes.length)]
 		send({
 			cmd:'chat',
-			text: txt
+			text: txt,
+			head: localStorageGet('head') || '',
 		})
 	}
 	textEl.appendChild(buttonEl)
