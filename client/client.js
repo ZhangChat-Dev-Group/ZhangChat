@@ -748,6 +748,7 @@ function pushWelcomeButton() {
 			text: txt
 		})
 	}
+	textEl.appendChild(buttonEl)
 
 	messageEl.appendChild(textEl);
 
