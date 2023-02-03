@@ -634,6 +634,7 @@ function pushMessage(args,cls = undefined) {    //cls指定messageEl添加什么
 function pushHTML(args,cls = undefined) {    //cls指定messageEl添加什么classList
 	// Message container
 	var messageEl = document.createElement('div');
+	messageEl.classList.add('message');
 
 	if (verifyNickname(getNick()) && args.nick == getNick()) {
 		messageEl.classList.add('me');
@@ -713,6 +714,7 @@ function pushHTML(args,cls = undefined) {    //cls指定messageEl添加什么cla
 function pushWelcomeButton() {
 	// Message container
 	var messageEl = document.createElement('div');
+	messageEl.classList.add('message');
 
 	messageEl.classList.add('info');
 	
