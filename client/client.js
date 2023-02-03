@@ -748,6 +748,7 @@ function pushWelcomeButton() {
 		var max = Math.round(Math.random()*20)
 		while (i < max){    //@ee 你想累死我啊
 			hiyo += 'o'
+			i++
 		}
 		const welcomes = ['hi',hiyo,'hello','来了老弟~','awa!','uwu!']
 		var txt = welcomes[Math.round(Math.random()*welcomes.length)]
