@@ -446,7 +446,7 @@ var COMMANDS = {
 				joinNotice += '\n系统认证：' + args.auth
 			}
 			pushMessage({ nick: '→', text: joinNotice, trip: args.trip || '' },'info');    //仿Discord
-			if (localStorageGet('fun') == 'true'){
+			if (localStorageGet('fun') != 'false'){
 				pushWelcomeButton()
 			}
 		}
