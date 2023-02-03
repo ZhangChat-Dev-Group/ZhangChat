@@ -39,6 +39,7 @@ export async function run(core, server, socket, payload) {
       text:`${socket.nick} 清除了本房间的公共视频`
     },{channel:socket.channel})
   }
+  
   core.videos[socket.channel] = payload.url
   return server.broadcast({
     cmd:'info',

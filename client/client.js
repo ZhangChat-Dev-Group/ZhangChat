@@ -707,6 +707,58 @@ function pushHTML(args,cls = undefined) {    //cls指定messageEl添加什么cla
 	updateTitle();
 }
 
+function pushWelcomeButton() {
+	// Message container
+	var messageEl = document.createElement('div');
+
+	messageEl.classList.add('info');
+	
+	// Nickname
+	var nickSpanEl = document.createElement('span');
+	nickSpanEl.classList.add('nick');
+	messageEl.appendChild(nickSpanEl);
+
+	var nickLinkEl = document.createElement('a');
+	nickLinkEl.textContent = '*';
+
+	nickLinkEl.onclick = function () {
+		insertAtCursor("@" + args.nick + " ");
+		$('#chatinput').focus();
+	}
+
+	var date = new Date(Date.now());
+	nickLinkEl.title = date.toLocaleString();
+	nickSpanEl.appendChild(nickLinkEl);
+
+	// Text
+	var textEl = document.createElement('div');
+	textEl.classList.add('text');
+	
+	//Button
+	var buttonEl = document.createElement('button')
+	buttonEl.textContent = '欢迎一下'
+	buttonEl.onclick = () => {
+		const welcomes = ['hi yo','hi','hi yoooooooooooooooo','hello','来了老弟']
+		var txt = welcomes[Math.round(Math.random()*welcomes.length)]
+		send({
+			cmd:'chat',
+			text: txt
+		})
+	}
+
+	messageEl.appendChild(textEl);
+
+	// Scroll to bottom
+	var atBottom = isAtBottom();
+	$('#messages').appendChild(messageEl);
+	if (atBottom) {
+		window.scrollTo(0, document.body.scrollHeight);
+	}
+
+	unread += 1;
+	updateTitle();
+}
+
 
 function insertAtCursor(text) {
 	var input = $('#chatinput');
