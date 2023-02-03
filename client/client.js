@@ -436,7 +436,9 @@ var COMMANDS = {
 			const welcomes = ['欢迎你，nick','nick跳进了聊天室','快看啊，是nick','nick来了','那是活蹦乱跳的nick','nick滚进了聊天室']
 
 			var joinNotice = welcomes[Math.round(Math.random()*welcomes.length)].replace('nick',nick)
-			//var joinNotice = nick + " 加入了聊天室"
+			if (localStorageGet('fun') == 'false') {
+		            joinNotice = nick + " 加入了聊天室"
+			}
 			if (args.client){
 				joinNotice += '\nTA正在使用 ' + args.client
 			}
@@ -950,6 +952,10 @@ if (localStorageGet('joined-left') == 'false') {
 	$('#joined-left').checked = false;
 }
 
+if (localStorageGet('fun') == 'false') {
+	$('#fun').checked = false;
+}
+
 if (localStorageGet('parse-latex') == 'false') {
 	$('#parse-latex').checked = false;
 	md.inline.ruler.disable([ 'katex' ]);
@@ -962,6 +968,10 @@ $('#pin-sidebar').onchange = function (e) {
 
 $('#joined-left').onchange = function (e) {
 	localStorageSet('joined-left', !!e.target.checked);
+}
+
+$('#fun').onchange = function (e) {
+	localStorageSet('fun', !!e.target.checked);
 }
 
 $('#parse-latex').onchange = function (e) {
