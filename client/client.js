@@ -437,7 +437,7 @@ var COMMANDS = {
 		        var joinNotice = nick + " 加入了聊天室"
 			}else {
 				const welcomes = ['欢迎你，nick','nick跳进了聊天室','快看啊，是nick','nick来了','那是活蹦乱跳的nick','nick滚进了聊天室']
-				var joinNotice = welcomes[Math.round(Math.random()*welcomes.length)].replace('nick',nick)
+				var joinNotice = welcomes[Math.round(Math.random()*(welcomes.length - 1))].replace('nick',nick)
 			}
 			if (args.client){
 				joinNotice += '\nTA正在使用 ' + args.client
