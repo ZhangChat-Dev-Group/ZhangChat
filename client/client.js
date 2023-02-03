@@ -725,7 +725,7 @@ function pushWelcomeButton() {
 	nickLinkEl.textContent = '*';
 
 	nickLinkEl.onclick = function () {
-		insertAtCursor("@" + args.nick + " ");
+		insertAtCursor("@" + '*' + " ");
 		$('#chatinput').focus();
 	}
 
