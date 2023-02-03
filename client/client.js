@@ -751,7 +751,7 @@ function pushWelcomeButton() {
 			i++
 		}
 		const welcomes = ['hi',hiyo,'hello','来了老弟~','awa!','uwu!']
-		var txt = welcomes[Math.round(Math.random()*welcomes.length)]
+		var txt = welcomes[Math.round(Math.random()*(welcomes.length - 1))]
 		send({
 			cmd:'chat',
 			text: txt,
