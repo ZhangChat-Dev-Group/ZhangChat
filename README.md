@@ -14,7 +14,7 @@
 2.  在仓库根目录下执行 npm install  
 3.  按照向导的提示配置服务器  
 4.  把 `chat.db.bak` 重命名为 `chat.db`  
-5.  修改 client/client.js 的第 348 行代码，填写你的服务器的 WebSocket 地址
+5.  修改 client/client.js 的join函数，把与URL相关的代码按照实际情况进行修改
 6.  执行 npm start（请注意防火墙放行相关端口）  
 
 ## 开发背景  
