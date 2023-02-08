@@ -7,7 +7,7 @@ export async function init(core){
 // module main
 export async function run(core, server, socket, data) {
   // increase rate limit chance and ignore if not admin
-  if (!UAC.isAdmin(socket.level)) {
+  if (!UAC.isModerator(socket.level)) {
     server.reply({
       cmd:'warn',
       text:'权限不足，无法操作。'
