@@ -655,14 +655,6 @@ function pushHTML(args,cls = undefined) {    //cls指定messageEl添加什么cla
 		messageEl.classList.add('warn');
 	} else if (args.nick == '*') {
 		messageEl.classList.add('info');
-	} else if (args.admin) {
-		messageEl.classList.add('admin');
-	} else if (args.mod) {
-		messageEl.classList.add('mod');
-	} else if (args.channelOwner){
-		messageEl.classList.add('channelOwner')
-	} else if (args.trusted){
-		messageEl.classList.add('trusted');
 	}
 	
 	// Nickname
@@ -672,11 +664,20 @@ function pushHTML(args,cls = undefined) {    //cls指定messageEl添加什么cla
 
 	if (args.trip) {
 		var tripEl = document.createElement('span');
-		if(args.isBot){
-			tripEl.textContent = '√Bot ' + args.trip + " ";
-		}else{
-			tripEl.textContent = args.trip + " ";
+		var prefixs = []
+		if (args.isBot){    //机器人标识
+			prefixs.push(String.fromCodePoint(129302))
 		}
+		if(args.admin){    //站长标识
+			prefixs.push(String.fromCodePoint(128081))
+		}else if (args.mod){    //管理员标识
+			prefixs.push(String.fromCodePoint(11088))
+		}else if (args.channelOwner){//房主标识
+			prefixs.push(String.fromCodePoint(127968))
+		}else if (args.trusted){    //信任用户标识
+			prefixs.push(String.fromCodePoint(128681))
+		}
+		tripEl.textContent = prefixs.join(' ') + ' ' + args.trip + " ";
 		tripEl.classList.add('trip');
 		nickSpanEl.appendChild(tripEl);
 	}
