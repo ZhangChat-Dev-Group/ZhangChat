@@ -22,8 +22,8 @@ export async function run(core, server, socket, data) {
   if (loadResult === '') {
     loadResult = `重新加载了 ${core.commands.commands.length} 个命令, 没有报错`;
   } else {
-    loadResult = `重新加载了 ${core.commands.commands.length} 个命令, 下面是一些报错:
-      ${loadResult}`;
+    loadResult = `重新加载了 ${core.commands.commands.length} 个命令, 下面是一些错误信息:
+${loadResult}`;
   }
 
   if (typeof data.reason !== 'undefined') {
