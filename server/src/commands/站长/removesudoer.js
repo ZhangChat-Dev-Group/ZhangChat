@@ -22,7 +22,7 @@ export async function run(core, server, socket, data) {
   }
 
   // remove trip from config
-  core.config.mods = core.config.mods.filter((trip) => trip !== data.trip);
+  core.config.sudoers = core.config.sudoers.filter((trip) => trip !== data.trip);
 
   server.broadcast({
     cmd:'info',
