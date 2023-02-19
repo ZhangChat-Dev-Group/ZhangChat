@@ -20,25 +20,10 @@ textarea {
 .text a {
   color: #e2eee6;
 }
-.admin .nick {
-  color: #e88;
-}
-.mod .nick {
-  color: #7cc;
-}
-.channelOwner .nick {
-  color: #ea5;
-}
-.trusted .nick {
-  color: #8c8;
-}
 .me .nick {
   color: #d9b;
 }
 .info .nick,.info .text {
-  color: #9c9;
-}
-.captcha {
   color: #9c9;
 }
 .warn .nick,.warn .text {

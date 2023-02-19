@@ -28,10 +28,6 @@ textarea {
 .info .text {
   color: #a1c659;
 }
-.captcha {
-  color: #a1c659;
-  font-family: monospace;
-}
 .warn .nick,
 .warn .text {
   color: #fda331;

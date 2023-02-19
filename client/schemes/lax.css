@@ -40,28 +40,12 @@ textarea {
 .text a {
   color: #5c9c9f;
 }
-.admin .nick {
-  color: #f2777a;
-}
-.mod .nick {
-  color: #66cccc;
-}
-.channelOwner .nick {
-  color: #CCCCCC;
-}
-.trusted .nick {
-  color: #ffee00
-}
 .me .nick {
   color: #cc99cc;
 }
 .info .nick,
 .info .text {
   color: #3e9353;
-}
-.captcha {
-  color: #3e9353;
-  font-family: monospace;
 }
 .warn .nick,
 .warn .text {

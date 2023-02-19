@@ -21,28 +21,12 @@ textarea {
 .text a {
   color: #e8e4cf;
 }
-.admin .nick {
-  color: #d73737;
-}
-.mod .nick {
-  color: #1fad83;
-}
-.channelOwner .nick {
-  color: #CCCCCC;    /* 草草草草草草，多么生草的颜色！ */
-}
-.trusted .nick {
-  color: #ffee00
-}
 .me .nick {
   color: #b854d4;
 }
 .info .nick,
 .info .text {
   color: #60ac39;
-}
-.captcha {
-  color: #60ac39;
-  font-family: monospace;
 }
 .warn .nick,
 .warn .text {

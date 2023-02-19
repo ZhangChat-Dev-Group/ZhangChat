@@ -21,12 +21,6 @@ textarea {
 .text a {
   color: #e0e0e0;
 }
-.admin .nick {
-  color: #ac4142;
-}
-.mod .nick {
-  color: #75b5aa;
-}
 .me .nick {
   color: #aa759f;
 }
