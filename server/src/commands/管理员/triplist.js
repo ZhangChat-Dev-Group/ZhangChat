@@ -17,7 +17,7 @@ export async function run(core, server, socket, data) {
   var new_list=''
   var i
   for (i in core.config.trips) {
-    new_list+=`${i} 被替换为：${core.config.trips[i]}\n`
+    new_list+=`\`${i}\` 被替换为：\`${core.config.trips[i]}\`\n`
   }
   server.reply({
     cmd:'info',

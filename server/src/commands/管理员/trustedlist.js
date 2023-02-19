@@ -24,7 +24,7 @@ export async function run(core, server, socket, data) {
     }
     var content = '以下是所有信任用户：\n'
     for (var i = 0; i < core.config.trusted.length; i++) {
-        content = content+`${core.config.trusted[i]}\n`
+        content += `\`${core.config.trusted[i]}\`\n`
     }
 
     server.reply({

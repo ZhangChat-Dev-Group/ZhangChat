@@ -19,7 +19,7 @@ export async function run(core, server, socket, data) {
   var toSend = '目前有以下token：\n'
   var i = 0
   for (i in core.config.tokens){
-    toSend += `[${core.config.tokens[i].trip}] ${core.config.tokens[i].token}\n`
+    toSend += `[\`${core.config.tokens[i].trip}\`] \`${core.config.tokens[i].token}\`\n`
   }
   server.reply({
     cmd:'info',

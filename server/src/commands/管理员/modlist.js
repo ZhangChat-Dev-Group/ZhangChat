@@ -16,9 +16,9 @@ export async function run(core, server, socket, data) {
         },socket)
         return server.police.frisk(socket.address, 20);
     }
-    var content = '以下是所有模组（Mod）：\n'
+    var content = '以下是所有管理员：\n'
     for (var i = 0; i < core.config.mods.length; i++) {
-        content = content+`${core.config.mods[i].trip}\n`
+        content += `\`${core.config.mods[i].trip}\`\n`
     }
 
     server.reply({
@@ -31,7 +31,7 @@ export async function run(core, server, socket, data) {
 
 export const info = {
     name: 'modlist',
-    description: '查看所有模组（Mod）',
+    description: '查看所有管理员',
     usage: `
     API: { cmd: 'modlist' }
     文本：以聊天形式发送 /modlist`,

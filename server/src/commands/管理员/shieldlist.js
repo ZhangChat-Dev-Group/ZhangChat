@@ -17,7 +17,7 @@ export async function run(core, server, socket, data) {
   var send = '屏蔽的内容：\n'
   var i = 0;
   for (i in core.config.shield){
-    send += `${core.config.shield[i]}\n`
+    send += `\`${core.config.shield[i]}\`\n`
   }
   server.reply({
     cmd:'info',
