@@ -29,7 +29,7 @@ export async function run(core, server, socket, data) {
 }
 
 export const info = {
-  name: 'addsudoer',
+  name: 'sudoerlist',
   description: '查看所有可提权用户',
   usage: `
     API: { cmd: 'sudoerlist' }
