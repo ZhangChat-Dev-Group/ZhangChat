@@ -797,7 +797,7 @@ function insertAtCursor(text) {
 
 function send(data) {
 	if (ws && ws.readyState == ws.OPEN) {
-		if ($('#rainbow-nick').checked) && (data['cmd'] == 'chat') {
+		if ($('#rainbow-nick').checked && data['cmd'] == 'chat') {
 			ws.send(JSON.stringify({ cmd: 'changecolor', color: `#${Math.floor(Math.random()*0xffffff).toString(16).padEnd(6,"0")}` }));
 		};
 		ws.send(JSON.stringify(data));
