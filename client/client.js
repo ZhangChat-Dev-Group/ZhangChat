@@ -438,11 +438,11 @@ var COMMANDS = {
 
 		if ($('#joined-left').checked) {
 			if (localStorageGet('fun') == 'false') {
-		        var joinNotice = nick + " 加入了聊天室"
+		                var joinNotice = nick + " 加入了聊天室"
 			}else {
 				const test = ['活蹦乱跳','手舞足蹈','哼着小曲','突然诈尸','可爱','美丽','快乐','活泼']
 				const test2 = ["来到","误入","闯入","跳进","飞进","滚进"]
-				var joinNotice = test[Math.round(Math.random()*(test.length - 1))] + " 的 " + nick + " " + test2[Math.round(Math.random()*(test2.length - 1))] + "了聊天室"
+				var joinNotice = `${test[Math.round(Math.random()*(test.length - 1))]}的++${nick}++${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
 			}
 			if (args.client){
 				joinNotice += '\nTA正在使用 ' + args.client
@@ -464,11 +464,11 @@ var COMMANDS = {
 
 		if ($('#joined-left').checked) {
 			if (localStorageGet('fun') == 'false') {
-		        var leaveNotice = nick + " 离开了聊天室"
+		                var leaveNotice = nick + " 离开了聊天室"
 			}else {
 				const test = ["躺着","蹲着","扭着"]
 				const test2 = ["跳出","飞出","滚出"]
-				var leaveNotice = nick + " " + test[Math.round(Math.random()*(test.length - 1))] + test2[Math.round(Math.random()*(test2.length - 1))] + "了聊天室"
+				var leaveNotice = `++${nick}++${test[Math.round(Math.random()*(test.length - 1))]}${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
 			}
 			pushMessage({ nick: '←', text: leaveNotice },'info');    //仿Discord
 		}
