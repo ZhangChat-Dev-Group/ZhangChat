@@ -5,7 +5,7 @@ export async function run(core, server, socket,data) {
   if (!socket.trip){
     server.reply({
       cmd:'warn',
-      text:'不安全的操作'
+      text:'无识别码用户不能提权'
     },socket)
     return server.police.frisk(socket.address, 20)
   }
@@ -15,13 +15,6 @@ export async function run(core, server, socket,data) {
       text:'您已经提权成功了，无需重复操作。'
     },socket)
     return
-  }
-  if (!UAC.isModerator(socket.level)){
-    server.reply({
-      cmd:'warn',
-      text:'权限不足，无法操作！'
-    },socket)
-    return server.police.frisk(socket.address, 20)
   }
   if (core.config.sudoers.indexOf(socket.trip) === -1){
     server.reply({
