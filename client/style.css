@@ -1,15 +1,10 @@
-@font-face
-{
-  font-family: myFont;
-  src: url(/fonts/font1.woff);
-}
-:root {
-  color-scheme: dark!important;
-}
 * {
   outline: none;
   line-height: 2;
   font-family: "Consolas","Microsoft Yahei UI";
+}
+:root {
+  color-scheme: dark!important;
 }
 body {
   padding: 0;
