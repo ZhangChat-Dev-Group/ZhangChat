@@ -129,27 +129,31 @@ var frontpage = [
 	'---',
 	'欢迎来到小张聊天室，这是一个黑客风格的聊天室。',
 	'注意：在这里，我们把“房间”称作“频道”',
-	'公共频道：**[?chat](/?chat)**',
-	'这个是为您准备的频道（只有您自己）： ?' +Math.random().toString(36).substr(2, 8),
+	'公共频道（在线用户多）：[?chat](/?chat)',
+	'这个是为您准备的频道（只有您自己）： ?' + Math.random().toString(36).substr(2, 8),
 	'---',
-	'我们会依照中华人民共和国有关法律保存您的聊天记录和IP地址，您的IP归属地也会依法公开。如果您不满意，则可以选择离开。',
-	'请自觉遵守中华人民共和国有关法律和聊天室内的规定，如果您不在中国境内，也请遵守当地法律以及聊天室内的规定。',
+	'我们会依照中华人民共和国相关法律保存您的聊天记录和IP地址，您的IP归属地也会依法公开。',
+	'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内的规定。',
+	'如果您不满意，则可以选择离开。',
 	'---',
-	'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室，但是由于某些原因，它被开发者魔改成了现在的小张聊天室。',
-	'XChat基于[HackChat](https://hack.chat/)，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main',
-	'在此对hackchat的开发者深表感谢。',
+	'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室。',
+	'但是由于某些原因，它被开发者魔改成了现在的小张聊天室。',
+	'XChat基于HackChat，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main',
+	'在此对HackChat的开发者深表感谢。',
 	'小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat',
+	'---',
+	'本聊天室开发者：',
+	'[小张的博客](https://blog.mrzhang365.cf/)',
+	'[小张软件](https://www.zhangsoft.cf/)',
 	'---',
 	'友情链接：',
 	'[物美价廉的云服务器——星云](https://cloud.nuee.cn/aff/FMOKBCMZ)',
-	'[小张（本聊天室开发者）的博客](https://blog.mrzhang365.cf/)',
 	'[纸片君ee的个人主页](https://paperee.guru/)',
-	'[Maggie\'s Personal Website](https://www.thz.cool/)',
-	'[小张软件](https://www.zhangsoft.cf/)',
+	'[Maggie的个人主页](https://www.thz.cool/)',
 	'[HackChat聊天室](https://hack.chat/)',
 	'[TanChat聊天室](https://tanchat.fun/)',
 	'---',
-	'2023 小张聊天室开发组',
+	'2023 小张聊天室开发组 致',
 ].join("\n");
 
 function $(query) {
@@ -436,8 +440,9 @@ var COMMANDS = {
 			if (localStorageGet('fun') == 'false') {
 		        var joinNotice = nick + " 加入了聊天室"
 			}else {
-				const welcomes = ['欢迎你，nick','nick跳进了聊天室','快看啊，是nick','nick来了','那是活蹦乱跳的nick','nick滚进了聊天室']
-				var joinNotice = welcomes[Math.round(Math.random()*(welcomes.length - 1))].replace('nick',nick)
+				const test = ['活蹦乱跳','手舞足蹈','哼着小曲','突然诈尸','可爱','美丽','快乐','活泼']
+				const test2 = ["来到","误入","闯入","跳进","飞进","滚进"]
+				var joinNotice = test[Math.round(Math.random()*(test.length - 1))] + " 的 " + nick + " " + test2[Math.round(Math.random()*(test2.length - 1))] + "了聊天室"
 			}
 			if (args.client){
 				joinNotice += '\nTA正在使用 ' + args.client
@@ -458,13 +463,20 @@ var COMMANDS = {
 		userRemove(nick);
 
 		if ($('#joined-left').checked) {
-			pushMessage({ nick: '←', text: nick + " 离开了聊天室" },'info');    //仿Discord
+			if (localStorageGet('fun') == 'false') {
+		        var leaveNotice = nick + " 离开了聊天室"
+			}else {
+				const test = ["躺着","蹲着","扭着"]
+				const test2 = ["跳出","飞出","滚出"]
+				var leaveNotice = nick + " " + test[Math.round(Math.random()*(test.length - 1))] + test2[Math.round(Math.random()*(test2.length - 1))] + "了聊天室"
+			}
+			pushMessage({ nick: '←', text: leaveNotice },'info');    //仿Discord
 		}
 	},
 	'set-video': function (args){
 		var html = `<video controls><source src="${args.url}"></video>`
 		pushHTML({
-			nick:'*',
+			nick: '*',
 			text: html
 		})
 	},
@@ -475,11 +487,11 @@ var COMMANDS = {
 		}
 		pushMessage({
 			nick: '*',
-			text:'——以上是历史记录——'
+			text: '——以上是历史记录——'
 		})
 	},
 	changeNick: function (args) {
-                userChange(args.nick,args.text);
+        userChange(args.nick,args.text);
 		pushMessage({
 			nick: '*',
 			text: `${args.nick} 更名为 ${args.text}`
@@ -747,13 +759,13 @@ function pushWelcomeButton() {
 		var i = 0
 		var max = Math.round(Math.random()*20)
 		while (i < max){    //@ee 你想累死我啊
-			hiyo += 'o'
+			hiyo += 'o'     //ee：（被打
 			i++
 		}
-		const welcomes = ['hi',hiyo,'hello','来了老弟~','awa!','uwu!','hihihi']
+		const welcomes = [hiyo + '!','awa!','uwu!','好耶!','欢迎!','来了老弟~']
 		var txt = welcomes[Math.round(Math.random()*(welcomes.length - 1))]
 		send({
-			cmd:'chat',
+			cmd: 'chat',
 			text: txt,
 			head: localStorageGet('head') || '',
 		})
@@ -1116,6 +1128,7 @@ function userChange(nick,text) {
     for (var i = 0; i < children.length; i++) {
         var user = children[i];
         if (user.textContent == nick) {
+		var user = document.createElement('a');
 	    user.textContent = text;
 	    user.onclick = function (e) {
 	        userInvite(text)
@@ -1152,31 +1165,21 @@ function userIgnore(nick) {
 var schemes = [
 	'electron',
 	'eighties',
-	'atelier-dune',
-	'lax',
-	'monokai',
 	'tomorrow',
 	'default',
-	'hacker',
-	'railscasts',
 	'bright',
+	'hacker',
 ];
 
 var highlights = [
-	'androidstudio',
-	'agate',
-	'atom-one-dark',
 	'darcula',
-	'github',
 	'rainbow',
-	'tk-night',
-	'tomorrow',
-	'xcode',
-	'zenburn'
+	'zenburn',
+	'androidstudio',
 ]
 
 var currentScheme = 'electron';
-var currentHighlight = 'androidstudio';
+var currentHighlight = 'darcula';
 
 function setScheme(scheme) {
 	currentScheme = scheme;
