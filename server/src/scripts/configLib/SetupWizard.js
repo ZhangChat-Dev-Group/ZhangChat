@@ -34,8 +34,8 @@ class SetupWizard {
     questions.properties = this.setQuestionDefaults(questions.properties, currentConfig);
 
     // force password re-entry
-    questions.properties.adminPassword.default = '';
-    questions.properties.adminPassword.required = true;
+    questions.properties.trip.default = '';
+    questions.properties.trip.required = true;
 
     // output the packages setup banner
     require('../setupSchema/Banner.js');
