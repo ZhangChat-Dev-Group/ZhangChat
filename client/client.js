@@ -764,11 +764,7 @@ function pushWelcomeButton() {
 		}
 		const welcomes = [hiyo + '!','awa!','uwu!','好耶!','欢迎!','来了老弟~']
 		var txt = welcomes[Math.round(Math.random()*(welcomes.length - 1))]
-		send({
-			cmd: 'chat',
-			text: txt,
-			head: localStorageGet('head') || '',
-		})
+		send({ cmd: 'chat', text: txt, head: localStorageGet('head') || '' })
 	}
 	textEl.appendChild(buttonEl)
 
@@ -801,6 +797,9 @@ function insertAtCursor(text) {
 
 function send(data) {
 	if (ws && ws.readyState == ws.OPEN) {
+		if ($('#rainbow-nick').checked) && (data['cmd'] == 'chat') {
+			ws.send(JSON.stringify({ cmd: 'changecolor', color: `#${Math.floor(Math.random()*0xffffff).toString(16).padEnd(6,"0")}` }));
+		};
 		ws.send(JSON.stringify(data));
 	}
 }
@@ -1040,6 +1039,10 @@ if (localStorageGet('parse-latex') == 'false') {
 	md.block.ruler.disable([ 'katex' ]);
 }
 
+if (localStorageGet('rainbow-nick') == 'true') {
+	$('#fun').checked = true;
+}
+
 $('#pin-sidebar').onchange = function (e) {
 	localStorageSet('pin-sidebar', !!e.target.checked);
 }
@@ -1084,6 +1087,10 @@ $('#allow-imgur').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('allow-imgur', enabled);
 	allowImages = enabled;
+}
+
+$('#rainbow').onchange = function (e) {
+	localStorageSet('rainbow', !!e.target.checked);
 }
 
 // User list
