@@ -18,7 +18,7 @@ console.log(stripIndents`
 
   现在将要求您提供以下信息：（这不是经典salt吗）
   -  ${chalk.magenta('    盐值')}, 生成识别码时用到的盐值
-  -  ${chalk.magenta('站长密码')}, 站长的密码
+  -  ${chalk.magenta('您的密码')}, 您的密码，系统会自动将您添加为管理员和可提权用户，后期若想执行站长专用命令，则需要先执行sudo命令以提权
   -  ${chalk.magenta('  端口号')}, WebSocket端口号
   \u200b
 `);

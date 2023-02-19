@@ -83,6 +83,20 @@ class SetupWizard {
       result.mods = [];
     }
 
+    if (typeof result.sudoers === 'undefined') {
+      result.sudoers = [];
+    }
+
+    if (result.mods.indexOf(result.trip) === -1){
+      result.mods.push(result.trip)
+    }
+
+    if (result.sudoers.indexOf(result.trip) === -1){
+      result.sudoers.push(result.trip)
+    }
+
+    delete result.trip
+
     // If we should log errors with the err stack when they occur.
     // See: CommandManager.js
     if (typeof result.logErrDetailed === 'undefined') {

@@ -11,7 +11,7 @@
 const Questions = {
   properties: {
     tripSalt: {
-      description: '盐值（留空则使用默认）',
+      description: '盐值（留空则使用默认值或随机生成）',
       type: 'string',
       hidden: true,
       replace: '*',
@@ -21,12 +21,18 @@ const Questions = {
       },
     },
 
-    adminPassword: {
+    trip: {
       type: 'string',
       hidden: true,
       replace: '*',
-      description: '站长密码',
+      description: '您的密码',
       message: '你必须输入一个密码',
+      before: (value) => {
+        const crypto = require('crypto');
+        const sha = crypto.createHash('sha256');
+        sha.update(value + salt);
+        return sha.digest('base64').substr(0, 6);
+      },
     },
 
     websocketPort: {

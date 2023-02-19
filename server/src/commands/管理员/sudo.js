@@ -23,10 +23,10 @@ export async function run(core, server, socket,data) {
     },socket)
     return server.police.frisk(socket.address, 20)
   }
-  if (data.password !== core.config.adminPassword){
+  if (core.config.sudoers.indexOf(socket.trip) === -1){
     server.reply({
       cmd:'warn',
-      text:'密码错误，请稍后重试~~（因为我们要对你进行严格的频率限制）~~。'
+      text:'您不是可提权用户，请稍后重试~~（因为我们要对你进行严格的频率限制）~~。'
     },socket)
     server.police.frisk(socket.address, 30)
     return
@@ -45,35 +45,12 @@ export async function run(core, server, socket,data) {
   }
 }
 
-export function initHooks(server){
-  server.registerHook('out','chat',this.blockPassword.bind(this),9999)
-  server.registerHook('out','info',this.blockPassword.bind(this),9999)
-  server.registerHook('out','warn',this.blockPassword.bind(this),9999)
-}
-
-export function blockPassword(core,server,socket,payload){
-  if (payload.text.toLowerCase().indexOf(core.config.adminPassword.toLowerCase()) !== -1){
-    server.reply({
-      cmd:'warn',
-      text:'抱歉，您即将接收的信息包含服务器内部数据，因此我们屏蔽了它。'
-    },socket)
-    return false
-  }
-  return payload
-}
-
 // module meta
-export const requiredData = ['password'];
 export const info = {
   name: 'sudo',
-  description: '将你的权限提升至站长级别',
+  description: '将你的权限提升至站长级别，仅可提权用户可用',
   usage: `
-    API: { cmd: 'sudo',password:'站长的密码' }
-    文本：以聊天形式发送 /sudo 站长的密码`,
-  fastcmd:[
-    {
-      name:'password',
-      len:0
-    }
-  ]
+    API: { cmd: 'sudo' }
+    文本：以聊天形式发送 /sudo`,
+  fastcmd:[]
 };

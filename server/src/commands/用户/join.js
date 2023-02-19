@@ -68,12 +68,6 @@ export function parseNickname(core, data) {
     }
   });
 
-  if (password === core.config.adminPassword) {
-    userInfo.uType = 'admin'; /* @legacy */
-    userInfo.trip = 'POWER+';
-    userInfo.level = UAC.levels.admin;
-  }
-
   if (data.client){
     var targetClient = core.config.clients.filter((c) => c.key === data.client)
     if (targetClient.length === 0){
