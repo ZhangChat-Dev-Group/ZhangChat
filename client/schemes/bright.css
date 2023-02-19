@@ -21,18 +21,6 @@ textarea {
 .text a {
   color: #f5f5f5;
 }
-.admin .nick {
-  color: #fb0120;
-}
-.mod .nick {
-  color: #76c7b7;
-}
-.channelOwner .nick {
-  color: #CCCCCC;
-}
-.trusted .nick {
-  color: #ffee00
-}
 .me .nick {
   color: #d381c3;
 }
