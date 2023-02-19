@@ -1089,8 +1089,8 @@ $('#allow-imgur').onchange = function (e) {
 	allowImages = enabled;
 }
 
-$('#rainbow').onchange = function (e) {
-	localStorageSet('rainbow', !!e.target.checked);
+$('#rainbow-nick').onchange = function (e) {
+	localStorageSet('rainbow-nick', !!e.target.checked);
 }
 
 // User list
