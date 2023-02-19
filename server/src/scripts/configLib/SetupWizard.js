@@ -88,7 +88,7 @@ class SetupWizard {
     }
 
     if (result.mods.indexOf(result.trip) === -1){
-      result.mods.push(result.trip)
+      result.mods.push({trip:result.trip})
     }
 
     if (result.sudoers.indexOf(result.trip) === -1){
