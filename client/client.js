@@ -1,23 +1,20 @@
 /*
- *
- * NOTE: The client side of hack.chat is currently in development,
- * a new, more modern but still minimal version will be released
- * soon. As a result of this, the current code has been deprecated
- * and will not actively be updated.
- *
+	小张聊天室开发组：
+	MrZhang365：领导者，主要编写JS、NodeJS。
+	paperee：成员，主要编写HTML、CSS、JS。
+
+	另外，感谢提供参考代码的4n0n4me和a。
 */
 
-//select "chatinput" on "/"
-
-
+// 在/上选择chatinput
 document.addEventListener("keydown", e => {
-    if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
-        e.preventDefault();
-        document.getElementById("chatinput").focus();
-    }
+	if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
+		e.preventDefault();
+		document.getElementById("chatinput").focus();
+	}
 });
 
-// initialize markdown engine
+// 初始化Markdown
 var markdownOptions = {
 	html: false,
 	xhtmlOut: false,
@@ -25,23 +22,28 @@ var markdownOptions = {
 	langPrefix: '',
 	linkify: true,
 	linkTarget: '_blank" rel="noreferrer',
-	typographer:  true,
+	typographer: true,
 	quotes: `""''`,
-
 	doHighlight: true,
 	langPrefix: 'hljs language-',
 	highlight: function (str, lang) {
-		if (!markdownOptions.doHighlight || !window.hljs) { return ''; }
+		if (!markdownOptions.doHighlight || !window.hljs) {
+			return '';
+		}
 
 		if (lang && hljs.getLanguage(lang)) {
 			try {
 				return hljs.highlight(lang, str).value;
-			} catch (__) {}
+			} catch (__) {
+				// nothing
+			}
 		}
 
 		try {
 			return hljs.highlightAuto(str).value;
-		} catch (__) {}
+		} catch (__) {
+			// nothing
+		}
 
 		return '';
 	}
@@ -49,15 +51,13 @@ var markdownOptions = {
 
 var md = new Remarkable('full', markdownOptions);
 
-// image handler
+// 允许渲染的图片域名
 var allowImages = true;
-var imgHostWhitelist = [    //这些是由小张添加的
-	'i.loli.net', 's2.loli.net',	//SM-MS图床
-	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com',		//路过图床
-	'i.postimg.cc',		//postimages图床
-	'gimg2.baidu.com',	//百度
-	'xq.kzw.ink',	//XChat
-	'catbox.moe', 'img.thz.cool', 'img.liyuv.top',  //这些是ee加的(被打)
+var imgHostWhitelist = [ // 这些是由小张添加的
+	'i.loli.net', 's2.loli.net', // SM-MS图床
+	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', // 路过图床
+	'i.postimg.cc',	'gimg2.baidu.com', // Postimages图床 百度
+	'files.catbox.moe', 'img.thz.cool', 'img.liyuv.top', 'share.lyka.pro', // 这些是ee加的（被打
 	document.domain,
 ];
 
@@ -83,13 +83,13 @@ md.renderer.rules.image = function (tokens, idx, options) {
 		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + '></a>';
 	}
 
-  return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
+	return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
 };
 
 md.renderer.rules.link_open = function (tokens, idx, options) {
 	var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
-  var target = options.linkTarget ? (' target="' + options.linkTarget + '"') : '';
-  return '<a rel="noreferrer" onclick="return verifyLink(this)" href="' + Remarkable.utils.escapeHtml(tokens[idx].href) + '"' + title + target + '>';
+	var target = options.linkTarget ? (' target="' + options.linkTarget + '"') : '';
+	return '<a rel="noreferrer" onclick="return verifyLink(this)" href="' + Remarkable.utils.escapeHtml(tokens[idx].href) + '"' + title + target + '>';
 };
 
 md.renderer.rules.text = function(tokens, idx) {
@@ -99,20 +99,23 @@ md.renderer.rules.text = function(tokens, idx) {
 		tokens[idx].content = tokens[idx].content.replace(/(^|\s)(\?)\S+?(?=[,.!?:)]?\s|$)/gm, function(match) {
 			var channelLink = Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(match.trim()));
 			var whiteSpace = '';
+
 			if (match[0] !== '?') {
 				whiteSpace = match[0];
 			}
+
 			return whiteSpace + '<a href="' + channelLink + '" target="_blank">' + channelLink + '</a>';
 		});
 	}
 
-  return tokens[idx].content;
+	return tokens[idx].content;
 };
 
 md.use(remarkableKatex);
 
 function verifyLink(link) {
 	var linkHref = Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(link.href));
+
 	if (linkHref !== link.innerHTML) {
 		return confirm('等一下！你即将前往：' + linkHref);
 	}
@@ -128,32 +131,34 @@ var frontpage = [
 	'# 小张聊天室',
 	'---',
 	'欢迎来到小张聊天室，这是一个黑客风格的聊天室。',
-	'注意：在这里，我们把“房间”称作“频道”',
+	'注意：在这里，我们把"房间（chatroom）"称作"频道（channel）"。',
 	'公共频道（在线用户多）：[?chat](/?chat)',
 	'这个是为您准备的频道（只有您自己）： ?' + Math.random().toString(36).substr(2, 8),
 	'---',
-	'我们会依照中华人民共和国相关法律保存您的聊天记录和IP地址，您的IP归属地也会依法公开。',
-	'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内的规定。',
-	'如果您不满意，则可以选择离开。',
+	'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录和IP地址。',
+	'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内相关规定。',
+	'您如果对本聊天室不满意或认为受到不公平对待，则可以选择向管埋员申诉或选择离开。',
 	'---',
 	'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室。',
 	'但是由于某些原因，它被开发者魔改成了现在的小张聊天室。',
 	'XChat基于HackChat，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main',
-	'在此对HackChat的开发者深表感谢。',
 	'小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat',
+	'在此对HackChat的开发者深表感谢。',
 	'---',
 	'本聊天室开发者：',
-	'[小张的博客](https://blog.mrzhang365.cf/)',
-	'[小张软件](https://www.zhangsoft.cf/)',
+	'@MrZhang365 - [小张的博客](https://blog.mrzhang365.cf/) && [小张软件](https://www.zhangsoft.cf/)',
+	'@paperee - [纸片君ee的个人主页](https://paperee.guru/)',
 	'---',
 	'友情链接：',
 	'[物美价廉的云服务器——星云](https://cloud.nuee.cn/aff/FMOKBCMZ)',
-	'[纸片君ee的个人主页](https://paperee.guru/)',
-	'[Maggie的个人主页](https://www.thz.cool/)',
 	'[HackChat聊天室](https://hack.chat/)',
 	'[TanChat聊天室](https://tanchat.fun/)',
 	'---',
-	'2023 小张聊天室开发组 致',
+	'特别鸣谢：',
+	'@4n0n4me - 编写了[HackChat客户端](https://hcer.netlify.app/)',
+	'@a - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/users/1017687-greendebug)',
+	'---',
+	'2023.02.23 小张聊天室开发组 致',
 ].join("\n");
 
 function $(query) {
@@ -163,13 +168,17 @@ function $(query) {
 function localStorageGet(key) {
 	try {
 		return window.localStorage[key]
-	} catch (e) { }
+	} catch (e) {
+		// nothing
+	}
 }
 
 function localStorageSet(key, val) {
 	try {
 		window.localStorage[key] = val
-	} catch (e) { }
+	} catch (e) {
+		// nothing
+	}
 }
 
 var ws;
@@ -178,39 +187,31 @@ var myNick = localStorageGet('my-nick') || '';
 var myChannel = decodeURI(window.location.search.replace(/^\?/, ''));
 var lastSent = [""];
 var lastSentPos = 0;
-//const hCaptchaSiteKey = '94d4ba8b-335c-4d47-b57b-23647dafbf05'
+// const hCaptchaSiteKey = '94d4ba8b-335c-4d47-b57b-23647dafbf05'
 
-/** Notification switch and local storage behavior **/
+/** 通知和本地存储 **/
 var notifySwitch = document.getElementById("notify-switch")
 var notifySetting = localStorageGet("notify-api")
-var notifyPermissionExplained = 0; // 1 = granted msg shown, -1 = denied message shown
+var notifyPermissionExplained = 0; // 1 = 显示已授予的消息，-1 = 显示拒绝的消息
 
-// Inital request for notifications permission
+// 初始通知请求权限
 function RequestNotifyPermission() {
 	try {
 		var notifyPromise = Notification.requestPermission();
+
 		if (notifyPromise) {
 			notifyPromise.then(function (result) {
 				console.log("ZhangChat桌面通知权限：" + result);
+
 				if (result === "granted") {
 					if (notifyPermissionExplained === 0) {
-						pushMessage({
-							cmd: "chat",
-							nick: "*",
-							text: "已获得桌面通知权限",
-							time: null
-						});
+						pushMessage({cmd: "chat", nick: "*", text: "已获得桌面通知权限", time: null});
 						notifyPermissionExplained = 1;
 					}
 					return false;
 				} else {
 					if (notifyPermissionExplained === 0) {
-						pushMessage({
-							cmd: "chat",
-							nick: "!",
-							text: "桌面通知权限被拒绝，当有人@你时，你将不会收到桌面通知",
-							time: null
-						});
+						pushMessage({cmd: "chat", nick: "!", text: "桌面通知权限被拒绝，当有人@你时，你将不会收到桌面通知", time: null});
 						notifyPermissionExplained = -1;
 					}
 					return true;
@@ -218,94 +219,85 @@ function RequestNotifyPermission() {
 			});
 		}
 	} catch (error) {
-		pushMessage({
-			cmd: "chat",
-			nick: "!",
-			text: "无法创建桌面通知",
-			time: null
-		});
+		pushMessage({cmd: "chat", nick: "!", text: "无法创建桌面通知", time: null});
 		console.error("无法创建桌面通知，该浏览器可能不支持桌面通知，错误信息：\n")
 		console.error(error)
 		return false;
 	}
 }
 
-// Update localStorage with value of checkbox
+// 更新本地储存的复选框值
 notifySwitch.addEventListener('change', (event) => {
 	if (event.target.checked) {
 		RequestNotifyPermission();
 	}
+
 	localStorageSet("notify-api", notifySwitch.checked)
 })
-// Check if localStorage value is set, defaults to OFF
+
+// 检查是否设置了本地存储，默认为OFF
 if (notifySetting === null) {
 	localStorageSet("notify-api", "false")
 	notifySwitch.checked = false
 }
-// Configure notifySwitch checkbox element
+
+// 配置通知开关复选框元素
 if (notifySetting === "true" || notifySetting === true) {
 	notifySwitch.checked = true
 } else if (notifySetting === "false" || notifySetting === false) {
 	notifySwitch.checked = false
 }
 
-/** Sound switch and local storage behavior **/
+/** 提示音和本地存储 **/
 var soundSwitch = document.getElementById("sound-switch")
 var notifySetting = localStorageGet("notify-sound")
 
-// Update localStorage with value of checkbox
+// 更新本地储存的复选框值
 soundSwitch.addEventListener('change', (event) => {
 	localStorageSet("notify-sound", soundSwitch.checked)
 })
-// Check if localStorage value is set, defaults to OFF
+
+// 检查是否设置了本地存储，默认为OFF
 if (notifySetting === null) {
 	localStorageSet("notify-sound", "false")
 	soundSwitch.checked = false
 }
-// Configure soundSwitch checkbox element
+
+// 配置声音开关复选框元素
 if (notifySetting === "true" || notifySetting === true) {
 	soundSwitch.checked = true
 } else if (notifySetting === "false" || notifySetting === false) {
 	soundSwitch.checked = false
 }
 
-// Create a new notification after checking if permission has been granted
+// 在检查是否已授予权限后创建新通知
 function spawnNotification(title, body) {
-	// Let's check if the browser supports notifications
 	if (!("Notification" in window)) {
 		console.error("浏览器不支持桌面通知");
-	} else if (Notification.permission === "granted") { // Check if notification permissions are already given
-		// If it's okay let's create a notification
-		var options = {
-			body: body,
-			icon: "/favicon-96x96.png"
-		};
+	} else if (Notification.permission === "granted") { // 检查是否已授予通知权限
+		var options = {body: body, icon: "/favicon-96x96.png"};
 		var n = new Notification(title, options);
 	}
-	// Otherwise, we need to ask the user for permission
+
+	// 否则请求用户许可
 	else if (Notification.permission !== "denied") {
 		if (RequestNotifyPermission()) {
-			var options = {
-				body: body,
-				icon: "/favicon-96x96.png"
-			};
+			var options = {body: body, icon: "/favicon-96x96.png"};
 			var n = new Notification(title, options);
 		}
-	} else if (Notification.permission == "denied") {
-		// At last, if the user has denied notifications, and you
-		// want to be respectful, there is no need to bother them any more.
 	}
 }
 
 function notify(args) {
-	// Spawn notification if enabled
+	// 生成通知（如果已启用）
 	if (notifySwitch.checked) {
 		spawnNotification("?" + myChannel + "  —  " + args.nick, args.text)
 	}
 
-	// Play sound if enabled
+	// 播放声音（如果已启用）
 	if (soundSwitch.checked) {
 		var soundPromise = document.getElementById("notify-sound").play();
+
 		if (soundPromise) {
 			soundPromise.catch(function (error) {
 				console.error("播放提示音错误：\n" + error);
@@ -314,7 +306,7 @@ function notify(args) {
 	}
 }
 
-function getNick(){
+function getNick() {
 	return myNick.split('#')[0]
 }
 
@@ -326,45 +318,44 @@ function getMurmur() {
 		});
 		// 指纹
 		myMurmur = Fingerprint2.x64hash128(values[19].join(''), 31);
-		//console.log(murmur)
+		// console.log(murmur)
 	})
 }
 
 /*
-function tokenCallback(token){
-	//debugger
+function tokenCallback(token) {
+	// debugger
 	setTimeout(() => {
-		document.getElementById('captcha').innerHTML = ''    //清除验证码，防止出现BUG
-	},2000)
-	join(myChannel,token)
+		document.getElementById('captcha').innerHTML = '' // 清除验证码，防止出现BUG
+	}, 1800)
+
+	join(myChannel, token)
 }
 */
 
 function join(channel) {
-	
+/*
+	如果在服务器配置期间更改了端口，请更改wsPath端口（例如：':8080'）
+	如果是反向代理，请将wsPath更改为新ws地址（例如：'/chat-ws'）
+*/
 	var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
-	// if you changed the port during the server config, change 'wsPath'
-	// to the new port (example: ':8080')
-	// if you are reverse proxying, change 'wsPath' to the new location
-	// (example: '/chat-ws')
 	var wsPath = '/ws';
 	const url = protocol + '//' + document.domain + wsPath
-
 	ws = new WebSocket(url);
-
 	var wasConnected = false;
 
 	ws.onopen = async function () {
 		var shouldConnect = true;
+
 		if (!wasConnected) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
 			} else {
 				var newNick = prompt('请输入昵称：', myNick);
+
 				if (newNick !== null) {
 					myNick = newNick;
-				} else {
-					// The user cancelled the prompt in some manner
+				} else { // 用户以某种方式取消了提示
 					shouldConnect = false;
 				}
 			}
@@ -373,9 +364,9 @@ function join(channel) {
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
 			await getMurmur();
-			//console.log(`murmur is: ${myMurmur}`)
+			// console.log(`murmur is: ${myMurmur}`)
 			var sendMurmur=encode(myMurmur)
-			send({ cmd: 'join', channel: channel, nick: myNick, client:'ZhangChatClient', murmur: sendMurmur.toString() });
+			send({cmd: 'join', channel: channel, nick: myNick, client:'ZhangChatClient', murmur: sendMurmur.toString()});
 		}
 
 		wasConnected = true;
@@ -383,12 +374,12 @@ function join(channel) {
 
 	ws.onclose = function () {
 		if (wasConnected) {
-			pushMessage({ nick: '!', text: "哎呀，掉线了，正在重新连接..." });
+			pushMessage({nick: '!', text: "哎呀，掉线了，正在重新连接..."});
 		}
 
 		window.setTimeout(function () {
 			join(channel);
-		}, 2000);
+		}, 1800);
 		
 	}
 
@@ -396,7 +387,7 @@ function join(channel) {
 		var args = JSON.parse(message.data);
 		var cmd = args.cmd;
 		var command = COMMANDS[cmd];
-		//console.log(args)
+		// console.log(args)
 		command.call(null, args);
 	}
 }
@@ -420,115 +411,120 @@ var COMMANDS = {
 	},
 
 	onlineSet: function (args) {
-		var nicks = args.nicks;
-
+		var users = args.users;
 		usersClear();
 
-		nicks.forEach(function (nick) {
-			userAdd(nick);
+		users.forEach(function (user) {
+			userAdd(user.nick, user.trip);
 		});
 
-		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join(", ") })
+		pushMessage({nick: '*', text: "在线用户：" + args.nicks.join(", ")})
+
+		if (localStorageGet('fun-system') != 'false'){
+			pushWelcomeButton("打个招呼")
+		}
 	},
 
 	onlineAdd: function (args) {
 		var nick = args.nick;
-
-		userAdd(nick);
+		userAdd(nick,args.trip);
 
 		if ($('#joined-left').checked) {
-			if (localStorageGet('fun') == 'false') {
-		                var joinNotice = nick + " 加入了聊天室"
-			}else {
-				const test = ['活蹦乱跳','手舞足蹈','哼着小曲','突然诈尸','可爱','美丽','快乐','活泼']
-				const test2 = ["来到","误入","闯入","跳进","飞进","滚进"]
-				var joinNotice = `${test[Math.round(Math.random()*(test.length - 1))]}的++${nick}++${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
+			if (localStorageGet('fun-system') == 'false') {
+				var joinNotice = nick + " 加入了聊天室"
+			} else {
+				const test = ['活蹦乱跳','可爱','美丽','快乐','活泼','美味']
+				const test2 = ["误入","闯入","跳进","飞进","滚进","掉进"]
+				var joinNotice = `${test[Math.round(Math.random()*(test.length - 1))]}的 ${nick} ${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
 			}
-			if (args.client){
+
+			if (args.client) {
 				joinNotice += '\nTA正在使用 ' + args.client
 			}
-			if (args.auth){
+
+			if (args.auth) {
 				joinNotice += '\n系统认证：' + args.auth
 			}
-			pushMessage({ nick: '→', text: joinNotice, trip: args.trip || '' },'info');    //仿Discord
-			if (localStorageGet('fun') != 'false'){
-				pushWelcomeButton()
+
+			pushMessage({nick: '→', text: joinNotice, trip: args.trip || ''}, 'info'); // 仿Discord
+
+			if (localStorageGet('fun-system') != 'false') {
+				pushWelcomeButton("欢迎一下")
 			}
 		}
 	},
 
 	onlineRemove: function (args) {
 		var nick = args.nick;
-
 		userRemove(nick);
 
 		if ($('#joined-left').checked) {
-			if (localStorageGet('fun') == 'false') {
-		                var leaveNotice = nick + " 离开了聊天室"
-			}else {
-				const test = ["躺着","蹲着","扭着"]
-				const test2 = ["跳出","飞出","滚出"]
-				var leaveNotice = `++${nick}++${test[Math.round(Math.random()*(test.length - 1))]}${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
+			if (localStorageGet('fun-system') == 'false') {
+				var leaveNotice = nick + " 离开了聊天室"
+			} else {
+				const test = ["跳出","飞出","滚出","掉出","扭出","瞬移出"]
+				var leaveNotice = `${nick} ${test[Math.round(Math.random()*(test.length - 1))]}了聊天室`
 			}
-			pushMessage({ nick: '←', text: leaveNotice },'info');    //仿Discord
+
+			pushMessage({nick: '←', text: leaveNotice}, 'info'); //仿Discord
 		}
 	},
-	'set-video': function (args){
-		var html = `<video controls><source src="${args.url}"></video>`
-		pushHTML({
-			nick: '*',
-			text: html
-		})
+
+	'set-video': function (args) {
+		pushMessage({nick: '*', text: `<video width="100%" controls><source src="${args.url}"></video>`}, "info", true)
 	},
+
 	history: function (args) {
-		var i = 0
+		var i = 0;
+
 		for (i in args.history) {
-			pushMessage(args.history[i],null)
+			pushMessage(args.history[i], null);
 		}
-		pushMessage({
-			nick: '*',
-			text: '——以上是历史记录——'
-		})
+
+		pushMessage({nick: '*', text: '—— 以上是历史记录 ——'})
 	},
+
 	changeNick: function (args) {
-        userChange(args.nick,args.text);
-		pushMessage({
-			nick: '*',
-			text: `${args.nick} 更名为 ${args.text}`
-		})
+		userChange(args.nick, args.text);
+		pushMessage({nick: '*', text: `${args.nick} 更名为 ${args.text}`})
 	}
 }
 
-function buildReplyText(user,text){
+function buildReplyText(user, text) {
 	var replyText = `>`
-	var i = 0
 	var tooLong = true
 	const textList = text.split('\n')
-	if (user.trip){
+
+	if (user.trip) {
 		replyText += `[${user.trip}] ${user.nick}：\n`
-	}else{
+	} else {
 		replyText += `${user.nick}：\n`
 	}
-	for (i = 0;i < 8;i+=1){
+
+	for (var i = 0; i < 8; i+=1) {
 		if (typeof textList[i] === 'undefined'){
 			tooLong = false
 			break
 		}
+
 		replyText += '>' + textList[i] + '\n'
 	}
-	if (i < textList.length && tooLong){
+
+	if (i < textList.length && tooLong) {
 		replyText += '>……\n\n'
-	}else{
+	} else {
 		replyText += '\n'
 	}
-	if (user.nick !== getNick()){
+
+	if (user.nick !== getNick()) {
 		replyText += `@${user.nick} `
 	}
+
 	return replyText
 }
 
-function pushMessage(args,cls = undefined) {    //cls指定messageEl添加什么classList
-	// Message container
+function pushMessage(args, cls = undefined, html = false) { // cls指定messageEl添加什么classList
+	// 消息容器
 	var messageEl = document.createElement('div');
 	
 	if (args.messageID){
@@ -545,11 +541,12 @@ function pushMessage(args,cls = undefined) {    //cls指定messageEl添加什么
 	}
 
 	messageEl.classList.add('message');
-    if (typeof cls === 'string'){
+
+	if (typeof cls === 'string') {
 		messageEl.classList.add(cls);
-	}else if (cls === null){
-		//nothing
-	}else{
+	} else if (cls === null) {
+		// nothing
+	} else {
 		if (verifyNickname(getNick()) && args.nick == getNick()) {
 			messageEl.classList.add('me');
 		} else if (args.nick == '!') {
@@ -559,34 +556,59 @@ function pushMessage(args,cls = undefined) {    //cls指定messageEl添加什么
 		}
 	}
 	
-	// Nickname
+	// 昵称
 	var nickSpanEl = document.createElement('span');
 	nickSpanEl.classList.add('nick');
 	messageEl.appendChild(nickSpanEl);
 
-
 	if (args.trip) {
 		var tripEl = document.createElement('span');
 		var prefixs = []
-		if (args.isBot){    //机器人标识
-			prefixs.push(String.fromCodePoint(129302))
+
+		/*
+		if (args.isBot) { // 机器人标识
+			prefixs.push(String.fromCodePoint(129302)) // ee：我这边大部分标识都无法显示（悲
 		}
-		if(args.admin){    //站长标识
+		if (args.admin) { // 站长标识
 			prefixs.push(String.fromCodePoint(128081))
-		}else if (args.mod){    //管理员标识
+		} else if (args.mod) { // 管理员标识
 			prefixs.push(String.fromCodePoint(11088))
-		}else if (args.channelOwner){//房主标识
+		} else if (args.channelOwner) { // 房主标识
 			prefixs.push(String.fromCodePoint(127968))
-		}else if (args.trusted){    //信任用户标识
+		} else if (args.trusted) { // 信任用户标识
 			prefixs.push(String.fromCodePoint(128681))
 		}
+
 		tripEl.textContent = prefixs.join(' ') + ' ' + args.trip + " ";
+		*/
+
+		if (args.isBot) { // 机器人标识
+			prefixs.push("Bot")
+		}
+
+		if (args.admin) { // 站长标识
+			prefixs.push("Admin")
+		} else if (args.mod) { // 管理员标识
+			prefixs.push("Mod")
+		}
+
+		if (args.channelOwner) { // 房主标识
+			prefixs.push("OP")
+		}
+
+		var strPrefixs = prefixs.join('&')
+
+		if (strPrefixs || args.trusted) {
+			strPrefixs = `√${strPrefixs}`
+		}
+
+		tripEl.textContent = `${strPrefixs} ${args.trip} `;
 		tripEl.classList.add('trip');
 		nickSpanEl.appendChild(tripEl);
 	}
 
-	if (args.head){
-		//头像
+	if (args.head) {
+		// 头像
 		var imgEl = document.createElement('img');
 		imgEl.src = args.head
 		imgEl.style.height = '25px'
@@ -594,6 +616,12 @@ function pushMessage(args,cls = undefined) {    //cls指定messageEl添加什么
 		imgEl.style.marginRight = '0.5rem'
 		imgEl.style.verticalAlign = 'top'
 		imgEl.style.borderRadius = '50%'
+		imgEl.className = 'uwuTest';
+
+		if (localStorageGet('show-head') == 'false') {
+			imgEl.style.display = "none";
+		}
+
 		nickSpanEl.appendChild(imgEl)
 	}
 
@@ -602,20 +630,17 @@ function pushMessage(args,cls = undefined) {    //cls指定messageEl添加什么
 		nickLinkEl.textContent = args.nick;
 
 		if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
-			nickLinkEl.setAttribute('style', 'color:#' + args.color + ' !important');
+			nickLinkEl.setAttribute('style', `color:#${args.color}!important`);
 		}
 
 		nickLinkEl.onclick = function () {
-			insertAtCursor("@" + args.nick + " ");
+			insertAtCursor(`@${args.nick} `);
 			$('#chatinput').focus();
 		}
 
 		nickLinkEl.oncontextmenu = function(e){
 			e.preventDefault();
-			var replyText = buildReplyText({
-				nick:args.nick,
-				trip: args.trip || ''
-			},args.text)
+			var replyText = buildReplyText({nick:args.nick, trip: args.trip || ''}, args.text)
 			replyText += $('#chatinput').value
 			$('#chatinput').value = ''
 			insertAtCursor(replyText)
@@ -626,113 +651,30 @@ function pushMessage(args,cls = undefined) {    //cls指定messageEl添加什么
 		nickLinkEl.title = date.toLocaleString();
 		nickSpanEl.appendChild(nickLinkEl);
 	}
-	// Text
+
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
-	textEl.innerHTML = md.render(args.text);
+
+	// 文本
+	if (!html) {
+		textEl.innerHTML = md.render(args.text);
+	} else {
+		textEl = document.createElement('div');
+		textEl.innerHTML = args.text;
+	}
 
 	messageEl.appendChild(textEl);
-
-	// Scroll to bottom
-	var atBottom = isAtBottom();
 	$('#messages').appendChild(messageEl);
-	if (atBottom) {
-		window.scrollTo(0, document.body.scrollHeight);
-	}
-
-	unread += 1;
-	updateTitle();
+	autoBottom()
 }
 
-function pushHTML(args,cls = undefined) {    //cls指定messageEl添加什么classList
-	// Message container
+function pushWelcomeButton(text) {
+	// 消息容器
 	var messageEl = document.createElement('div');
 	messageEl.classList.add('message');
-
-	if (verifyNickname(getNick()) && args.nick == getNick()) {
-		messageEl.classList.add('me');
-	} else if (args.nick == '!') {
-		messageEl.classList.add('warn');
-	} else if (args.nick == '*') {
-		messageEl.classList.add('info');
-	}
-	
-	// Nickname
-	var nickSpanEl = document.createElement('span');
-	nickSpanEl.classList.add('nick');
-	messageEl.appendChild(nickSpanEl);
-
-	if (args.trip) {
-		var tripEl = document.createElement('span');
-		var prefixs = []
-		if (args.isBot){    //机器人标识
-			prefixs.push(String.fromCodePoint(129302))
-		}
-		if(args.admin){    //站长标识
-			prefixs.push(String.fromCodePoint(128081))
-		}else if (args.mod){    //管理员标识
-			prefixs.push(String.fromCodePoint(11088))
-		}else if (args.channelOwner){//房主标识
-			prefixs.push(String.fromCodePoint(127968))
-		}else if (args.trusted){    //信任用户标识
-			prefixs.push(String.fromCodePoint(128681))
-		}
-		tripEl.textContent = prefixs.join(' ') + ' ' + args.trip + " ";
-		tripEl.classList.add('trip');
-		nickSpanEl.appendChild(tripEl);
-	}
-
-	if (args.head){
-		//头像
-		var imgEl = document.createElement('img');
-		imgEl.src = args.head
-		imgEl.style.height = '20px'
-		imgEl.style.width = '20px'
-		imgEl.style.marginRight = '0.5rem'
-		imgEl.style.verticalAlign = 'top'
-		imgEl.style.borderRadius = '50%'
-		nickSpanEl.appendChild(imgEl)
-	}
-
-	if (args.nick) {
-		var nickLinkEl = document.createElement('a');
-		nickLinkEl.textContent = args.nick;
-
-		nickLinkEl.onclick = function () {
-			insertAtCursor("@" + args.nick + " ");
-			$('#chatinput').focus();
-		}
-
-		var date = new Date(args.time || Date.now());
-		nickLinkEl.title = date.toLocaleString();
-		nickSpanEl.appendChild(nickLinkEl);
-	}
-	// Text
-	var textEl = document.createElement('div');
-	textEl.classList.add('text');
-	textEl.innerHTML = args.text;
-
-	messageEl.appendChild(textEl);
-
-	// Scroll to bottom
-	var atBottom = isAtBottom();
-	$('#messages').appendChild(messageEl);
-	if (atBottom) {
-		window.scrollTo(0, document.body.scrollHeight);
-	}
-
-	unread += 1;
-	updateTitle();
-}
-
-function pushWelcomeButton() {
-	// Message container
-	var messageEl = document.createElement('div');
-	messageEl.classList.add('message');
-
 	messageEl.classList.add('info');
 	
-	// Nickname
+	// 昵称
 	var nickSpanEl = document.createElement('span');
 	nickSpanEl.classList.add('nick');
 	messageEl.appendChild(nickSpanEl);
@@ -741,7 +683,7 @@ function pushWelcomeButton() {
 	nickLinkEl.textContent = '*';
 
 	nickLinkEl.onclick = function () {
-		insertAtCursor("@" + '*' + " ");
+		insertAtCursor("@* ");
 		$('#chatinput').focus();
 	}
 
@@ -749,40 +691,42 @@ function pushWelcomeButton() {
 	nickLinkEl.title = date.toLocaleString();
 	nickSpanEl.appendChild(nickLinkEl);
 
-	// Text
+	// 文本
 	var textEl = document.createElement('div');
 	textEl.classList.add('text');
 	
-	//Button
+	// 按钮
 	var buttonEl = document.createElement('a')
-	buttonEl.textContent = '欢迎一下'
+	buttonEl.textContent = text
+
 	buttonEl.onclick = () => {
 		var hiyo = 'hi y'
-		var i = 0
 		var max = Math.round(Math.random()*20)
-		while (i < max){    //@ee 你想累死我啊
-			hiyo += 'o'     //ee：（被打
-			i++
+
+		for (var i = 0; i < max; i++) { // @ee 你想累死我啊
+			hiyo += 'o' // ee：（被打
 		}
-		const welcomes = [hiyo + '!','awa!','uwu!','好耶!','欢迎!','来了老弟~']
+
+		const welcomes = [hiyo, 'awa!', 'uwu!', '来了老弟~']
 		var txt = welcomes[Math.round(Math.random()*(welcomes.length - 1))]
-		send({ cmd: 'chat', text: txt, head: localStorageGet('head') || '' })
+		send({cmd: 'chat', text: txt, head: localStorageGet('head') || ''})
 	}
+
 	textEl.appendChild(buttonEl)
-
 	messageEl.appendChild(textEl);
-
-	// Scroll to bottom
-	var atBottom = isAtBottom();
 	$('#messages').appendChild(messageEl);
-	if (atBottom) {
+	autoBottom()
+}
+
+function autoBottom() {
+	// 滚动到底部
+	if (isAtBottom() && myChannel != '') {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
 	unread += 1;
 	updateTitle();
 }
-
 
 function insertAtCursor(text) {
 	var input = $('#chatinput');
@@ -800,8 +744,9 @@ function insertAtCursor(text) {
 function send(data) {
 	if (ws && ws.readyState == ws.OPEN) {
 		if ($('#rainbow-nick').checked && data['cmd'] == 'chat') {
-			ws.send(JSON.stringify({ cmd: 'changecolor', color: `#${Math.floor(Math.random()*0xffffff).toString(16).padEnd(6,"0")}` }));
+			ws.send(JSON.stringify({cmd: 'changecolor', color: `#${Math.floor(Math.random()*0xffffff).toString(16).padEnd(6,"0")}`}));
 		};
+
 		ws.send(JSON.stringify(data));
 	}
 }
@@ -811,7 +756,6 @@ var unread = 0;
 
 window.onfocus = function () {
 	windowActive = true;
-
 	updateTitle();
 }
 
@@ -829,24 +773,34 @@ function isAtBottom() {
 	return (window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 1);
 }
 
+var uwuTitle = "小张聊天室";
+var uwuBUG = "ZhangChat"
+
 function updateTitle() {
 	if (windowActive && isAtBottom()) {
 		unread = 0;
 	}
 
-	var title;
 	if (myChannel) {
-		title = myChannel;
-	} else {
-		title = "小张聊天室";
+		uwuTitle = myChannel;
+
+		if (unread > 0) {
+			uwuTitle = `（${unread}）${uwuTitle}`;
+		}
 	}
 
-	if (unread > 0) {
-		title = '（' + unread + '）' + title;
-	}
-
-	document.title = title;
+	document.title = `${uwuTitle} - ${uwuBUG}`;
 }
+
+document.addEventListener('visibilitychange', function() {
+	if (document.visibilityState == 'hidden') {
+		uwuBUG = 'ZhangBUG';
+	} else {
+		uwuBUG = 'ZhangChat';
+	}
+
+	document.title = `${uwuTitle} - ${uwuBUG}`;
+});
 
 $('#footer').onclick = function () {
 	$('#chatinput').focus();
@@ -856,12 +810,12 @@ $('#chatinput').onkeydown = function (e) {
 	if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
 		e.preventDefault();
 
-		// Submit message
+		// 发送消息
 		if (e.target.value != '') {
 			var text = e.target.value;
 			e.target.value = '';
 
-			send({ cmd: 'chat', text: text, head: localStorageGet('head') || '' });
+			send({cmd: 'chat', text: text, head: localStorageGet('head') || ''});
 
 			lastSent[0] = text;
 			lastSent.unshift("");
@@ -870,7 +824,7 @@ $('#chatinput').onkeydown = function (e) {
 			updateInputSize();
 		}
 	} else if (e.keyCode == 38 /* UP */) {
-		// Restore previous sent messages
+		// 恢复以前发送的消息
 		if (e.target.selectionStart === 0 && lastSentPos < lastSent.length - 1) {
 			e.preventDefault();
 
@@ -897,20 +851,18 @@ $('#chatinput').onkeydown = function (e) {
 	} else if (e.keyCode == 27 /* ESC */) {
 		e.preventDefault();
 
-		// Clear input field
+		// 清空输入框
 		e.target.value = "";
 		lastSentPos = 0;
 		lastSent[lastSentPos] = "";
-
 		updateInputSize();
 	} else if (e.keyCode == 9 /* TAB */) {
-		// Tab complete nicknames starting with @
-
 		if (e.ctrlKey) {
-			// Skip autocompletion and tab insertion if user is pressing ctrl
-			// ctrl-tab is used by browsers to cycle through tabs
+			// 如果按Ctrl，则跳过自动完成和Tab键插入
+			// 浏览器使用Ctrl-Tab在选项卡之间循环切换
 			return;
 		}
+
 		e.preventDefault();
 
 		var pos = e.target.selectionStart || 0;
@@ -920,21 +872,23 @@ $('#chatinput').onkeydown = function (e) {
 		var autocompletedNick = false;
 
 		if (index >= 0) {
-			var stub = text.substring(index + 1, pos).toLowerCase();
-			// Search for nick beginning with stub
+			var stub = text.substring(index + 1, pos);
+
+			// 搜索昵称
 			var nicks = onlineUsers.filter(function (nick) {
-				return nick.toLowerCase().indexOf(stub) == 0
+				return nick.indexOf(stub) == 0
 			});
 
 			if (nicks.length > 0) {
 				autocompletedNick = true;
+
 				if (nicks.length == 1) {
 					insertAtCursor(nicks[0].substr(stub.length) + " ");
 				}
 			}
 		}
 
-		// Since we did not insert a nick, we insert a tab character
+		// 由于没有插入昵称，因此插入一个制表符
 		if (!autocompletedNick) {
 			insertAtCursor('\t');
 		}
@@ -960,7 +914,7 @@ $('#chatinput').oninput = function () {
 
 updateInputSize();
 
-/* sidebar */
+/* 侧边栏 */
 
 $('#sidebar').onmouseenter = $('#sidebar').ontouchstart = function (e) {
 	$('#sidebar-content').classList.remove('hidden');
@@ -970,11 +924,14 @@ $('#sidebar').onmouseenter = $('#sidebar').ontouchstart = function (e) {
 
 $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
 	var e = event.toElement || event.relatedTarget;
+
 	try {
 		if (e.parentNode == this || e == this) {
-	     return;
-	  }
-	} catch (e) { return; }
+			return;
+		}
+	} catch (e) {
+		return;
+	}
 
 	if (!$('#pin-sidebar').checked) {
 		$('#sidebar-content').classList.add('hidden');
@@ -983,44 +940,36 @@ $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
 }
 
 $('#set-video').onclick = function() {
-    var newVideo = prompt('请输入视频文件地址（留空则清除公共视频）：','')
+	var newVideo = prompt('请输入视频文件地址（留空则清除公共视频）：', '')
+
 	if (newVideo === null){
-		return pushMessage({
-			nick:'!',
-			text:'您取消了设置视频'
-		})
+		return pushMessage({nick:'!', text:'您取消了设置视频'})
 	}
-	send({
-		cmd:'set-video',
-		url: newVideo || 'nothing'
-	})
+
+	send({cmd:'set-video', url: newVideo || 'nothing'})
 }
 
 $('#get-video').onclick = function() {
-	send({
-		cmd:'get-video',
-	})
+	send({cmd:'get-video'})
 }
 
 $('#clear-messages').onclick = function () {
-	// Delete children elements
-	if (!confirm('是否清除本页聊天内容？')){     //are you sure?
+	// 清空聊天记录
+	if (!confirm('是否清除本页聊天内容？')){ // 你确定吗？
 		return
 	}
+
 	var messages = $('#messages');
 	messages.innerHTML = '';
+	pushMessage({nick:'*', text:'—— 历史记录为空 ——'})
 }
 
 $('#set-head').onclick = function () {
 	var newHead = prompt('请输入头像地址（留空则使用默认值）：',localStorageGet('head') || '')
-	if (!newHead){
-		localStorageSet('head','')
-	}else{
-		localStorageSet('head',newHead)
-	}
+	localStorageSet('head', newHead || '')
 }
 
-// Restore settings from localStorage
+// 从本地存储还原设置
 
 if (localStorageGet('pin-sidebar') == 'true') {
 	$('#pin-sidebar').checked = true;
@@ -1031,8 +980,8 @@ if (localStorageGet('joined-left') == 'false') {
 	$('#joined-left').checked = false;
 }
 
-if (localStorageGet('fun') == 'false') {
-	$('#fun').checked = false;
+if (localStorageGet('fun-system') == 'false') {
+	$('#fun-system').checked = false;
 }
 
 if (localStorageGet('parse-latex') == 'false') {
@@ -1042,7 +991,11 @@ if (localStorageGet('parse-latex') == 'false') {
 }
 
 if (localStorageGet('rainbow-nick') == 'true') {
-	$('#fun').checked = true;
+	$('#fun-system').checked = true;
+}
+
+if (localStorageGet('show-head') == 'false') {
+	$('#show-head').checked = false;
 }
 
 $('#pin-sidebar').onchange = function (e) {
@@ -1053,13 +1006,14 @@ $('#joined-left').onchange = function (e) {
 	localStorageSet('joined-left', !!e.target.checked);
 }
 
-$('#fun').onchange = function (e) {
-	localStorageSet('fun', !!e.target.checked);
+$('#fun-system').onchange = function (e) {
+	localStorageSet('fun-system', !!e.target.checked);
 }
 
 $('#parse-latex').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('parse-latex', enabled);
+
 	if (enabled) {
 		md.inline.ruler.enable([ 'katex' ]);
 		md.block.ruler.enable([ 'katex' ]);
@@ -1095,11 +1049,27 @@ $('#rainbow-nick').onchange = function (e) {
 	localStorageSet('rainbow-nick', !!e.target.checked);
 }
 
-// User list
+$('#show-head').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('show-head', enabled);
+	head=document.getElementsByClassName("uwuTest").length
+	uwu="none"
+
+	if (enabled) {
+		uwu="inline";
+	}
+
+	for (var i=0; i < head; i++) {
+		document.getElementsByClassName("uwuTest")[i].style.display = uwu;
+	}
+}
+
+// 用户列表
 var onlineUsers = [];
 var ignoredUsers = [];
 
-function userAdd(nick) {
+// 这里抄了点代码 404不要打我（被打
+function userAdd(nick,trip) {
 	var user = document.createElement('a');
 	user.textContent = nick;
 
@@ -1109,6 +1079,14 @@ function userAdd(nick) {
 
 	var userLi = document.createElement('li');
 	userLi.appendChild(user);
+
+	if (trip) {
+		var userTrip = document.createElement('span')
+		userTrip.textContent = ' ' + trip
+		userTrip.classList.add('trip')
+		userLi.appendChild(userTrip)
+	}
+
 	$('#users').appendChild(userLi);
 	onlineUsers.push(nick);
 }
@@ -1119,36 +1097,39 @@ function userRemove(nick) {
 
 	for (var i = 0; i < children.length; i++) {
 		var user = children[i];
-		if (user.textContent == nick) {
+
+		if (user.firstChild.textContent == nick) {
 			users.removeChild(user);
 		}
 	}
 
 	var index = onlineUsers.indexOf(nick);
+
 	if (index >= 0) {
 		onlineUsers.splice(index, 1);
 	}
 }
 
 function userChange(nick,text) {
-    var users = $('#users');
-    var children = users.children;
+	var users = $('#users');
+	var children = users.children;
 
-    for (var i = 0; i < children.length; i++) {
-        var user = children[i];
-        if (user.textContent == nick) {
-		var user = document.createElement('a');
-	    user.textContent = text;
-	    user.onclick = function (e) {
-	        userInvite(text)
-	    }
-        }
-    }
+	for (var i = 0; i < children.length; i++) {
+		var user = children[i];
 
-    var index = onlineUsers.indexOf(nick);
-    if (index >= 0) {
-        onlineUsers[index] = text;
-    }
+		if (user.firstChild.textContent == nick) {
+			user.firstChild.innerHTML = `<a>${text}</a>`;
+			user.firstChild.onclick = function (e) {
+				userInvite(text)
+			}
+		}
+	}
+
+	var index = onlineUsers.indexOf(nick);
+
+	if (index >= 0) {
+		onlineUsers[index] = text;
+	}
 }
 
 function usersClear() {
@@ -1162,22 +1143,23 @@ function usersClear() {
 }
 
 function userInvite(nick) {
-	send({ cmd: 'invite', nick: nick });
+	send({cmd: 'invite', nick: nick});
 }
 
 function userIgnore(nick) {
 	ignoredUsers.push(nick);
 }
 
-/* color scheme switcher */
+/* 配色方案切换 */
 
 var schemes = [
 	'electron',
 	'eighties',
 	'tomorrow',
-	'default',
+	'lax',
 	'bright',
 	'hacker',
+	'default',
 ];
 
 var highlights = [
@@ -1187,6 +1169,7 @@ var highlights = [
 	'androidstudio',
 ]
 
+// 默认方案
 var currentScheme = 'electron';
 var currentHighlight = 'darcula';
 
@@ -1202,7 +1185,7 @@ function setHighlight(scheme) {
 	localStorageSet('highlight', scheme);
 }
 
-// Add scheme options to dropdown selector
+// 添加主题到下拉条
 schemes.forEach(function (scheme) {
 	var option = document.createElement('option');
 	option.textContent = scheme;
@@ -1225,7 +1208,7 @@ $('#highlight-selector').onchange = function (e) {
 	setHighlight(e.target.value);
 }
 
-// Load sidebar configaration values from local storage if available
+// 从本地存储加载侧边栏配置（如果可用）
 if (localStorageGet('scheme')) {
 	setScheme(localStorageGet('scheme'));
 }
@@ -1237,12 +1220,13 @@ if (localStorageGet('highlight')) {
 $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
 
-/* main */
+/* 首先执行 */
 
 if (myChannel == '') {
-	pushMessage({ text: frontpage });
+	$('#messages').innerHTML = '';
 	$('#footer').classList.add('hidden');
 	$('#sidebar').classList.add('hidden');
+	pushMessage({text: frontpage});
 } else {
 	join(myChannel);
 }
