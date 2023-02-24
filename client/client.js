@@ -131,11 +131,11 @@ var frontpage = [
 	'# 小张聊天室',
 	'---',
 	'欢迎来到小张聊天室，这是一个黑客风格的聊天室。',
-	'注意：在这里，我们把"房间（chatroom）"称作"频道（channel）"。',
-	'公共频道（在线用户多）：[?chat](/?chat)',
+	'公共房间（在线用户多）：[?chat](/?chat)',
+	`您也可以自己创建房间，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
 	`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
 	'---',
-	'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录和IP地址。',
+	'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录。',
 	'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内相关规定。',
 	'您如果对本聊天室不满意或认为受到不公平对待，则可以选择向管埋员申诉或选择离开。',
 	'---',
@@ -282,7 +282,7 @@ function spawnNotification(title, body) {
 	// 否则请求用户许可
 	else if (Notification.permission !== "denied") {
 		if (RequestNotifyPermission()) {
-			var options = {body: body, icon: "/favicon-96x96.png"};
+			var options = {body: body, /* icon: "/favicon-96x96.png" */ /* 图标没做好，也不能用XC的图标 */};
 			var n = new Notification(title, options);
 		}
 	}
@@ -471,7 +471,7 @@ var COMMANDS = {
 	},
 
 	'set-video': function (args) {
-		pushMessage({nick: '*', text: `<video width="100%" controls><source src="${args.url}"></video>`}, "info", true)
+		pushMessage({nick: '*', text: `<video width="100%" controls><source src="${encodeURI(args.url)}"></video>`}, "info", true)
 	},
 
 	history: function (args) {
@@ -544,8 +544,6 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 	if (typeof cls === 'string') {
 		messageEl.classList.add(cls);
-	} else if (cls === null) {
-		// nothing
 	} else {
 		if (verifyNickname(getNick()) && args.nick == getNick()) {
 			messageEl.classList.add('me');
@@ -563,53 +561,45 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 	if (args.trip) {
 		var tripEl = document.createElement('span');
-		var uwuTemp
 
-		if (!cls) {
-			var prefixs = []
-			var prefixs2 = []
+		var prefixs = []
+		var prefixs2 = []
 
-			if (args.isBot) { // 机器人标识
-				prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分onlyemoji都无法显示（悲
-				prefixs2.push("Bot")
-			}
-
-			if (args.admin) { // 站长标识
-				prefixs.push(String.fromCodePoint(9770))
-				prefixs2.push("Admin")
-			} else if (args.mod) { // 管理员标识
-				prefixs.push(String.fromCodePoint(9733))
-				prefixs2.push("Mod")
-			} else if (args.trusted) { // 信任用户标识
-				prefixs.push(String.fromCodePoint(9830))
-			}
-
-			if (args.channelOwner) { // 房主标识
-				prefixs.push(String.fromCodePoint(10033))
-				prefixs2.push("OP")
-			} 
-
-			var strPrefixs = prefixs.join(" ")
-			var strPrefixs2 = prefixs2.join('&');
-
-			if (strPrefixs2 || args.trusted) {
-				strPrefixs2 = `√${strPrefixs2}`;
-			}
-
-			uwuTemp = `<span class="none onlyemoji">${strPrefixs}</span><span class="none onlytext">${strPrefixs2}</span>`
+		if (args.isBot) { // 机器人标识
+			prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分onlyemoji都无法显示（悲
+			prefixs2.push("机器人")
 		}
 
-		tripEl.innerHTML = `${uwuTemp}<span class="uwuTrip">${args.trip}</span>`;
+		if (args.admin) { // 站长标识
+			prefixs.push(String.fromCodePoint(9770))
+			prefixs2.push("站长")
+		} else if (args.mod) { // 管理员标识
+			prefixs.push(String.fromCodePoint(9733))
+			prefixs2.push("管理员")
+		} else if (args.trusted) { // 信任用户标识
+			prefixs.push(String.fromCodePoint(9830))
+		}
+
+		if (args.channelOwner) { // 房主标识
+			prefixs.push(String.fromCodePoint(10033))
+			prefixs2.push("房主")
+		} 
+
+		var strPrefixs = prefixs.join(" ")
+		var strPrefixs2 = prefixs2.join('&');
+
+		var t = new String()
+
+		if (localStorageGet('prefix') === '文本'){
+			t = '√' + strPrefixs2 + ' ' + args.trip
+		}else if (localStorageGet('prefix') === '表情符号'){
+			t = strPrefixs + ' ' + args.trip
+		}else {
+			t = args.trip
+		}
+
+		tripEl.innerHTML = t
 		tripEl.classList.add('trip');
-
-		if (!cls) {
-			let temp = localStorageGet('prefix');
-			display('none', 'none', tripEl);
-
-			if (temp && temp != 'none') {
-				display(temp, 'inline', tripEl);
-			}
-		}
 
 		nickSpanEl.appendChild(tripEl);
 	}
@@ -1191,15 +1181,15 @@ var highlights = [
 ]
 
 var uwuPrefixs = [
-	'none',
-	'onlytext',
-	'onlyemoji',
+	'无',
+	'文本',
+	'表情符号',
 ]
 
 // 默认方案
 var currentScheme = 'electron';
 var currentHighlight = 'darcula';
-var currentPrefix = 'none';
+var currentPrefix = '文本';
 
 function setScheme(scheme) {
 	currentScheme = scheme;
