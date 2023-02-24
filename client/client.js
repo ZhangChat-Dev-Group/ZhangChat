@@ -131,8 +131,9 @@ var frontpage = [
 	'# 小张聊天室',
 	'---',
 	'欢迎来到小张聊天室，这是一个黑客风格的聊天室。',
-	'公共房间（在线用户多）：[?chat](/?chat)',
-	`您也可以自己创建房间，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
+	'注意：在这里，我们把"房间（chatroom）"称作"频道（channel）"。',
+	'公共频道（在线用户多）：[?chat](/?chat)',
+	`您也可以自己创建频道，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
 	`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
 	'---',
 	'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录。',
@@ -274,17 +275,9 @@ if (notifySetting === "true" || notifySetting === true) {
 function spawnNotification(title, body) {
 	if (!("Notification" in window)) {
 		console.error("浏览器不支持桌面通知");
-	} else if (Notification.permission === "granted") { // 检查是否已授予通知权限
-		var options = {body: body, icon: "/favicon-96x96.png"};
+	} else if (Notification.permission === "granted" || (Notification.permission !== "denied" && RequestNotifyPermission())) { // 检查是否已授予通知权限
+		var options = {body: body, /* icon: "/favicon-96x96.png" */ /* 图标没做好，也不能用XC的图标 */};
 		var n = new Notification(title, options);
-	}
-
-	// 否则请求用户许可
-	else if (Notification.permission !== "denied") {
-		if (RequestNotifyPermission()) {
-			var options = {body: body, /* icon: "/favicon-96x96.png" */ /* 图标没做好，也不能用XC的图标 */};
-			var n = new Notification(title, options);
-		}
 	}
 }
 
@@ -544,7 +537,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 	if (typeof cls === 'string') {
 		messageEl.classList.add(cls);
-	} else {
+	} else if (cls !== null) {
 		if (verifyNickname(getNick()) && args.nick == getNick()) {
 			messageEl.classList.add('me');
 		} else if (args.nick == '!') {
@@ -561,47 +554,50 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 	if (args.trip) {
 		var tripEl = document.createElement('span');
+		var uwuTemp
 
-		var prefixs = []
-		var prefixs2 = []
+		// @MrZhang365 这段真不能删 否则没法替换- quq
+		if (!cls) {
+			var prefixs = []
+			var prefixs2 = []
 
-		if (args.isBot) { // 机器人标识
-			prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分onlyemoji都无法显示（悲
-			prefixs2.push("Bot")
+			if (args.isBot) { // 机器人标识
+				prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分emoji都无法显示（悲
+				prefixs2.push("Bot")
+			}
+
+			if (args.admin) { // 站长标识
+				prefixs.push(String.fromCodePoint(9770))
+				prefixs2.push("Admin")
+			} else if (args.mod) { // 管理员标识
+				prefixs.push(String.fromCodePoint(9733))
+				prefixs2.push("Mod")
+			} else if (args.channelOwner) { // 房主标识
+				prefixs.push(String.fromCodePoint(10033))
+				prefixs2.push("RoomOP") // 再缩缩（
+			} else if (args.trusted) { // 信任用户标识
+				prefixs.push(String.fromCodePoint(9830))
+			}
+
+			var strPrefixs = prefixs2.join('&');
+
+			if (strPrefixs || args.trusted) { // 虽然直接插入HTML，但这是在本地运行的JS代码，根本没法做到XSS（
+				strPrefixs = `√${strPrefixs}`;
+				uwuTemp = `<span class="none onlyemoji">${prefixs.join(" ")}</span><span class="none onlytext">${strPrefixs}</span>`
+			}
 		}
 
-		if (args.admin) { // 站长标识
-			prefixs.push(String.fromCodePoint(9770))
-			prefixs2.push("Admin")
-		} else if (args.mod) { // 管理员标识
-			prefixs.push(String.fromCodePoint(9733))
-			prefixs2.push("Mod")
-		} else if (args.trusted) { // 信任用户标识
-			prefixs.push(String.fromCodePoint(9830))
-		}
-
-		if (args.channelOwner) { // 房主标识
-			prefixs.push(String.fromCodePoint(10033))
-			prefixs2.push("RoomAdmin")
-		} 
-
-		var strPrefixs = prefixs.join(" ")
-		var strPrefixs2 = prefixs2.join('&');
-
-		var t = new String()
-
-		if (!strPrefixs){
-			t = args.trip
-		}else if (localStorageGet('prefix') === '文本'){
-			t = '√' + strPrefixs2 + ' ' + args.trip
-		}else if (localStorageGet('prefix') === '表情符号'){
-			t = strPrefixs + ' ' + args.trip
-		} else {
-			t = args.trip
-		}
-
-		tripEl.innerHTML = t
+		tripEl.innerHTML = `${uwuTemp || ''}<span class="uwuTrip">${args.trip}</span>`;
 		tripEl.classList.add('trip');
+
+		if (!cls) {
+			let temp = localStorageGet('prefix');
+			display('none', 'none', tripEl);
+
+			if (temp && temp != 'none') {
+				display(temp, 'inline', tripEl);
+			}
+		}
 
 		nickSpanEl.appendChild(tripEl);
 	}
@@ -845,9 +841,8 @@ $('#chatinput').onkeydown = function (e) {
 			updateInputSize();
 		}
 	} else if (e.keyCode == 27 /* ESC */) {
-		e.preventDefault();
-
 		// 清空输入框
+		e.preventDefault();
 		e.target.value = '';
 		lastSentPos = 0;
 		lastSent[lastSentPos] = '';
@@ -1183,15 +1178,15 @@ var highlights = [
 ]
 
 var uwuPrefixs = [
-	'无',
-	'文本',
-	'表情符号',
+	'none',
+	'onlytext',
+	'onlyemoji',
 ]
 
 // 默认方案
 var currentScheme = 'electron';
 var currentHighlight = 'darcula';
-var currentPrefix = '文本';
+var currentPrefix = 'none';
 
 function setScheme(scheme) {
 	currentScheme = scheme;
@@ -1210,7 +1205,7 @@ function setPrefix(scheme) {
 	localStorageSet('prefix', scheme);
 	display('none')
 
-	if (scheme && scheme != '无') {
+	if (scheme && scheme != 'none') {
 		display(scheme, 'inline')
 	}
 }
