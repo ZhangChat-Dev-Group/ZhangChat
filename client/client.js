@@ -1276,7 +1276,7 @@ $('#prefix-selector').value = currentPrefix;
 
 /* 首先执行 */
 
-if (!!myChannel) {
+if (!myChannel) {
 	$('#messages').innerHTML = '';
 	$('#footer').classList.add('hidden');
 	$('#sidebar').classList.add('hidden');
