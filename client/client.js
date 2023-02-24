@@ -75,21 +75,21 @@ md.renderer.rules.image = function (tokens, idx, options) {
 	var src = Remarkable.utils.escapeHtml(tokens[idx].src);
 
 	if (isWhiteListed(src) && allowImages) {
-		var imgSrc = ' src="' + Remarkable.utils.escapeHtml(tokens[idx].src) + '"';
-		var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
-		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
+		var imgSrc = ` src="${Remarkable.utils.escapeHtml(tokens[idx].src)}"`;
+		var title = tokens[idx].title ? (` title="${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title))}"`) : '';
+		var alt = ` alt="${(tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '')}"`;
 		var suffix = options.xhtmlOut ? ' /' : '';
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
-		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' class="text"></a>';
+		return `<a href="${src}" target="_blank" rel="noreferrer"><img${scrollOnload}${imgSrc}${alt}${title}${suffix} class="text"></a>`;
 	}
 
-	return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
+	return `<a href="${src}" target="_blank" rel="noreferrer">${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src))}</a>`;
 };
 
 md.renderer.rules.link_open = function (tokens, idx, options) {
-	var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
-	var target = options.linkTarget ? (' target="' + options.linkTarget + '"') : '';
-	return '<a rel="noreferrer" onclick="return verifyLink(this)" href="' + Remarkable.utils.escapeHtml(tokens[idx].href) + '"' + title + target + '>';
+	var title = tokens[idx].title ? (` title="${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title))}"`) : '';
+	var target = options.linkTarget ? (` target="${options.linkTarget}"`) : '';
+	return `<a rel="noreferrer" onclick="return verifyLink(this)" href="${Remarkable.utils.escapeHtml(tokens[idx].href)}"${title}${target}>`;
 };
 
 md.renderer.rules.text = function(tokens, idx) {
@@ -104,7 +104,7 @@ md.renderer.rules.text = function(tokens, idx) {
 				whiteSpace = match[0];
 			}
 
-			return whiteSpace + '<a href="' + channelLink + '" target="_blank">' + channelLink + '</a>';
+			return `${whiteSpace}<a href="${channelLink}" target="_blank">${channelLink}</a>`;
 		});
 	}
 
@@ -117,7 +117,7 @@ function verifyLink(link) {
 	var linkHref = Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(link.href));
 
 	if (linkHref !== link.innerHTML) {
-		return confirm('等一下！你即将前往：' + linkHref);
+		return confirm(`等一下！你即将前往：${linkHref}`);
 	}
 
 	return true;
@@ -133,7 +133,7 @@ var frontpage = [
 	'欢迎来到小张聊天室，这是一个黑客风格的聊天室。',
 	'注意：在这里，我们把"房间（chatroom）"称作"频道（channel）"。',
 	'公共频道（在线用户多）：[?chat](/?chat)',
-	'这个是为您准备的频道（只有您自己）： ?' + Math.random().toString(36).substr(2, 8),
+	`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
 	'---',
 	'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录和IP地址。',
 	'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内相关规定。',
@@ -201,7 +201,7 @@ function RequestNotifyPermission() {
 
 		if (notifyPromise) {
 			notifyPromise.then(function (result) {
-				console.log("ZhangChat桌面通知权限：" + result);
+				console.log(`ZhangChat桌面通知权限：${result}`);
 
 				if (result === "granted") {
 					if (notifyPermissionExplained === 0) {
@@ -291,7 +291,7 @@ function spawnNotification(title, body) {
 function notify(args) {
 	// 生成通知（如果已启用）
 	if (notifySwitch.checked) {
-		spawnNotification("?" + myChannel + "  —  " + args.nick, args.text)
+		spawnNotification(`?${myChannel} - ${args.nick}`, args.text)
 	}
 
 	// 播放声音（如果已启用）
@@ -300,7 +300,7 @@ function notify(args) {
 
 		if (soundPromise) {
 			soundPromise.catch(function (error) {
-				console.error("播放提示音错误：\n" + error);
+				console.error(`播放提示音错误：${error}`);
 			});
 		}
 	}
@@ -340,7 +340,7 @@ function join(channel) {
 */
 	var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
 	var wsPath = '/ws';
-	const url = protocol + '//' + document.domain + wsPath
+	const url = `${protocol}//${document.domain}${wsPath}`
 	ws = new WebSocket(url);
 	var wasConnected = false;
 
@@ -418,9 +418,9 @@ var COMMANDS = {
 			userAdd(user.nick, user.trip);
 		});
 
-		pushMessage({nick: '*', text: "在线用户：" + args.nicks.join(", ")})
+		pushMessage({nick: '*', text: `在线用户：${args.nicks.join(", ")}`})
 
-		if (localStorageGet('fun-system') != 'false'){
+		if (localStorageGet('fun-button') != 'false'){
 			pushWelcomeButton("打个招呼")
 		}
 	},
@@ -431,7 +431,7 @@ var COMMANDS = {
 
 		if ($('#joined-left').checked) {
 			if (localStorageGet('fun-system') == 'false') {
-				var joinNotice = nick + " 加入了聊天室"
+				var joinNotice = `${nick} 加入了聊天室`
 			} else {
 				const test = ['活蹦乱跳','可爱','美丽','快乐','活泼','美味']
 				const test2 = ["误入","闯入","跳进","飞进","滚进","掉进"]
@@ -439,16 +439,16 @@ var COMMANDS = {
 			}
 
 			if (args.client) {
-				joinNotice += '\nTA正在使用 ' + args.client
+				joinNotice += `\nTA正在使用 ${args.client}`
 			}
 
 			if (args.auth) {
-				joinNotice += '\n系统认证：' + args.auth
+				joinNotice += `\n系统认证：${args.auth}`
 			}
 
 			pushMessage({nick: '→', text: joinNotice, trip: args.trip || ''}, 'info'); // 仿Discord
 
-			if (localStorageGet('fun-system') != 'false') {
+			if (localStorageGet('fun-button') != 'false') {
 				pushWelcomeButton("欢迎一下")
 			}
 		}
@@ -460,7 +460,7 @@ var COMMANDS = {
 
 		if ($('#joined-left').checked) {
 			if (localStorageGet('fun-system') == 'false') {
-				var leaveNotice = nick + " 离开了聊天室"
+				var leaveNotice = `${nick} 离开了聊天室`
 			} else {
 				const test = ["跳出","飞出","滚出","掉出","扭出","瞬移出"]
 				var leaveNotice = `${nick} ${test[Math.round(Math.random()*(test.length - 1))]}了聊天室`
@@ -507,7 +507,7 @@ function buildReplyText(user, text) {
 			break
 		}
 
-		replyText += '>' + textList[i] + '\n'
+		replyText += `>${textList[i]}\n`
 	}
 
 	if (i < textList.length && tooLong) {
@@ -533,7 +533,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 	if (
 		typeof (myNick) === 'string' && (
-			args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) ||
+			args.text.match(new RegExp(`@${getNick()}\\b`, "gi")) ||
 			((args.type === "whisper" || args.type === "invite") && args.from)
 		)
 	) {
@@ -565,7 +565,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		var tripEl = document.createElement('span');
 		var uwuTemp
 
-		if (cls != 'history')
+		if (!cls) {
 			var prefixs = []
 			var prefixs2 = []
 
@@ -589,18 +589,20 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 				prefixs2.push("OP")
 			} 
 
-			var strPrefixs = prefixs2.join('&');
+			var strPrefixs = prefixs.join(" ")
+			var strPrefixs2 = prefixs2.join('&');
 
-			if (strPrefixs || args.trusted) {
-				strPrefixs = `√${strPrefixs}`;
+			if (strPrefixs2 || args.trusted) {
+				strPrefixs2 = `√${strPrefixs2}`;
 			}
 
-			uwuTemp = `<span class="none onlyemoji">${prefixs.join(' ')}</span><span class="none onlytext">${strPrefixs}</span>`
+			uwuTemp = `<span class="none onlyemoji">${strPrefixs}</span><span class="none onlytext">${strPrefixs2}</span>`
+		}
 
 		tripEl.innerHTML = `${uwuTemp}<span class="uwuTrip">${args.trip}</span>`;
 		tripEl.classList.add('trip');
 
-		if (cls != history) {
+		if (!cls) {
 			let temp = localStorageGet('prefix');
 			display('none', 'none', tripEl);
 
@@ -976,12 +978,22 @@ if (localStorageGet('pin-sidebar') == 'true') {
 	$('#sidebar-content').classList.remove('hidden');
 }
 
-if (localStorageGet('joined-left') == 'false') {
-	$('#joined-left').checked = false;
-}
-
 if (localStorageGet('fun-system') == 'false') {
 	$('#fun-system').checked = false;
+}
+
+if (localStorageGet('joined-left') == 'false') {
+	$('#joined-left').checked = false;
+
+	if ($('#joined-left').checked) {
+		$('#fun-system').removeAttribute('disabled')
+	} else {
+		$('#fun-system').setAttribute('disabled','disabled')
+	}
+}
+
+if (localStorageGet('fun-button') == 'false') {
+	$('#fun-button').checked = false;
 }
 
 if (localStorageGet('parse-latex') == 'false') {
@@ -991,7 +1003,7 @@ if (localStorageGet('parse-latex') == 'false') {
 }
 
 if (localStorageGet('rainbow-nick') == 'true') {
-	$('#fun-system').checked = true;
+	$('#rainbow-nick').checked = true;
 }
 
 if (localStorageGet('show-head') == 'false') {
@@ -1003,11 +1015,22 @@ $('#pin-sidebar').onchange = function (e) {
 }
 
 $('#joined-left').onchange = function (e) {
-	localStorageSet('joined-left', !!e.target.checked);
+	var enabled = !!e.target.checked;
+	localStorageSet('joined-left', enabled);
+
+	if (enabled) {
+		$('#fun-system').removeAttribute('disabled')
+	} else {
+		$('#fun-system').setAttribute('disabled','disabled')
+	}
 }
 
 $('#fun-system').onchange = function (e) {
 	localStorageSet('fun-system', !!e.target.checked);
+}
+
+$('#fun-button').onchange = function (e) {
+	localStorageSet('fun-button', !!e.target.checked);
 }
 
 $('#parse-latex').onchange = function (e) {
@@ -1123,7 +1146,9 @@ function userChange(nick, text) {
 		var user = children[i];
 
 		if (user.firstChild.textContent == nick) {
-			user.firstChild.innerHTML = `<a>${text}</a>`;
+			var temp = document.createElement('a')
+			temp.textContent = text;
+			user.firstChild.appendChild(temp)
 			user.firstChild.onclick = function (e) {
 				userInvite(text)
 			}
@@ -1186,13 +1211,13 @@ var currentPrefix = 'none';
 
 function setScheme(scheme) {
 	currentScheme = scheme;
-	$('#scheme-link').href = "schemes/" + scheme + ".css";
+	$('#scheme-link').href = `schemes/${scheme}.css`;
 	localStorageSet('scheme', scheme);
 }
 
 function setHighlight(scheme) {
 	currentHighlight = scheme;
-	$('#highlight-link').href = "vendor/hljs/styles/" + scheme + ".min.css";
+	$('#highlight-link').href = `vendor/hljs/styles/${scheme}.min.css`;
 	localStorageSet('highlight', scheme);
 }
 
