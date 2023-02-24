@@ -126,7 +126,7 @@ export async function run(core, server, socket, data) {
       cmd: 'warn',
       text: '警告：检测到您正在使用弱密码，我们强烈建议您换用一个强密码。\n一个强密码的定义：最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符\n如果您继续使用弱密码，那么您可能无法正常使用部分功能。',
     }, socket);
-    socket.passwordWarning = true
+    socket.passwordWarning = true    //标记正在使用弱密码，未来会限制使用部分功能
   }
 
   // check if the nickname already exists in the channel
