@@ -565,7 +565,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		var tripEl = document.createElement('span');
 		var uwuTemp
 
-		if (!!cls) {
+		if (!cls) {
 			var prefixs = []
 			var prefixs2 = []
 
@@ -602,7 +602,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		tripEl.innerHTML = `${uwuTemp}<span class="uwuTrip">${args.trip}</span>`;
 		tripEl.classList.add('trip');
 
-		if (!!cls) {
+		if (!cls) {
 			let temp = localStorageGet('prefix');
 			display('none', 'none', tripEl);
 
