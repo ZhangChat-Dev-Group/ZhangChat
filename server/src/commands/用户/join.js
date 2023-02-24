@@ -42,6 +42,11 @@ export function parseNickname(core, data) {
   }
 
   if (password){
+    const passwordCheck = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/    //给密码加点料
+    if (!passwordCheck.test(password)){
+      userInfo.passwordWarning = true    //弱密码警告
+    }
+
     const trip = hash(password + core.config.tripSalt)
     userInfo.trip= core.config.trips[trip] || trip
     userInfo.password = password
@@ -114,6 +119,14 @@ export async function run(core, server, socket, data) {
     }, socket);
     socket.terminate()
     return false
+  }
+
+  if (userInfo.passwordWarning){
+    server.reply({
+      cmd: 'warn',
+      text: '警告：检测到您正在使用弱密码，我们强烈建议您换用一个强密码。\n一个强密码的定义：最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符\n如果您继续使用弱密码，那么您可能无法正常使用部分功能。',
+    }, socket);
+    socket.passwordWarning = true
   }
 
   // check if the nickname already exists in the channel
