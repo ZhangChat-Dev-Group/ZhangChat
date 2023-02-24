@@ -32,7 +32,7 @@ export function addMurmurToSocket(core,server,socket,payload){
   if (!payload.murmur){    //没有指纹，可能是bot或者旧版客户端
     server.reply({
       cmd:'warn',
-      text:'# 哎呀！出错了！\n由于某些原因，我们无法获取你的浏览器指纹。\n这可能是因为你的浏览器上的某些插件阻止了我们，也可能是因为您使用的不是最新版本的XChat客户端。\n如果您在使用第三方客户端，请确保第三方客户端适配了浏览器指纹功能！\n如果您是机器人开发者，请确保token无误！'
+      text:'# 哎呀！出错了！\n由于某些原因，我们无法获取你的浏览器指纹。\n这可能是因为你的浏览器上的某些插件阻止了我们，也可能是因为您使用的不是最新版本的小张聊天室网页版。\n如果您在使用第三方客户端，请确保第三方客户端适配了浏览器指纹功能！\n如果您是机器人开发者，请确保token无误！'
     },socket)
     socket.terminate()    //一路走好！
     return false
@@ -51,7 +51,7 @@ export function addMurmurToSocket(core,server,socket,payload){
   if (decoded.length !== 32 || typeof decoded !== 'string' || !decoded){    //如果无法被解密（或者不符合规范），说明是非法指纹
     server.reply({
       cmd:'warn',
-      text:'# 哎呀！出错了！\n由于某些原因，我们无法正确获取你的浏览器指纹。\n这可能是因为你的浏览器上的某些插件阻止了我们，也可能是因为您使用的不是最新版本的XChat客户端。\n如果您在使用第三方客户端，请确保第三方客户端适配了浏览器指纹功能！'
+      text:'# 哎呀！出错了！\n由于某些原因，我们无法正确获取你的浏览器指纹。\n这可能是因为你的浏览器上的某些插件阻止了我们，也可能是因为您使用的不是最新版本的小张聊天室网页版。\n如果您在使用第三方客户端，请确保第三方客户端适配了浏览器指纹功能！'
     },socket)
     socket.terminate()    //goodbye
     return false    //中断

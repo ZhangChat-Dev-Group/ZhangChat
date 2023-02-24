@@ -54,7 +54,7 @@ export const info = {
   usage: `
     API: { cmd: 'set-video', url: 'your-video-url' }
     文本：以聊天形式发送 /set-video 视频文件链接
-    其他方法：（仅XChat官方客户端-V2有效）在侧边栏中点击“设置公共视频”按钮`,
+    其他方法：（仅小张聊天室网页版有效）在侧边栏中点击“设置公共视频”按钮`,
   fastcmd:[
     {
       name:'url',
