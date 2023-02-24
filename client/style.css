@@ -202,9 +202,10 @@ table > thead > tr > th, table > tbody > tr > th, table > tfoot > tr > th, table
 td, th {
 		padding: 0;
 }
-img {
+img.text {
 	max-width: 50%;
 	max-height: 800px;
+	margin-top: 10px;
 }
 ul, ol {
 	padding: 0;
@@ -236,6 +237,15 @@ pre,code {
 	color:#ccc;
 	background-color: #282b2e;
 	border-color: #555;
+}
+#users > li > a, .uwuTest, .none, .trip {
+	margin-right: 0.5rem;
+}
+.uwuTest {
+	height: 25px;
+	width: 25px;
+	vertical-align: top;
+	border-radius: 50%;
 }
 @media only screen and (max-width: 1024px) {
 	.messages {
