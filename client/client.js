@@ -567,22 +567,22 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 		if (args.isBot) { // 机器人标识
 			prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分onlyemoji都无法显示（悲
-			prefixs2.push("机器人")
+			prefixs2.push("Bot")
 		}
 
 		if (args.admin) { // 站长标识
 			prefixs.push(String.fromCodePoint(9770))
-			prefixs2.push("站长")
+			prefixs2.push("Admin")
 		} else if (args.mod) { // 管理员标识
 			prefixs.push(String.fromCodePoint(9733))
-			prefixs2.push("管理员")
+			prefixs2.push("Mod")
 		} else if (args.trusted) { // 信任用户标识
 			prefixs.push(String.fromCodePoint(9830))
 		}
 
 		if (args.channelOwner) { // 房主标识
 			prefixs.push(String.fromCodePoint(10033))
-			prefixs2.push("房主")
+			prefixs2.push("RoomAdmin")
 		} 
 
 		var strPrefixs = prefixs.join(" ")
@@ -1210,7 +1210,7 @@ function setPrefix(scheme) {
 	localStorageSet('prefix', scheme);
 	display('none')
 
-	if (scheme && scheme != 'none') {
+	if (scheme && scheme != '无') {
 		display(scheme, 'inline')
 	}
 }
