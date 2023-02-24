@@ -7,7 +7,7 @@
 	<title>小张聊天室 - ZhangChat</title>
 	<link rel="manifest" href="manifest.json">
 	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="electron.css">
+	<link rel="stylesheet" href="schemes/electron.css">
 	<link rel="stylesheet" href="vendor/katex/katex.min.css">
 	<script src="vendor/katex/katex.min.js"></script>
 	<script src="vendor/remarkable-katex/remarkableKatex.min.js"></script>
@@ -46,20 +46,18 @@
 				<label for="notify-switch">桌面通知</label>
 			</p>
 			<p>
-				<input id="joined-left" type="checkbox" checked>
-				<label for="joined-left">加入/离开 提醒</label>
-			</p>
-			<p>
-				<input id="fun-system" type="checkbox" checked>
-				<label for="fun-system" title="仿Discord">有趣的系统</label>
-			</p>
-			<p>
 				<input id="parse-latex" type="checkbox" checked>
 				<label for="parse-latex" title="允许渲染LaTeX">启用数学公式</label>
 			</p>
 			<p>
 				<input id="syntax-highlight" type="checkbox" checked>
 				<label for="syntax-highlight">代码高亮</label>
+			</p>
+			<hr>
+			<h4>更多</h4>
+			<p>
+				<input id="joined-left" type="checkbox" checked>
+				<label for="joined-left">显示 加入/离开</label>
 			</p>
 			<p>
 				<input id="allow-imgur" type="checkbox" checked>
@@ -68,6 +66,12 @@
 			<p>
 				<input id="show-head" type="checkbox" checked>
 				<label for="show-head">显示头像</label>
+			</p>
+			<hr>
+			<h4>实验室</h4>
+			<p>
+				<input id="fun-system" type="checkbox" checked>
+				<label for="fun-system" title="仿Discord">有趣的系统</label>
 			</p>
 			<p>
 				<input id="rainbow-nick" type="checkbox">
