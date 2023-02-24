@@ -65,12 +65,17 @@ export const info = {
   description: '解除对某用户的禁言',
   usage: `
     API: { cmd: 'speak', hash: '<目标hash>' }
-    文本：以聊天形式发送 /speak 目标hash ==（不是昵称！！！）==`,
+    文本：以聊天形式发送 /speak 目标hash（如果设置为“*”则解除所有禁言） ==（不是昵称！！！）==`,
   fastcmd:[
     {
       name:'hash',
       len:1,
-      check: /^[a-zA-Z0-9/\+]{15}$/
+      check: (text) => {
+        if (text === '*'){
+          return true
+        }
+        return /^[a-zA-Z0-9/\+]{15}$/.test(text)
+      }
     }
   ]
 };
