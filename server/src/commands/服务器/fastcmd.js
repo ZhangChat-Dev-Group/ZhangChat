@@ -61,6 +61,11 @@ export function fastcmd(core, server, socket, payload) {
     fakePayload[command.info.fastcmd[i].name] = temp.join(' ')    //截取数组，然后join一下
     cut += command.info.fastcmd[i].len
   }
+  
+  if (typeof fakePayload.nick === 'string'){
+    fakePayload.nick = fakePayload.nick.replace(/@/g,'')    //删掉昵称里面的 “@”
+  }
+  
   server.handleData(socket,JSON.stringify(fakePayload))
   return false
 }
