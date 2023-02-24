@@ -570,7 +570,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 			var prefixs2 = []
 
 			if (args.isBot) { // 机器人标识
-				prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分onlyemoji都无法显示（悲
+				prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分emoji都无法显示（悲
 				prefixs2.push("Bot")
 			}
 
@@ -589,17 +589,15 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 				prefixs2.push("OP")
 			} 
 
-			var strPrefixs = prefixs.join(" ")
-			var strPrefixs2 = prefixs2.join('&');
+			var strPrefixs = prefixs2.join('&');
 
-			if (strPrefixs2 || args.trusted) {
-				strPrefixs2 = `√${strPrefixs2}`;
+			if (strPrefixs || args.trusted) {
+				strPrefixs = `√${strPrefixs}`;
+				uwuTemp = `<span class="none onlyemoji">${prefixs.join(" ")}</span><span class="none onlytext">${strPrefixs}</span>`
 			}
-
-			uwuTemp = `<span class="none onlyemoji">${strPrefixs}</span><span class="none onlytext">${strPrefixs2}</span>`
 		}
 
-		tripEl.innerHTML = `${uwuTemp}<span class="uwuTrip">${args.trip}</span>`;
+		tripEl.innerHTML = `${uwuTemp || ''}<span class="uwuTrip">${args.trip}</span>`;
 		tripEl.classList.add('trip');
 
 		if (!cls) {
