@@ -420,7 +420,7 @@ var COMMANDS = {
 
 		pushMessage({nick: '*', text: `在线用户：${args.nicks.join(", ")}`})
 
-		if (localStorageGet('fun-button') != 'false'){
+		if (localStorageGet('fun-system') != 'false'){
 			pushWelcomeButton("打个招呼")
 		}
 	},
@@ -448,7 +448,7 @@ var COMMANDS = {
 
 			pushMessage({nick: '→', text: joinNotice, trip: args.trip || ''}, 'info'); // 仿Discord
 
-			if (localStorageGet('fun-button') != 'false') {
+			if (localStorageGet('fun-system') != 'false') {
 				pushWelcomeButton("欢迎一下")
 			}
 		}
@@ -565,7 +565,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		var tripEl = document.createElement('span');
 		var uwuTemp
 
-		if (!cls) {
+		if (!!cls) {
 			var prefixs = []
 			var prefixs2 = []
 
@@ -602,7 +602,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		tripEl.innerHTML = `${uwuTemp}<span class="uwuTrip">${args.trip}</span>`;
 		tripEl.classList.add('trip');
 
-		if (!cls) {
+		if (!!cls) {
 			let temp = localStorageGet('prefix');
 			display('none', 'none', tripEl);
 
@@ -724,7 +724,7 @@ function pushWelcomeButton(text) {
 
 function autoBottom() {
 	// 滚动到底部
-	if (isAtBottom() && myChannel != '') {
+	if (isAtBottom() && !!myChannel) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
@@ -815,7 +815,7 @@ $('#chatinput').onkeydown = function (e) {
 		e.preventDefault();
 
 		// 发送消息
-		if (e.target.value != '') {
+		if (!!e.target.value) {
 			var text = e.target.value;
 			e.target.value = '';
 
@@ -856,9 +856,9 @@ $('#chatinput').onkeydown = function (e) {
 		e.preventDefault();
 
 		// 清空输入框
-		e.target.value = "";
+		e.target.value = '';
 		lastSentPos = 0;
-		lastSent[lastSentPos] = "";
+		lastSent[lastSentPos] = '';
 		updateInputSize();
 	} else if (e.keyCode == 9 /* TAB */) {
 		if (e.ctrlKey) {
@@ -992,10 +992,6 @@ if (localStorageGet('joined-left') == 'false') {
 	}
 }
 
-if (localStorageGet('fun-button') == 'false') {
-	$('#fun-button').checked = false;
-}
-
 if (localStorageGet('parse-latex') == 'false') {
 	$('#parse-latex').checked = false;
 	md.inline.ruler.disable([ 'katex' ]);
@@ -1027,10 +1023,6 @@ $('#joined-left').onchange = function (e) {
 
 $('#fun-system').onchange = function (e) {
 	localStorageSet('fun-system', !!e.target.checked);
-}
-
-$('#fun-button').onchange = function (e) {
-	localStorageSet('fun-button', !!e.target.checked);
 }
 
 $('#parse-latex').onchange = function (e) {
@@ -1284,7 +1276,7 @@ $('#prefix-selector').value = currentPrefix;
 
 /* 首先执行 */
 
-if (myChannel == '') {
+if (!!myChannel) {
 	$('#messages').innerHTML = '';
 	$('#footer').classList.add('hidden');
 	$('#sidebar').classList.add('hidden');
