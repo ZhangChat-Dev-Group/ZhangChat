@@ -80,7 +80,7 @@ md.renderer.rules.image = function (tokens, idx, options) {
 		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
 		var suffix = options.xhtmlOut ? ' /' : '';
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
-		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + '></a>';
+		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' class="text"></a>';
 	}
 
 	return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
@@ -478,7 +478,7 @@ var COMMANDS = {
 		var i = 0;
 
 		for (i in args.history) {
-			pushMessage(args.history[i], null);
+			pushMessage(args.history[i], 'history');
 		}
 
 		pushMessage({nick: '*', text: '—— 以上是历史记录 ——'})
@@ -563,77 +563,81 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 	if (args.trip) {
 		var tripEl = document.createElement('span');
-		var prefixs = []
+		var uwuTemp
 
-		/*
-		if (args.isBot) { // 机器人标识
-			prefixs.push(String.fromCodePoint(129302)) // ee：我这边大部分标识都无法显示（悲
-		}
-		if (args.admin) { // 站长标识
-			prefixs.push(String.fromCodePoint(128081))
-		} else if (args.mod) { // 管理员标识
-			prefixs.push(String.fromCodePoint(11088))
-		} else if (args.channelOwner) { // 房主标识
-			prefixs.push(String.fromCodePoint(127968))
-		} else if (args.trusted) { // 信任用户标识
-			prefixs.push(String.fromCodePoint(128681))
-		}
+		if (cls != 'history')
+			var prefixs = []
+			var prefixs2 = []
 
-		tripEl.textContent = prefixs.join(' ') + ' ' + args.trip + " ";
-		*/
+			if (args.isBot) { // 机器人标识
+				prefixs.push(String.fromCodePoint(10022)) // ee：我这边大部分onlyemoji都无法显示（悲
+				prefixs2.push("Bot")
+			}
 
-		if (args.isBot) { // 机器人标识
-			prefixs.push("Bot")
-		}
+			if (args.admin) { // 站长标识
+				prefixs.push(String.fromCodePoint(9770))
+				prefixs2.push("Admin")
+			} else if (args.mod) { // 管理员标识
+				prefixs.push(String.fromCodePoint(9733))
+				prefixs2.push("Mod")
+			} else if (args.trusted) { // 信任用户标识
+				prefixs.push(String.fromCodePoint(9830))
+			}
 
-		if (args.admin) { // 站长标识
-			prefixs.push("Admin")
-		} else if (args.mod) { // 管理员标识
-			prefixs.push("Mod")
-		}
+			if (args.channelOwner) { // 房主标识
+				prefixs.push(String.fromCodePoint(10033))
+				prefixs2.push("OP")
+			} 
 
-		if (args.channelOwner) { // 房主标识
-			prefixs.push("OP")
-		}
+			var strPrefixs = prefixs2.join('&');
 
-		var strPrefixs = prefixs.join('&')
+			if (strPrefixs || args.trusted) {
+				strPrefixs = `√${strPrefixs}`;
+			}
 
-		if (strPrefixs || args.trusted) {
-			strPrefixs = `√${strPrefixs}`
-		}
+			uwuTemp = `<span class="none onlyemoji">${prefixs.join(' ')}</span><span class="none onlytext">${strPrefixs}</span>`
 
-		tripEl.textContent = `${strPrefixs} ${args.trip} `;
+		tripEl.innerHTML = `${uwuTemp}<span class="uwuTrip">${args.trip}</span>`;
 		tripEl.classList.add('trip');
+
+		if (cls != history) {
+			let temp = localStorageGet('prefix');
+			display('none', 'none', tripEl);
+
+			if (temp && temp != 'none') {
+				display(temp, 'inline', tripEl);
+			}
+		}
+
 		nickSpanEl.appendChild(tripEl);
 	}
 
 	if (args.head) {
 		// 头像
 		var imgEl = document.createElement('img');
-		imgEl.src = args.head
-		imgEl.style.height = '25px'
-		imgEl.style.width = '25px'
-		imgEl.style.marginRight = '0.5rem'
-		imgEl.style.verticalAlign = 'top'
-		imgEl.style.borderRadius = '50%'
+		imgEl.src = args.head;
 		imgEl.className = 'uwuTest';
 
 		if (localStorageGet('show-head') == 'false') {
 			imgEl.style.display = "none";
 		}
 
-		nickSpanEl.appendChild(imgEl)
+		nickSpanEl.appendChild(imgEl);
 	}
 
 	if (args.nick) {
 		var nickLinkEl = document.createElement('a');
 		nickLinkEl.textContent = args.nick;
 
+		var date = new Date(args.time || Date.now());
+		nickLinkEl.title = date.toLocaleString();
+
 		if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
 			nickLinkEl.setAttribute('style', `color:#${args.color}!important`);
+			nickLinkEl.title += ` #${args.color}`;
 		}
 
-		nickLinkEl.onclick = function () {
+		nickLinkEl.onclick = function() {
 			insertAtCursor(`@${args.nick} `);
 			$('#chatinput').focus();
 		}
@@ -647,13 +651,10 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 			$('#chatinput').focus();
 		}
 
-		var date = new Date(args.time || Date.now());
-		nickLinkEl.title = date.toLocaleString();
 		nickSpanEl.appendChild(nickLinkEl);
 	}
 
 	var textEl = document.createElement('p');
-	textEl.classList.add('text');
 
 	// 文本
 	if (!html) {
@@ -663,6 +664,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		textEl.innerHTML = args.text;
 	}
 
+	textEl.classList.add('text');
 	messageEl.appendChild(textEl);
 	$('#messages').appendChild(messageEl);
 	autoBottom()
@@ -858,8 +860,6 @@ $('#chatinput').onkeydown = function (e) {
 		updateInputSize();
 	} else if (e.keyCode == 9 /* TAB */) {
 		if (e.ctrlKey) {
-			// 如果按Ctrl，则跳过自动完成和Tab键插入
-			// 浏览器使用Ctrl-Tab在选项卡之间循环切换
 			return;
 		}
 
@@ -1051,16 +1051,21 @@ $('#rainbow-nick').onchange = function (e) {
 
 $('#show-head').onchange = function (e) {
 	var enabled = !!e.target.checked;
+	var state = 'none'
 	localStorageSet('show-head', enabled);
-	head=document.getElementsByClassName("uwuTest").length
-	uwu="none"
 
 	if (enabled) {
-		uwu="inline";
+		state = 'inline'
 	}
 
-	for (var i=0; i < head; i++) {
-		document.getElementsByClassName("uwuTest")[i].style.display = uwu;
+	display('uwuTest', state)
+}
+
+function display(name, state = 'none', scope = document) {
+	let uwuClass = scope.getElementsByClassName(name)
+	
+	for (var i=0; i < uwuClass.length; i++) {
+		uwuClass[i].style.display = state;
 	}
 }
 
@@ -1068,8 +1073,8 @@ $('#show-head').onchange = function (e) {
 var onlineUsers = [];
 var ignoredUsers = [];
 
-// 这里抄了点代码 404不要打我（被打
-function userAdd(nick,trip) {
+// 这里参考了HC++的代码 404不要打我（被打
+function userAdd(nick, trip) {
 	var user = document.createElement('a');
 	user.textContent = nick;
 
@@ -1082,7 +1087,7 @@ function userAdd(nick,trip) {
 
 	if (trip) {
 		var userTrip = document.createElement('span')
-		userTrip.textContent = ' ' + trip
+		userTrip.innerHTML = trip
 		userTrip.classList.add('trip')
 		userLi.appendChild(userTrip)
 	}
@@ -1110,7 +1115,7 @@ function userRemove(nick) {
 	}
 }
 
-function userChange(nick,text) {
+function userChange(nick, text) {
 	var users = $('#users');
 	var children = users.children;
 
@@ -1155,11 +1160,10 @@ function userIgnore(nick) {
 var schemes = [
 	'electron',
 	'eighties',
+	'default',
 	'tomorrow',
 	'lax',
-	'bright',
 	'hacker',
-	'default',
 ];
 
 var highlights = [
@@ -1169,9 +1173,16 @@ var highlights = [
 	'androidstudio',
 ]
 
+var uwuPrefixs = [
+	'none',
+	'onlytext',
+	'onlyemoji',
+]
+
 // 默认方案
 var currentScheme = 'electron';
 var currentHighlight = 'darcula';
+var currentPrefix = 'none';
 
 function setScheme(scheme) {
 	currentScheme = scheme;
@@ -1183,6 +1194,16 @@ function setHighlight(scheme) {
 	currentHighlight = scheme;
 	$('#highlight-link').href = "vendor/hljs/styles/" + scheme + ".min.css";
 	localStorageSet('highlight', scheme);
+}
+
+function setPrefix(scheme) {
+	currentPrefix = scheme;
+	localStorageSet('prefix', scheme);
+	display('none')
+
+	if (scheme && scheme != 'none') {
+		display(scheme, 'inline')
+	}
 }
 
 // 添加主题到下拉条
@@ -1200,12 +1221,23 @@ highlights.forEach(function (scheme) {
 	$('#highlight-selector').appendChild(option);
 });
 
+uwuPrefixs.forEach(function (scheme) {
+	var option = document.createElement('option');
+	option.textContent = scheme;
+	option.value = scheme;
+	$('#prefix-selector').appendChild(option);
+});
+
 $('#scheme-selector').onchange = function (e) {
 	setScheme(e.target.value);
 }
 
 $('#highlight-selector').onchange = function (e) {
 	setHighlight(e.target.value);
+}
+
+$('#prefix-selector').onchange = function (e) {
+	setPrefix(e.target.value);
 }
 
 // 从本地存储加载侧边栏配置（如果可用）
@@ -1217,8 +1249,13 @@ if (localStorageGet('highlight')) {
 	setHighlight(localStorageGet('highlight'));
 }
 
+if (localStorageGet('prefix')) {
+	setPrefix(localStorageGet('prefix'));
+}
+
 $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
+$('#prefix-selector').value = currentPrefix;
 
 /* 首先执行 */
 
