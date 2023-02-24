@@ -590,11 +590,13 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 
 		var t = new String()
 
-		if (localStorageGet('prefix') === '文本'){
+		if (!strPrefixs){
+			t = args.trip
+		}else if (localStorageGet('prefix') === '文本'){
 			t = '√' + strPrefixs2 + ' ' + args.trip
 		}else if (localStorageGet('prefix') === '表情符号'){
 			t = strPrefixs + ' ' + args.trip
-		}else {
+		} else {
 			t = args.trip
 		}
 
