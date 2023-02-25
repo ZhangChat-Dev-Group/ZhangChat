@@ -114,7 +114,8 @@ export const info = {
   fastcmd:[
     {
       name:'nick',
-      len:1
+      len:1,
+      check: UAC.verifyNickname
     },
     {
       name:'channel',

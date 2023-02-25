@@ -22,7 +22,7 @@ export async function run(core, server, socket, data) {
     }
     server.reply({
         cmd:'info',
-        text:`以下用户（识别码）注册了XChat个人空间：\n${allhomes}您可以发送 \`/home <识别码>\` 来参观他们的个人空间哦~`
+        text:`以下用户（识别码）注册了个人空间：\n${allhomes}您可以发送 \`/home <识别码>\` 来参观他们的个人空间哦~`
     },socket)
     return true
   }else{
@@ -41,14 +41,17 @@ export async function run(core, server, socket, data) {
 
 export const info = {
   name: 'home',
-  description: '此命令用于参观XChat个人空间',
+  description: '此命令用于参观个人空间',
   usage: `
-    API: {cmd: 'home', trip: '<可选的识别码，不填则显示所有注册了XChat空间的用户>'}
-    文本：以聊天形式发送 /home <可选的识别码，不填则显示所有注册了XChat空间的用户>`,
+    API: {cmd: 'home', trip: '<可选的识别码，不填则显示所有注册了个人空间的用户>'}
+    文本：以聊天形式发送 /home <可选的识别码，不填则显示所有注册了个人空间的用户>`,
   fastcmd:[
     {
       name:'trip',
-      len:1
+      len:1,
+      check: (text) => {
+        return /^[a-zA-Z0-9/\+]{6}$/.test(text) || !text
+      }
     }
   ]
 };

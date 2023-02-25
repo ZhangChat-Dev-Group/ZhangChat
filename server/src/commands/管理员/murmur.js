@@ -1,10 +1,3 @@
-/*
-  本模块用于查询用户的IP地址
-  小张软件总程序员Mr_Zhang编写
-  命令开源，除了十字街以外，其他的聊天室都能用
-  开源之后请不要忘记注明是小张软件写的哈
-*/
-
 import * as UAC from '../utility/UAC/_info';
 
 // module main

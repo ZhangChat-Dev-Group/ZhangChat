@@ -52,19 +52,19 @@ export function fastcmd(core, server, socket, payload) {
         continue
       }
       if (typeof command.info.fastcmd[i].check === 'object' && command.info.fastcmd[i].check.constructor === RegExp){    //检查是否符合规则，模式：正则表达式
-        if (!check(command.info.fastcmd[i].check,temp.join(' '))){
+        if (!check(command.info.fastcmd[i].check,command.info.fastcmd[i].name !== 'nick' ? temp.join(' ') : temp.join(' ').replace(/@/g,''))){
           server.reply({
             cmd:'warn',
-            text:`抱歉，参数 ${command.info.fastcmd[i].name} 不符合规则，请重试。`
+            text:`抱歉，参数 \`${command.info.fastcmd[i].name}\` 不符合规则，请重试。`
           },socket)
           return false
         }
       }
       if (typeof command.info.fastcmd[i].check === 'function'){    //检查是否符合规则，模式：自定义函数
-        if (!command.info.fastcmd[i].check(temp.join(' '))){
+        if (!command.info.fastcmd[i].check(command.info.fastcmd[i].name !== 'nick' ? temp.join(' ') : temp.join(' ').replace(/@/g,''))){
           server.reply({
             cmd:'warn',
-            text:`抱歉，参数 ${command.info.fastcmd[i].name} 不符合规则，请重试。`
+            text:`抱歉，参数 \`${command.info.fastcmd[i].name}\` 不符合规则，请重试。`
           },socket)
           return false
         }
@@ -77,19 +77,19 @@ export function fastcmd(core, server, socket, payload) {
       continue
     }
     if (typeof command.info.fastcmd[i].check === 'object' && command.info.fastcmd[i].check.constructor === RegExp){    //检查是否符合规则，模式：正则表达式
-      if (!check(command.info.fastcmd[i].check,temp.join(' '))){
+      if (!check(command.info.fastcmd[i].check,command.info.fastcmd[i].name !== 'nick' ? temp.join(' ') : temp.join(' ').replace(/@/g,''))){
         server.reply({
           cmd:'warn',
-          text:`抱歉，参数 ${command.info.fastcmd[i].name} 不符合规则，请重试。`
+          text:`抱歉，参数 \`${command.info.fastcmd[i].name}\` 不符合规则，请重试。`
         },socket)
         return false
       }
     }
     if (typeof command.info.fastcmd[i].check === 'function'){    //检查是否符合规则，模式：自定义函数
-      if (!command.info.fastcmd[i].check(temp.join(' '))){
+      if (!command.info.fastcmd[i].check(command.info.fastcmd[i].name !== 'nick' ? temp.join(' ') : temp.join(' ').replace(/@/g,''))){
         server.reply({
           cmd:'warn',
-          text:`抱歉，参数 ${command.info.fastcmd[i].name} 不符合规则，请重试。`
+          text:`抱歉，参数 \`${command.info.fastcmd[i].name}\` 不符合规则，请重试。`
         },socket)
         return false
       }
@@ -113,6 +113,6 @@ export function check(re,text){
 
 export const info = {
   name: 'fastcmd',
-  description: '快速执行命令。由[小张软件](https://www.zhangsoft.cf/)倾情制作。本聊天室已购买该模块。',
+  description: '快速执行命令。由[小张软件](https://www.zhangsoft.cf/)倾情制作。',
   usage: `服务器内部自动调用，如果你想用，就说明你不是人。`,
 };

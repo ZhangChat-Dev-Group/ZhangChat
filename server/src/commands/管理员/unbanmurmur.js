@@ -53,7 +53,8 @@ export const info = {
   fastcmd:[
     {
       name:'murmur',
-      len:1
+      len:1,
+      check: /^[a-z0-9]{32}$/
     }
   ]
 };

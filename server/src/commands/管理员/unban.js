@@ -59,7 +59,8 @@ export const info = {
   fastcmd:[
     {
       name:'hash',
-      len:1
+      len:1,
+      check: /^[a-zA-Z0-9/\+]{15}$/
     }
   ]
 };

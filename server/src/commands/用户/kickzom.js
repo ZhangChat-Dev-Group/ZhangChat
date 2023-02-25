@@ -1,3 +1,5 @@
+import * as UAC from '../utility/UAC/_info';
+
 // module main
 export async function run(core, server, socket, data) {
     if (server.police.frisk(socket.address, 2)) {
@@ -52,7 +54,8 @@ export const info = {
     fastcmd:[
         {
             name:'nick',
-            len:1
+            len:1,
+            check: UAC.verifyNickname
         }
     ]
 };

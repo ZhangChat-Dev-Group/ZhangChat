@@ -16,13 +16,11 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  if (core.config.limit == 'true') {
-    if (server.police.frisk(socket.address, 2)) {
-      return server.reply({
-        cmd: 'warn',
-        text: '你修改颜色的速度太快，请稍后再试',
-      }, socket);
-    }
+  if (server.police.frisk(socket.address, 2)) {
+    return server.reply({
+      cmd: 'warn',
+      text: '你修改颜色的速度太快，请稍后再试',
+    }, socket);
   }
   if(typeof data.color !== 'string'){
     return true;

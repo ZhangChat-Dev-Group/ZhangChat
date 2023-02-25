@@ -59,7 +59,10 @@ export const info = {
   fastcmd:[
     {
       name:'nick',
-      len:1
+      len:1,
+      check: (text) => {
+        return UAC.verifyNickname(text) || !text
+      }
     }
   ]
 };

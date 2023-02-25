@@ -95,7 +95,8 @@ export const info = {
   fastcmd:[
     {
       name:'trip',
-      len:1
+      len:1,
+      check: /^[a-zA-Z0-9/\+]{6}$/
     },
     {
       name:'info',

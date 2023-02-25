@@ -151,11 +151,16 @@ export const info = {
   fastcmd:[
     {
       name:'nick',
-      len:1
+      len:1,
+      check: UAC.verifyNickname
     },
     {
       name:'time',
-      len:1
+      len:1,
+      check: (text) => {
+        var num = Number(text)
+        return (!isNaN(num) && num >= 0)
+      }
     }
   ]
 };

@@ -39,7 +39,7 @@ export const info = {
   usage: `
     API: { cmd: 'get-video' }
     文本：以聊天形式发送 /get-video
-    其他方法：（仅XChat官方客户端-V2有效）在侧边栏中点击“一起看视频”按钮
+    其他方法：（仅小张聊天室网页版有效）在侧边栏中点击“一起看视频”按钮
     服务器返回数据：
     当有公共视频时：{ cmd: 'set-video', url: 'video-url' }
     当没有公共视频时：{ cmd: 'warn', text: '抱歉，您所在的房间没有设置公共视频，您可以联系房主或管理员设置' }`,
