@@ -17,7 +17,7 @@
     "postinstall": "cd ./server && npm install && npm run config"
   },
   "author": "MrZhang365",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "dependencies": {
     "crypto-js": "^4.1.1",
     "esm": "^3.2.25",
