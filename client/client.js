@@ -655,9 +655,16 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 	}
 
 	textEl.classList.add('text');
-	messageEl.appendChild(textEl);
+	
+	// Scroll to bottom
+	var atBottom = isAtBottom();
 	$('#messages').appendChild(messageEl);
-	autoBottom()
+	if (atBottom && myChannel) {
+		window.scrollTo(0, document.body.scrollHeight);
+	}
+
+	unread += 1;
+	updateTitle();
 }
 
 function pushWelcomeButton(text) {
