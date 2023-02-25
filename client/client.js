@@ -655,6 +655,8 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 	}
 
 	textEl.classList.add('text');
+
+	messageEl.appendChild(textEl)
 	
 	// Scroll to bottom
 	var atBottom = isAtBottom();
