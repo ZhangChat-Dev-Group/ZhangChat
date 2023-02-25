@@ -41,29 +41,63 @@ export async function run(core, server, socket, data) {
     }, socket);
   }
 
-  // commit arrest record
-  server.police.arrest(badClient.address, badClient.hash);
+  if (server.findSockets({
+    address: badClient.address,
+    level: (l) => l >= socket.level,
+  }).length > 0){    //防止封禁其他管理员开的小号
+    return server.reply({
+      cmd: 'warn',
+      text: `你的某位同事和 @${badClient.nick} 使用了同一个IP地址，如果你把 @${badClient.nick} 封禁了，那么你的同事也会遭殃的！`,
+    }, socket);
+  }
 
-  console.log(`${socket.nick} [${socket.trip}] 在 ?${socket.channel} 封禁了 ${targetNick}`);
+  var otherUsers = server.ban(badClient.address)
 
-  // notify normal users
-  server.broadcast({
-    cmd: 'info',
-    text: `已封禁 ${targetNick}`,
-    user: UAC.getUserDetails(badClient),
-  }, { channel: socket.channel, level: (level) => level < UAC.levels.moderator });
+  var formated = {}
+
+  otherUsers.forEach((user) => {
+    if (typeof formated[user.channel || server.cmdKey] !== 'object'){
+      formated[user.channel || server.cmdKey] = []
+    }
+    formated[user.channel || server.cmdKey].push(user)
+  })
+
+  var i
+  var strUsersList = ''
+
+  for (i in formated){
+    let nicks = []
+
+    strUsersList += '?'+ i + ' '
+
+    formated[i].forEach((user) => {
+      nicks.push(user.nick)
+      strUsersList += `[${user.trip || null}]${user.nick} `
+    })
+
+    strUsersList += '\n'
+
+    server.broadcast({
+      cmd:'info',
+      text: '已封禁 '+nicks.join('，')
+    }, {channel:i,level: (level) => level < UAC.levels.moderator})
+
+    formated[i].forEach((user) => {
+      user.terminate()
+    })
+  }
+
+  console.log(`[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}`)
+
 
   // notify mods
   server.broadcast({
     cmd: 'info',
-    text: `${socket.nick}#${socket.trip} 封禁了 ?${socket.channel} 的 ${targetNick}，${targetNick} 的hash为：${badClient.hash}\n您可以通过上面提供的hash来解除封禁该用户`,
+    text: `[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}\n您可以通过上面提供的IP来解除封禁该用户`,
     channel: socket.channel,
     user: UAC.getUserDetails(badClient),
     banner: UAC.getUserDetails(socket),
   }, { level: UAC.isModerator });
-
-  // force connection closed
-  badClient.terminate();
 
   // stats are fun
   core.stats.increment('users-banned');

@@ -1,7 +1,3 @@
-/*
-  Description: Removes a target ip from the ratelimiter
-*/
-
 import * as UAC from '../utility/UAC/_info';
 
 // module main
@@ -12,37 +8,28 @@ export async function run(core, server, socket, data) {
   }
 
   // check user input
-  if (typeof data.ip !== 'string' && typeof data.hash !== 'string') {
+  if (typeof data.ip !== 'string') {
     return server.reply({
       cmd: 'warn',
-      text: "您提供的数据无效，您必须提供IP或者hash",
+      text: "您提供的数据无效，您必须提供IP",
     }, socket);
   }
 
-  // find target
-  let mode;
-  let target;
-  if (typeof data.ip === 'string') {
-    mode = 'ip';
-    target = data.ip;
-  } else {
-    mode = 'hash';
-    target = data.hash;
+  var result = server.unban(data.ip)
+
+  if (!result){
+    return server.reply({
+      cmd:'warn',
+      text:'该IP地址没有被封禁'
+    },socket)
   }
 
-  // remove arrest record
-  server.police.pardon(target);
-
-  // mask ip if used
-  if (mode === 'ip') {
-    target = server.getSocketHash(target);
-  }
-  console.log(`${socket.nick} [${socket.trip}] 已解封 ${target}`);
-  // notify mods
   server.broadcast({
-    cmd: 'info',
-    text: `${socket.nick}#${socket.trip} 解除封禁了hash：${target}`,
-  }, { level: UAC.isModerator });
+    cmd:'info',
+    text:`[${socket.trip}] ${socket.nick} 已解除封禁IP地址：${data.ip}`
+  },{level:UAC.isModerator})
+
+  console.log(`[${socket.trip}] ${socket.nick} 已解除封禁IP地址：${data.ip}`)
 
   // stats are fun
   core.stats.decrement('users-banned');
@@ -52,15 +39,14 @@ export async function run(core, server, socket, data) {
 
 export const info = {
   name: 'unban',
-  description: '解除封禁目标IP地址或hash',
+  description: '解除封禁目标IP地址',
   usage: `
-    API: { cmd: 'unban', ip/hash: '<target ip or hash>' }
-    文本：以聊天形式发送 /unban 目标hash`,
+    API: { cmd: 'unban', ip: '<target ip>' }
+    文本：以聊天形式发送 /unban 目标IP地址`,
   fastcmd:[
     {
-      name:'hash',
+      name:'ip',
       len:1,
-      check: /^[a-zA-Z0-9/\+]{15}$/
     }
   ]
 };

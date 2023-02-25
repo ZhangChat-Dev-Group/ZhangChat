@@ -60,6 +60,12 @@ class MainServer extends WsServer {
     this.cmdBlacklist = {};
 
     /**
+      * 封禁的IP列表
+      * @type {Array}
+      */
+    this.bannedIPs = [];
+
+    /**
       * Stored info about the last server error
       * @type {ErrorEvent}
       */
@@ -120,6 +126,62 @@ class MainServer extends WsServer {
   }
 
   /**
+    * 将一个IP地址添加到封禁列表里
+    * @public
+    * @param {Object} ip 要封禁的IP地址
+    * @return {Array|null|false} 如果目标IP已经连接了服务器，则返回socket列表，否则返回null，当IP地址已经被封禁的时候，则返回false
+    */
+  ban(ip) {
+    if (this.bannedIPs.indexOf(ip) !== -1){    //是否已经被封禁
+      return false
+    }
+
+    this.bannedIPs.push(ip)    //添加到封禁列表
+
+    var sockets = this.findSockets({
+      address: ip
+    })    //寻找目标IP的用户
+
+    return sockets.length > 0 ? sockets : null    //返回数据
+  }
+
+  /**
+    * 将一个IP地址从封禁列表里移除
+    * @public
+    * @param {Object} ip 要解除封禁的IP地址
+    * @return {Boolean} 如果目标IP在封禁列表中，则返回true，否则返回false
+    */
+  unban(ip) {
+    if (this.bannedIPs.indexOf(ip) === -1){    //是否已经被封禁
+      return false
+    }
+
+    this.bannedIPs = this.bannedIPs.filter((i) => i !== ip)    //从封禁列表中删除
+
+    return true    //返回数据
+  }
+
+  /**
+    * 解封所有IP地址
+    * @public
+    * @return {void} 
+    */
+  unbanall() {
+    this.bannedIPs = []    //解封
+  }
+
+  /**
+    * 检查目标IP地址是否被封禁
+    * @public
+    * @param {Object} ip 要检查的IP地址
+    * @return {Boolean} 如果目标IP在已被封禁，则返回true，否则返回false
+    */
+  isBanned(ip) {
+    return this.bannedIPs.indexOf(ip) !== -1
+  }
+
+
+  /**
     * Bind listeners for the new socket created on connection to this class
     * @param {ws#WebSocket} socket New socket object
     * @param {Object} request Initial headers of the new connection
@@ -133,6 +195,15 @@ class MainServer extends WsServer {
 
     if (newSocket.address.startsWith('::ffff:')){    //去除IPv4里面多余的东西，防止后面识别IP的代码报错。
       newSocket.address = newSocket.address.replace('::ffff:','')
+    }
+
+    if (this.isBanned(newSocket.address)){    //检查是否被封禁
+      this.send({
+        cmd:'warn',
+        text:'您已经被封禁，目前无法连接服务器。'
+      },newSocket)
+      newSocket.terminate()    //强制断开连接
+      return false    //不要向下执行
     }
 
     newSocket.on('message', (data) => {
@@ -157,12 +228,21 @@ class MainServer extends WsServer {
     * @return {void}
     */
   handleData(socket, data) {
+    if (this.isBanned(socket.address)){    //检查是否被封禁
+      this.send({
+        cmd:'warn',
+        text:'您已经被封禁。'
+      },socket)
+      socket.terminate()    //强制断开连接
+      return false    //不要向下执行
+    }
+    
     // Don't penalize yet, but check whether IP is rate-limited
     if (this.police.frisk(socket.address, 0)) {
       this.core.commands.handleCommand(this, socket, {
         cmd: 'socketreply',
         cmdKey: this.cmdKey,
-        text: '您的操作过于频繁，或者已被封禁。',
+        text: '您的操作过于频繁，请稍后再试。',
       });
 
       return;
