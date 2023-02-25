@@ -1,7 +1,3 @@
-/*
-  Description: Adds the target socket's ip to the ratelimiter
-*/
-
 import * as UAC from '../utility/UAC/_info';
 
 // module main

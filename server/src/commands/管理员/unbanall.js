@@ -1,7 +1,3 @@
-/*
-  Description: Clears all bans and ratelimits
-*/
-
 import * as UAC from '../utility/UAC/_info';
 
 // module main
