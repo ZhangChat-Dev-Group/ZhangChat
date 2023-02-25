@@ -69,25 +69,55 @@ export async function run(core, server, socket, data) {
     trip: badClient.trip || '',
     hash: server.getSocketHash(badClient),
   };
+
   const nicks = [];
+  const users = []
 
   for (let i = 0, l = newPeerList.length; i < l; i += 1) {
     server.reply(moveAnnouncement, newPeerList[i]);
     nicks.push(newPeerList[i].nick);
+    users.push({
+      nick: newPeerList[i].nick,
+      trip: newPeerList[i].trip,
+      utype: newPeerList[i].uType, /* @legacy */
+      hash: newPeerList[i].hash,
+      level: newPeerList[i].level,
+      userid: newPeerList[i].userid,
+      channel: newPeerList[i].channel,
+      client: newPeerList[i].client || '未知客户端',
+      isme: false,
+    })
   }
 
   nicks.push(badClient.nick);
+  users.push({
+    nick: badClient.nick,
+    trip: badClient.trip,
+    utype: badClient.uType, /* @legacy */
+    hash: badClient.hash,
+    level: badClient.level,
+    userid: badClient.userid,
+    channel: badClient.channel,
+    client: badClient.client || '未知客户端',
+    isme: true,
+  })
+
 
   server.reply({
     cmd: 'onlineSet',
     nicks,
+    users,
   }, badClient);
 
   badClient.channel = data.channel;
   server.broadcast({
     cmd: 'info',
     text: `${badClient.nick} 被管理员移入 ?${data.channel}`,
-  }, { channel: data.channel });
+  }, { channel: data.channel, level: (l) => l < UAC.levels.moderator });
+  server.broadcast({
+    cmd: 'info',
+    text: `${badClient.nick} 被 ${socket.nick} 从 ?${socket.channel} 移入 ?${data.channel}`,
+  }, { channel: data.channel, level: UAC.isModerator });
   server.broadcast({
     cmd: 'info',
     text:`${badClient.nick} 被移出该房间`
