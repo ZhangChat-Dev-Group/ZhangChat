@@ -46,11 +46,27 @@ export async function run(core, server, socket, data) {
 
   // return error if found
   if (userExists.length > 0) {
-    // That nickname is already in that channel
-    return server.reply({
-      cmd: 'warn',
-      text: '昵称重复',
-    }, socket);
+    if ((((userExists[0].trip && socket.trip /* 都有识别码 */) && (!userExists[0].passwordWarning && !socket.passwordWarning /* 不是弱密码 */ ) && (userExists[0].trip === socket.trip)) || (socket.address === userExists[0].address /* 同IP地址 */)) && userExists.length === 1 /* 以防万一，虽然这有点多余 */){
+      server.broadcast({
+        cmd:'info',
+        text: `${userExists[0].nick} 可能是僵尸号，已被自动踢出聊天室`
+      },{channel:socket.channel})
+
+      userExists[0].channel = ''    //去掉channel，防止disconnect.js再次广播onlineRemove
+      
+      server.broadcast({    //广播用户离开通知，如果直接用terminate会出现异步的问题
+        cmd:'onlineRemove',
+        nick: userExists[0].nick
+      },{channel:socket.channel})
+      
+      userExists[0].terminate()    //关闭连接
+    }else{
+      // That nickname is already in that channel
+      return server.reply({
+        cmd: 'warn',
+        text: '昵称重复',
+      }, socket);
+    }
   }
   
   /*

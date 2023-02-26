@@ -24,7 +24,7 @@ export async function run(core, server, socket, data) {
             text: '找不到这个用户',
         }, socket);
     }
-    if (zom_socket[0].address === socket.address || (zom_socket[0].trip === socket.trip && zom_socket[0].trip && socket.trip)) {
+    if (zom_socket[0].address === socket.address || (zom_socket[0].trip === socket.trip && zom_socket[0].trip && socket.trip && !socket.passwordWarning && !zom_socket[0].passwordWarning)) {
         server.reply({
             cmd: 'warn',
             text: '您已被自己踢出聊天室，如果这不是您本人操作，请重新加入并通知管理员，谢谢合作。',
@@ -37,7 +37,7 @@ export async function run(core, server, socket, data) {
     } else {
         return server.reply({
             cmd: 'warn',
-            text: `抱歉，我们无法确定 ${data.nick} 就是您本人`,
+            text: `抱歉，我们无法确定 ${data.nick} 就是您本人，该命令只能踢出同IP地址或同识别码且都使用了强密码的用户`,
         }, socket);
     }
 
