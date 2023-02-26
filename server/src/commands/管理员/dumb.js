@@ -79,6 +79,17 @@ export async function run(core, server, socket, data) {
       text: '你不知道不能禁言同级别或级别更高的用户么？',
     }, socket);
   }
+
+  if (server.findSockets({
+    address: badClient.address,
+    level: (l) => l >= socket.level,
+  }).length > 0){    //防止封禁其他管理员开的小号
+    return server.reply({
+      cmd: 'warn',
+      text: `你的某位同事和 @${badClient.nick} 使用了同一个IP地址，如果你把 @${badClient.nick} 禁言了，那么你的同事也会遭殃的！`,
+    }, socket);
+  }
+
   //用户已经受伤了，别再捅刀了……
   if (core.mute[badClient.hash] !== undefined){
     return server.reply({
