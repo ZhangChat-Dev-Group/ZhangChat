@@ -335,8 +335,8 @@ function join(channel) {
 	var wsPath = '/ws';
 	const url = `${protocol}//${document.domain}${wsPath}`
 
-	ws = new WebSocket('wss://chat.zhangsoft.cf/ws');
-	//ws = new WebSocket(url);
+	//ws = new WebSocket('wss://chat.zhangsoft.cf/ws');
+	ws = new WebSocket(url);
 	
 	var wasConnected = false;
 
