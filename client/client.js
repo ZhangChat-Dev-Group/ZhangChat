@@ -334,7 +334,10 @@ function join(channel) {
 	var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
 	var wsPath = '/ws';
 	const url = `${protocol}//${document.domain}${wsPath}`
-	ws = new WebSocket(url);
+
+	ws = new WebSocket('wss://chat.zhangsoft.cf/ws');
+	//ws = new WebSocket(url);
+	
 	var wasConnected = false;
 
 	ws.onopen = async function () {
@@ -1139,9 +1142,7 @@ function userChange(nick, text) {
 		var user = children[i];
 
 		if (user.firstChild.textContent == nick) {
-			var temp = document.createElement('a')
-			temp.textContent = text;
-			user.firstChild.appendChild(temp)
+			user.firstChild.innerText = text
 			user.firstChild.onclick = function (e) {
 				userInvite(text)
 			}
