@@ -188,7 +188,7 @@ var myNick = localStorageGet('my-nick') || '';
 var myChannel = decodeURI(window.location.search.replace(/^\?/, ''));
 var lastSent = [""];
 var lastSentPos = 0;
-// const hCaptchaSiteKey = '94d4ba8b-335c-4d47-b57b-23647dafbf05'
+var modCmd = null
 
 /** 通知和本地存储 **/
 var notifySwitch = document.getElementById("notify-switch")
@@ -1093,6 +1093,11 @@ function userAdd(nick, trip) {
 		userInvite(nick)
 	}
 
+	user.oncontextmenu = function (e) {
+		e.preventDefault();
+		userModAction(nick)
+	}
+
 	var userLi = document.createElement('li');
 	userLi.appendChild(user);
 
@@ -1140,6 +1145,10 @@ function userChange(nick, text) {
 			user.firstChild.onclick = function (e) {
 				userInvite(text)
 			}
+			user.firstChild.oncontextmenu = function (e) {
+				e.preventDefault();
+				userModAction(text)
+			}
 		}
 	}
 
@@ -1162,6 +1171,20 @@ function usersClear() {
 
 function userInvite(nick) {
 	send({cmd: 'invite', nick: nick});
+}
+
+function userModAction(nick) {
+	if (modCmd === null){    //如果未设置
+		return pushMessage({
+			nick: '!',
+			text: '您尚未设置管理员操作'
+		})
+	}
+
+	let toSend = modCmd
+	toSend.nick = nick
+
+	send(toSend);
 }
 
 function userIgnore(nick) {
@@ -1191,6 +1214,53 @@ var uwuPrefixs = [
 	'onlytext',
 	'onlyemoji',
 ]
+
+var modAction = [    //管理员操作
+	{
+		text: '无',
+		data: null,
+	},
+	{
+		text: '踢出',    //对用户显示的文本
+		data: {    //用户选择了这个操作，客户端向服务器发送数据时使用的模板，客户端会自动加上nick参数
+			cmd: 'kick',
+		},
+	},
+	{
+		text: '封禁',
+		data: {
+			cmd: 'ban',
+		},
+	},
+	{
+		text: '禁言1分钟',
+		data: {
+			cmd: 'dumb',
+			time: 1,
+		},
+	},
+	{
+		text: '禁言5分钟',
+		data: {
+			cmd: 'dumb',
+			time: 5,
+		}
+	},
+	{
+		text: '禁言10分钟',
+		data: {
+			cmd: 'dumb',
+			time: 10,
+		}
+	},
+	{
+		text: '永久禁言',
+		data: {
+			cmd: 'dumb',
+			time: 0,
+		}
+	},
+];
 
 // 默认方案
 var currentScheme = 'electron';
@@ -1241,6 +1311,13 @@ uwuPrefixs.forEach(function (scheme) {
 	$('#prefix-selector').appendChild(option);
 });
 
+modAction.forEach((action) => {
+	var option = document.createElement('option');
+	option.textContent = action.text;
+	option.value = JSON.stringify(action.data);    //转换为JSON
+	$('#mod-action').appendChild(option)
+})
+
 $('#scheme-selector').onchange = function (e) {
 	setScheme(e.target.value);
 }
@@ -1251,6 +1328,10 @@ $('#highlight-selector').onchange = function (e) {
 
 $('#prefix-selector').onchange = function (e) {
 	setPrefix(e.target.value);
+}
+
+$('#mod-action').onchange = (e) => {
+	modCmd = JSON.parse(e.target.value)    //解析为obj
 }
 
 // 从本地存储加载侧边栏配置（如果可用）
