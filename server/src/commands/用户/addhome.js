@@ -33,7 +33,7 @@ export async function run(core, server, socket, data) {
   if (socket.passwordWarning){
     return server.reply({
       cmd:'warn',
-      text:'抱歉，要使用该功能，您必须设置一个强密码。\n一个强密码的定义：最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符\n如果您继续使用弱密码，那么您可能无法正常使用部分功能。'
+      text:'抱歉，要使用该功能，您必须设置一个强密码。\n一个强密码的定义：最少6位，包括至少1个大写字母，1个小写字母，1个数字\n如果您继续使用弱密码，那么您可能无法正常使用部分功能。'
     },socket)
   }
   

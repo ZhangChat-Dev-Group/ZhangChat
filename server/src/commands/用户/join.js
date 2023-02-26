@@ -42,7 +42,7 @@ export function parseNickname(core, data) {
   }
 
   if (password){
-    const passwordCheck = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/    //给密码加点料
+    const passwordCheck = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).*$/    //给密码加点料
     if (!passwordCheck.test(password)){
       userInfo.passwordWarning = true    //弱密码警告
     }
@@ -124,7 +124,7 @@ export async function run(core, server, socket, data) {
   if (userInfo.passwordWarning){
     server.reply({
       cmd: 'warn',
-      text: '警告：检测到您正在使用弱密码，我们强烈建议您换用一个强密码。\n一个强密码的定义：最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符\n如果您继续使用弱密码，那么您可能无法正常使用部分功能。',
+      text: '警告：检测到您正在使用弱密码，我们强烈建议您换用一个强密码。\n一个强密码的定义：最少6位，包括至少1个大写字母，1个小写字母，1个数字\n如果您继续使用弱密码，那么您可能无法正常使用部分功能。',
     }, socket);
     socket.passwordWarning = true    //标记正在使用弱密码，未来会限制使用部分功能
   }
