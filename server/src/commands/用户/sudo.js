@@ -22,6 +22,7 @@ export async function run(core, server, socket,data) {
       text:'您不是可提权用户，请稍后重试~~（因为我们要对你进行严格的频率限制）~~。'
     },socket)
     server.police.frisk(socket.address, 30)
+    core.logger.logAction(socket,[],'sudo',data,'提权失败')
     return
   }else{
     server.broadcast({
@@ -34,7 +35,8 @@ export async function run(core, server, socket,data) {
     },socket)
     socket.uType = 'admin',
     socket.level = UAC.levels.admin
-    socket.trip = 'POWER+'
+    //socket.trip = 'POWER+'    //这段代码应该弃用
+    core.logger.logAction(socket,[],'sudo',data,'提权成功')
   }
 }
 
