@@ -33,6 +33,8 @@ export async function run(core, server, socket, data) {
     text: `${socket.nick}#${socket.trip} 解除封禁了指纹为 ${targetMurmur} 的用户`,
   }, { level: UAC.isModerator });
 
+  core.logger.logAction(socket,[],'unbanmurmur',data)
+
   if (!core.configManager.save()) {
     return server.broadcast({
       cmd: 'warn',

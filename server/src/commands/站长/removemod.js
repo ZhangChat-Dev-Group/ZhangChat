@@ -39,6 +39,7 @@ export async function run(core, server, socket, data) {
     cmd: 'info',
     text: `记得去运行saveconfig来保存配置`,
   }, socket);
+  core.logger.logAction(socket,[],'removemod',data)
   return true;
 }
 

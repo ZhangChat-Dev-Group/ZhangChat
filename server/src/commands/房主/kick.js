@@ -64,6 +64,9 @@ export async function run(core, server, socket, data) {
   // stats are fun
   core.stats.increment('users-kicked', kicked.length);
 
+  // 保存为档案
+  core.logger.logAction(socket,[],'kick',data,`${kicked.map((k) => k.nick).join('、')} 被踢出聊天室`)
+
   return true;
 }
 

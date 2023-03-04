@@ -42,14 +42,6 @@ class CommandManager {
       * @type {Array}
       */
     this.categories = [];
-
-    /**
-      * Full path to config.json file
-      * @type {String}
-      */
-    if (typeof this.core.config.logErrDetailed === 'undefined') {
-      this.core.config.logErrDetailed = false;
-    }
   }
 
   /**
@@ -69,6 +61,11 @@ class CommandManager {
       cmdErrors += this.validateAndLoad(command, file, name);
     });
 
+    if (cmdErrors){
+      const errID = this.core.logger.logError(cmdErrors,'初始化模块',undefined,[])
+      return cmdErrors + `\n错误ID：\`${errID}\``;
+    }
+
     return cmdErrors;
   }
 
@@ -84,15 +81,14 @@ class CommandManager {
     const error = this.validateCommand(command);
 
     if (error) {
-      const errText = `无法加载命令模块 '${name}'：${error}`;
-      console.error(errText);
+      const errText = `无法加载命令模块 ${name}，错误信息：${error}`;
       return errText;
     }
 
     if (!command.category) {
       const base = join(this.core.dynamicImports.base, 'commands');
 
-      let category = 'Uncategorized';
+      let category = '未分类';
       if (file.indexOf(sep) > -1) {
         category = dirname(relative(base, file))
           .replace(new RegExp(sep.replace('\\', '\\\\'), 'g'), '/');
@@ -110,7 +106,6 @@ class CommandManager {
         command.init(this.core);
       } catch (err) {
         const errText = `无法初始化命令 ${name}：${err}`;
-        console.error(errText);
         return errText;
       }
     }
@@ -188,8 +183,8 @@ class CommandManager {
     * @param {Object} server main server object
     */
   initCommandHooks(server) {
-    this.commands.filter((c) => typeof c.initHooks !== 'undefined').forEach(
-      (c) => c.initHooks(server),
+    this.commands.filter((c) => typeof c.initHooks === 'function').forEach(
+      (c) => { c.initHooks(server) },
     );
   }
 
@@ -280,8 +275,13 @@ class CommandManager {
     try {
       return await command.run(this.core, server, socket, data);
     } catch (err) {
-      const errText = `无法执行 ${command.info.name} 命令：`;
+      const errID = this.core.logger.logError(err.stack, '执行命令', socket, [])    //生成错误日志，获取事件ID
+      //const errText = `无法执行 ${command.info.name} 命令：`;
+      const errText = `# :(\n# 非常无语，服务器在执行 ${command.info.name} 命令时出现了未知错误，无法为您提供相应的服务。\n### 小张聊天室的部分技术暂不成熟，出错是在所难免的，敬请谅解。\n您可以将错误ID \`${errID}\` 报告给开发者以帮助我们改进服务器。`;
 
+      // 此段代码已被弃用，因为 EventsLogger.js 可以更好地实现错误处理功能
+
+      /*
       // If we have more detail enabled, then we get the trace
       // if it isn't, or the property doesn't exist, then we'll get only the message
       if (this.core.config.logErrDetailed === true) {
@@ -289,11 +289,12 @@ class CommandManager {
       } else {
         console.log(errText + err.toString());
       }
+      */
 
       this.handleCommand(server, socket, {
         cmd: 'socketreply',
         cmdKey: server.cmdKey,
-        text: errText + err.toString(),
+        text: errText,
       });
 
       return null;

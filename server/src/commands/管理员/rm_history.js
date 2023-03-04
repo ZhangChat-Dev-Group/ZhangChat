@@ -13,6 +13,8 @@ export async function run(core, server, socket, data) {
       cmd: 'info',
       text: `${socket.nick} 已清除 ?${socket.channel} 的历史记录`,
     }, { level: UAC.isModerator });
+
+    core.logger.logAction(socket,[],'rm-history',data)
     
   });
   return true;

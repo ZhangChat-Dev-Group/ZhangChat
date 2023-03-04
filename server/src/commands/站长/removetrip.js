@@ -54,6 +54,7 @@ export async function run(core, server, socket, data) {
     cmd:'info',
     text:'请不要忘记执行 `saveconfig` 来保存配置文件'
   },socket)
+  core.logger.logAction(socket,[],'removetrip',data)
 }
 export const requiredData = ['trip'];
 export const info = {

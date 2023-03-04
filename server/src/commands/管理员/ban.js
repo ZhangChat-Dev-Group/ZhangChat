@@ -85,7 +85,6 @@ export async function run(core, server, socket, data) {
 
   console.log(`[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}`)
 
-
   // notify mods
   server.broadcast({
     cmd: 'info',
@@ -97,6 +96,8 @@ export async function run(core, server, socket, data) {
 
   // stats are fun
   core.stats.increment('users-banned');
+
+  core.logger.logAction(socket,[],'ban',data,`[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}`)
 
   return true;
 }

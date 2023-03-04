@@ -38,6 +38,7 @@ export async function run(core, server, socket, data) {
     cmd: 'info',
     text: `记得去运行saveconfig来保存配置\n建议执行clearpower命令以确保万无一失`,
   }, socket);
+  core.logger.logAction(socket,[],'removesudoer',data)
   return true;
 }
 

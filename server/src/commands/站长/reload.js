@@ -36,6 +36,8 @@ ${loadResult}`;
     text: loadResult,
   }, { level: UAC.isModerator });
 
+  core.logger.logAction(socket,[],'reload',data,loadResult)
+
   return true;
 }
 

@@ -57,6 +57,8 @@ export async function run(core, server, socket, data) {
     text:`你的禁言已被手动解除。`
   },{hash:data.hash})
 
+  core.logger.logAction(socket,[],'speak',data)
+
   return true;
 }
 

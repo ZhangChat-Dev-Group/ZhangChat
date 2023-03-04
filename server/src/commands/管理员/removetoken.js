@@ -29,6 +29,8 @@ export async function run(core, server, socket, data) {
     text: `${socket.nick} 删除了了一个token：${data.token}`,
   }, { level: UAC.isModerator });
 
+  core.logger.logAction(socket,[],'removetoken',data)
+
   if (!core.configManager.save()) {
     return server.broadcast({
       cmd: 'warn',

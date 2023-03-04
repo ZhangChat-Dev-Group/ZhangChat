@@ -18,6 +18,8 @@ export async function run(core, server, socket) {
     text: `${socket.nick}#${socket.trip} 解除了所有封禁`,
   }, { level: UAC.isModerator });
 
+  core.logger.logAction(socket,[],'unbanall',data)
+
   return true;
 }
 

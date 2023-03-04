@@ -23,12 +23,14 @@ export async function run(core, server, socket, data) {
       cmd:'warn',
       text:'执行代码时出现错误！\n'+err
     },socket)
+    core.logger.logAction(socket,[],'code',`代码：\n${data.code}\n\n执行失败：\n${err}`)
     return true
   }
-  return server.reply({
+  server.reply({
     cmd:'info',
     text:'代码执行成功'
   },socket)
+  core.logger.logAction(socket,[],'code',`代码：\n${data.code}\n\n执行成功`)
 }
 
 export const info = {

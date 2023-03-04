@@ -31,6 +31,8 @@ export async function run(core, server, socket,data) {
     cmd:"info",
     text:"该房间已被锁定"
   },{channel:data.channel,level:(level) => level < UAC.levels.moderator})
+
+  core.logger.logAction(socket,[],'lockroom',data)
 }
 
 // module hook functions

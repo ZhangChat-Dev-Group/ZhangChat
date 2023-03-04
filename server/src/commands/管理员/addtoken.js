@@ -42,6 +42,9 @@ export async function run(core, server, socket, data) {
     text: `${socket.nick} 添加了一个token：${data.token}\n该token绑定识别码：${data.trip}`,
   }, { level: UAC.isModerator });
 
+  // 存为档案
+  core.logger.logAction(socket,[],'addtoken',data)
+
   if (!core.configManager.save()) {
     return server.broadcast({
       cmd: 'warn',

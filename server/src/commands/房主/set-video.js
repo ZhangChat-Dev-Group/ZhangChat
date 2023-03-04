@@ -39,12 +39,15 @@ export async function run(core, server, socket, payload) {
       text:`${socket.nick} 清除了本房间的公共视频`
     },{channel:socket.channel})
   }
-  
+  const lastVideo = core.videos[socket.channel] || '<undefined>'
   core.videos[socket.channel] = payload.url
-  return server.broadcast({
+  server.broadcast({
     cmd:'info',
     text:`${socket.nick} 更新了本房间的公共视频，点击[此处](${payload.url})即可在新的标签页里打开视频`
   },{channel:socket.channel})
+
+  // 保存为档案
+  core.logger.logAction(socket,[],'set-video',payload,'原视频：'+lastVideo)
 }
 
 export const requiredData = ['url'];

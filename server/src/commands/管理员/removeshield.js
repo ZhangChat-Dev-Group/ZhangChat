@@ -41,6 +41,7 @@ export async function run(core, server, socket, data) {
     cmd:'info',
     text:`${socket.nick} 已取消屏蔽所有包含 ${data.text} 的内容`
   },{level:UAC.isModerator})
+  core.logger.logAction(socket,[],'removeshield',data)
   if (!core.configManager.save()) {
     return server.broadcast({
       cmd: 'warn',

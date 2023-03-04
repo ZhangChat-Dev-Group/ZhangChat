@@ -17,12 +17,19 @@ class ImportsManager {
     * Create an `ImportsManager` instance for (re)loading classes and config
     * @param {String} basePath executing directory name; default __dirname
     */
-  constructor(basePath) {
+  constructor(basePath,core) {
     /**
       * Stored reference to the base directory path
       * @type {String}
       */
     this.basePath = basePath;
+
+    /**
+     * core对象，用于调用 logger
+     * @type {Object}
+     */
+
+    this.core = core
 
     /**
       * Data holder for imported modules
@@ -67,14 +74,18 @@ class ImportsManager {
         } catch (e) {
           const err = `无法从 ${dirName} (${relative(dir, file)}) 加载命令模块，错误信息：\n${e}`;
           errorText += err;
-          console.error(err);
         }
       });
     } catch (e) {
       const err = `无法从 ${dirName} 加载命令模块，错误信息：\n${e}`;
       errorText += err;
-      console.error(err);
-      return errorText;
+      const errID = this.core.logger.logError(errorText,'加载模块',undefined,[])    //记录日志
+      return errorText + `\n错误ID：\`${errID}\``;
+    }
+
+    if (errorText){
+      const errID = this.core.logger.logError(errorText,'加载模块',undefined,[])    //记录日志
+      return errorText + `\n错误ID：\`${errID}\``;
     }
 
     return errorText;

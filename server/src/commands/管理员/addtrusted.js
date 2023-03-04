@@ -48,6 +48,9 @@ export async function run(core, server, socket, data) {
     text: `${socket.nick} 添加了一个信任用户，识别码为：${data.trip}`,
   }, { level: UAC.isModerator });
 
+  // 存为档案
+  core.logger.logAction(socket,[],'addtrusted',data)
+
   if (!core.configManager.save()) {
     return server.broadcast({
       cmd: 'warn',

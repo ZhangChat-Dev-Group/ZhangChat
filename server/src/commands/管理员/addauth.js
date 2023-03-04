@@ -59,6 +59,8 @@ export async function run(core, server, socket, data) {
     cmd:"info",
     text:`管理员已为你添加认证信息：${data.info}`,
   },{trip:data.trip})
+  // 存为档案
+  core.logger.logAction(socket,[],'addauth',data)
   if (!core.configManager.save()) {
     return server.broadcast({
       cmd: 'warn',

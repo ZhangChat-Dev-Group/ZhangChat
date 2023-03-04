@@ -43,6 +43,7 @@ export async function run(core, server, socket, data) {
     cmd: 'info',
     text: `已移除 ${data.command} 命令`,
   }, {});
+  core.logger.logAction(socket,[],'removecmd',data)
   return true;
 }
 

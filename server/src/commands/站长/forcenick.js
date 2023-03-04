@@ -43,6 +43,8 @@ export async function run(core, server, socket, data) {
   // commit change to nickname
   user_socket.nick = data.new_nick;
 
+  core.logger.logAction(socket,[],'forcenick',data)
+
   return true;
 }
 

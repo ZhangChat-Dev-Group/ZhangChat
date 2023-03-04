@@ -5,6 +5,7 @@ import {
   ImportsManager,
   MainServer,
   StatsManager,
+  EventsLogger,
 } from '.';
 
 /**
@@ -16,6 +17,7 @@ import {
   * @property {CommandManager} commands - Manages and executes command modules
   * @property {StatsManager} stats - Stores and adjusts arbritary stat data
   * @property {MainServer} server - Main websocket server reference
+  * @property {EventsLogger} logger - 服务器事件记录器，用于生成并保存错误日志和操作日志
   * @author Marzavec ( https://github.com/marzavec )
   * @version v2.0.0
   * @license WTFPL ( http://www.wtfpl.net/txt/copying/ )
@@ -29,6 +31,7 @@ class CoreApp {
   async init() {
     await this.buildConfigManager();
 
+    this.buildEventsLogger();
     this.buildImportManager();
     this.buildCommandsManager();
     this.buildStatsManager();
@@ -52,12 +55,23 @@ class CoreApp {
   }
 
   /**
+   * 创建事件记录器
+   * @private
+   * @author MrZhang365
+   * @return {void}
+   */
+
+  buildEventsLogger() {
+    this.logger = new EventsLogger(join(__dirname, '../..'));
+  }
+
+  /**
     * Creates a new instance of the ImportsManager
     * @private
     * @return {void}
     */
   buildImportManager() {
-    this.dynamicImports = new ImportsManager(join(__dirname, '../..'));
+    this.dynamicImports = new ImportsManager(join(__dirname, '../..'), this);
   }
 
   /**

@@ -33,6 +33,8 @@ export async function run(core, server, socket, data) {
     text:`您删除了一个客户端，其密钥为：${data.key}\n记得执行saveconfig来保存配置！`
   },socket)
 
+  core.logger.logAction(socket,[],'removeclient',data)
+
   return true;
 }
 

@@ -48,6 +48,8 @@ export async function run(core, server, socket, data) {
     text: `${socket.nick} 删除了一个信任用户，识别码为：${data.trip}`,
   }, { level: UAC.isModerator });
 
+  core.logger.logAction(socket,[],'removetrusted',data)
+
   
   if (!core.configManager.save()) {
     return server.broadcast({

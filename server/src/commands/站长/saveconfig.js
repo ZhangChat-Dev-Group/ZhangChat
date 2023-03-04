@@ -13,6 +13,7 @@ export async function run(core, server, socket) {
 
   // attempt save, notify of failure
   if (!core.configManager.save()) {
+    core.logger.logAction(socket,[],'saveconfig',data,'保存失败')
     return server.reply({
       cmd: 'warn',
       text: '保存文件失败，请检查日志。',
@@ -24,6 +25,8 @@ export async function run(core, server, socket) {
     cmd: 'info',
     text: '配置已保存！',
   }, { level: UAC.isModerator });
+
+  core.logger.logAction(socket,[],'addtrip',data,'保存成功')
 
   return true;
 }

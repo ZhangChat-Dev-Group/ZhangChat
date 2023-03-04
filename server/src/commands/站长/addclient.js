@@ -36,6 +36,8 @@ export async function run(core, server, socket, data) {
     text:`您添加了一个客户端，详细信息如下：\n名称：${data.name}\n密钥：${data.key}\n记得执行saveconfig来保存配置！`
   },socket)
 
+  core.logger.logAction(socket,[],'addclient',data)
+
   return true;
 }
 

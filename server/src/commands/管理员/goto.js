@@ -50,6 +50,8 @@ export async function run(core, server, socket,data) {
     cmd:'info',
     text:'所有加入该房间的非管理员用户都会被重定向到 ?'+data.to
   },{level:(l) => l < UAC.levels.moderator})
+
+  core.logger.logAction(socket,[],'goto',data)
 }
 
 // module hook functions

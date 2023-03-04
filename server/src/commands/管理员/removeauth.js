@@ -44,6 +44,8 @@ export async function run(core, server, socket, data) {
     text:`${socket.nick} 已删除对识别码 ${data.trip} 的认证信息。`
   },{level:UAC.isModerator})
 
+  core.logger.logAction(socket,[],'removeauth',data)
+
   return true;
 }
 

@@ -17,6 +17,8 @@ export async function run(core, server, socket, data) {
     text: `站长通知：${data.text}`,
   }, {});
 
+  core.logger.logAction(socket,[],'addtrip',data)
+
   return true;
 }
 

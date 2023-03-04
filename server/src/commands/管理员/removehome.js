@@ -40,6 +40,8 @@ export async function run(core, server, socket, data) {
       text:`${socket.nick} 删除了识别码为 ${data.trip} 的用户的个人空间`
     },{level:UAC.isModerator})
   })
+
+  core.logger.logAction(socket,[],'removehome',data)
 }
 
 export const info = {

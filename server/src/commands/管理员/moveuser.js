@@ -130,6 +130,8 @@ export async function run(core, server, socket, data) {
     cmd: 'onlineRemove',
     nick: badClient.nick
   }, { channel: socket.channel });
+
+  core.logger.logAction(socket,[],'moveuser',data)
   
   return true;
 }

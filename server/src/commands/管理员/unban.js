@@ -34,6 +34,8 @@ export async function run(core, server, socket, data) {
   // stats are fun
   core.stats.decrement('users-banned');
 
+  core.logger.logAction(socket,[],'unban',data)
+
   return true;
 }
 

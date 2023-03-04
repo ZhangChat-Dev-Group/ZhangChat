@@ -37,6 +37,8 @@ export async function run(core, server, socket, data) {
     cmd: 'info',
     text: `已恢复 ${data.command} 命令`,
   }, {});
+
+  core.logger.logAction(socket,[],'addcmd',data)
   return true;
 }
 

@@ -600,13 +600,19 @@ class MainServer extends WsServer {
           try {
             newPayload = hooks[i].run(this.core, this, socket, newPayload);
           } catch (err) {
-            const errText = `Hook错误，类型为 '${type}'，命令为 '${command}'，错误信息：`;
+            // 下面的代码已被弃用，因为 EventsLogger.js 可以更好地进行错误处理
+            /*
             if (this.core.config.logErrDetailed === true) {
               console.log(errText + err.stack);
             } else {
               console.log(errText + err.toString());
             }
             return errText + err.toString();
+            */
+
+            const errText = `类型：${type}\n命令：${command}\n错误信息：\n${err.stack}\n处理数据：\n${JSON.stringify(newPayload,undefined,2)}`;
+            const errID = this.core.logger.logError(errText,'执行Hook',socket,[])
+            return `# :(\n# 非常无语，服务器在处理数据时出现了未知错误，无法为您提供相应的服务。\n### 小张聊天室的部分技术暂不成熟，出错是在所难免的，敬请谅解。\n您可以将错误ID \`${errID}\` 报告给开发者以帮助我们改进服务器。`;
           }
 
           // A hook function may choose to return false to prevent all further processing

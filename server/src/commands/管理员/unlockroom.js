@@ -38,6 +38,7 @@ export async function run(core, server, socket, data) {
     cmd:"info",
     text:"该房间已解除锁定"
   },{channel:data.channel,level:(level) => level < UAC.levels.moderator})
+  core.logger.logAction(socket,[],'unlockroom',data)
 }
 // module meta
 export const info = {

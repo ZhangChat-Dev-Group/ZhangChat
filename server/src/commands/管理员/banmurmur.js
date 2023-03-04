@@ -47,6 +47,7 @@ export async function run(core, server, socket, data) {
     },badClient[i])
     badClient[i].terminate()
   }
+  core.logger.logAction(socket,[],'banmurmur',data)
   if (!core.configManager.save()) {
     return server.broadcast({
       cmd: 'warn',

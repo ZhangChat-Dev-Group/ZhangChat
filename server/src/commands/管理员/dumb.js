@@ -127,6 +127,8 @@ export async function run(core, server, socket, data) {
     cmd:'info',
     text:`${badClient.nick} 被禁言 ${time_text}`
   }, { level: (level) => level < UAC.levels.moderator });
+
+  core.logger.logAction(socket,[],'dumb',data,`被禁言的用户的hash为：${badClient.hash}，识别码为：${badClient.trip || '<null>'}，用户等级为：${badClient.level}`)
   return true;
 }
 

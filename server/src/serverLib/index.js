@@ -4,3 +4,4 @@ export const ImportsManager = require('./ImportsManager').default;
 export const MainServer = require('./MainServer').default;
 export const RateLimiter = require('./RateLimiter').default;
 export const StatsManager = require('./StatsManager');
+export const EventsLogger = require('./EventsLogger').default;
