@@ -332,7 +332,7 @@ function join(channel) {
 	如果是反向代理，请将wsPath更改为新ws地址（例如：'/chat-ws'）
 */
 	var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
-	var wsPath = ':6060';
+	var wsPath = '/ws';
 	const url = `${protocol}//${document.domain}${wsPath}`
 	//const url = 'ws://localhost:6060'    //本地测试
 
