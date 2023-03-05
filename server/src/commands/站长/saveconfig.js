@@ -26,7 +26,7 @@ export async function run(core, server, socket, data) {
     text: '配置已保存！',
   }, { level: UAC.isModerator });
 
-  core.logger.logAction(socket,[],'addtrip',data,'保存成功')
+  core.logger.logAction(socket,[],'saveconfig',data,'保存成功')
 
   return true;
 }
