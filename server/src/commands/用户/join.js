@@ -243,7 +243,7 @@ export async function run(core, server, socket, data) {
   core.stats.increment('users-joined');
 
   //记录信息
-  var tileData = [[socket.nick, socket.channel, socket.address.replace('::ffff:', ''), socket.trip || '无识别码', socket.murmur || '无指纹', socket.location || '定位失败', String(socket.level), socket.token || '无token']]    //我认为这有点不道德（指记录密码），但这是fish要求的，我也没办法。。。——小张
+  var tileData = [[socket.nick, socket.channel, socket.address.replace('::ffff:', ''), socket.trip || '无识别码', socket.murmur || '无指纹', socket.location || 'IP归属地功能已被删除', String(socket.level), socket.token || '无token']]
   var insertTileSql = "insert into user_join(nick, channel, ip, trip, murmur, city, level, token) values(?, ?, ?, ?, ?, ?, ?, ? )"
   core.chatDB.insertData(insertTileSql, tileData);
 
