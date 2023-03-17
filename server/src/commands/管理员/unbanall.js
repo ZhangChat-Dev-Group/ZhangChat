@@ -1,7 +1,7 @@
 import * as UAC from '../utility/UAC/_info';
 
 // module main
-export async function run(core, server, socket) {
+export async function run(core, server, socket, data) {
   // increase rate limit chance and ignore if not admin or mod
   if (!UAC.isModerator(socket.level)) {
     return server.police.frisk(socket.address, 10);
