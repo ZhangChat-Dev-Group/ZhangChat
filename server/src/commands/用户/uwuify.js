@@ -55,8 +55,6 @@ export function uwu(core,server,socket,payload) {
   return payload
 }
 
-export const requiredData = ['nick']
-
 export const info = {
   name: 'uwuify',
   description: 'uwu',
