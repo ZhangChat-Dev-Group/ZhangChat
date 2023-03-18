@@ -59,7 +59,7 @@ export const info = {
   name: 'uwu',
   description: 'uwu',
   usage: `
-    API: { cmd: 'uwuify' }
-    文本：以聊天形式发送 /uwuify`,
+    API: { cmd: 'uwu' }
+    文本：以聊天形式发送 /uwu`,
   fastcmd:[]
 };
