@@ -8,7 +8,7 @@ export async function run(core,server,socket,payload) {
 
   server.broadcast({
     cmd:'info',
-    text: `${socket.nick} 设置自己的 uwuify 状态为：${uwu ? '开启' : '关闭'}`
+    text: `${socket.nick} 设置自己的 uwu 状态为：${uwu ? '开启' : '关闭'}`
   },{
     channel: socket.channel
   })
