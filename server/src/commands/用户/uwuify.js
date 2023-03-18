@@ -56,7 +56,7 @@ export function uwu(core,server,socket,payload) {
 }
 
 export const info = {
-  name: 'uwuify',
+  name: 'uwu',
   description: 'uwu',
   usage: `
     API: { cmd: 'uwuify' }
