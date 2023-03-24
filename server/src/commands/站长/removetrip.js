@@ -42,8 +42,8 @@ export async function run(core, server, socket, data) {
       server.reply({
         cmd:'info',
         text:`您的特殊识别码 ${data.trip} 已被删除，您当前的识别码为：${targetTrip}`
-      },sockets[i])
-      sockets[i].trip = targetTrip
+      },sockets[j])
+      sockets[j].trip = targetTrip
     }
   }
   server.broadcast({
