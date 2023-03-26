@@ -3,7 +3,7 @@
 	MrZhang365：领导者，主要编写JS、NodeJS。
 	paperee：成员，主要编写HTML、CSS、JS。
 
-	另外，感谢提供参考代码的4n0n4me和a。
+	另外，感谢提供参考代码的4n0n4me和Dr0。
 */
 
 // 在/上选择chatinput
