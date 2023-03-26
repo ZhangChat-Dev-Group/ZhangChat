@@ -21,12 +21,14 @@ https://chat.zhangsoft.cf/
 6.  执行 npm start（请注意防火墙放行相关端口）  
 
 ## 开发背景  
->这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室，但是由于某些原因，它被开发者魔改成了现在的小张聊天室。  
+> 这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室。  
+> 但是由于某些原因，它被开发者魔改成了现在的小张聊天室。
 
-XChat基于[HackChat](https://hack.chat/)，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main  
-小张聊天室源代码：https://github.com/ZhangChat-Dev-Group/ZhangChat
+XChat基于HackChat，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main  
+小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat
 
 ## 贡献者  
 - [HackChat](https://github.com/Hack-Chat) 编写底层代码  
 - [MrZhang365](https://blog.mrzhang365.cf) 汉化前端与后端，并在前后端上编写了许多新功能  
-- [纸片君ee](https://paperee.guru) 为前端编写CSS
+- [paperee](https://paperee.guru) 为前端编写部分主题和功能
+- [Dr0](https://greasyfork.org/zh-CN/users/1017687-greendebug) 为前端编写部分功能，编写油猴脚本
