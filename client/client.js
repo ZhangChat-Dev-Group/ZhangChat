@@ -150,16 +150,16 @@ var frontpage = [
 	'@MrZhang365 - [小张的博客](https://blog.mrzhang365.cf/) && [小张软件](https://www.zhangsoft.cf/)',
 	'@paperee - [纸片君ee的个人主页](https://paperee.guru/)',
 	'---',
+	'更多代码贡献者：',
+	'@4n0n4me - 编写了[HackChat客户端](https://hcer.netlify.app/)',
+	'@Dr0 - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/users/1017687-greendebug)',
+	'---',
 	'友情链接：',
 	'[物美价廉的云服务器——星云](https://cloud.nuee.cn/aff/FMOKBCMZ)',
 	'[HackChat聊天室](https://hack.chat/)',
 	'[TanChat聊天室](https://tanchat.fun/)',
 	'---',
-	'特别鸣谢：',
-	'@4n0n4me - 编写了[HackChat客户端](https://hcer.netlify.app/)',
-	'@a - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/users/1017687-greendebug)',
-	'---',
-	'2023.02.23 小张聊天室开发组 致',
+	'2023.02.23~2023.03.26 小张聊天室开发组 致',
 ].join("\n");
 
 function $(query) {
@@ -336,8 +336,9 @@ function join(channel) {
 
 	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
 	const url = document.domain === 'chat.zhangsoft.cf' ? 'wss://chat.zhangsoft.cf/ws' : `${protocol}//${document.domain}${wsPath}`
-	//const url = 'ws://localhost:6060'    //本地测试
-	
+	//const url = 'ws://localhost:6060' //本地测试
+
+	//ws = new WebSocket('wss://chat.zhangsoft.cf/ws');
 	ws = new WebSocket(url);
 	
 	var wasConnected = false;
@@ -349,7 +350,8 @@ function join(channel) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
 			} else {
-				var newNick = prompt('请输入昵称：', myNick);
+				var newNick = localStorageGet('my-nick') || '';
+				if (localStorageGet('auto-login') != 'true' || newNick == undefined) newNick = prompt('请输入昵称：', myNick);
 
 				if (newNick !== null) {
 					myNick = newNick;
@@ -363,8 +365,8 @@ function join(channel) {
 			localStorageSet('my-nick', myNick);
 			await getMurmur();
 			// console.log(`murmur is: ${myMurmur}`)
-			var sendMurmur=encode(myMurmur)
-			send({cmd: 'join', channel: channel, nick: myNick, client:'ZhangChatClient', murmur: sendMurmur.toString()});
+			var sendMurmur = encode(myMurmur)
+			send({ cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient', murmur: sendMurmur.toString() });
 		}
 
 		wasConnected = true;
@@ -436,13 +438,8 @@ var COMMANDS = {
 				var joinNotice = `${test[Math.round(Math.random()*(test.length - 1))]}的 ${nick} ${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
 			}
 
-			if (args.client) {
-				joinNotice += `\nTA正在使用 ${args.client}`
-			}
-
-			if (args.auth) {
-				joinNotice += `\n系统认证：${args.auth}`
-			}
+			joinNotice += args.client ? `\nTA正在使用 ${args.client}` : ''
+			joinNotice += args.auth ? `\n系统认证：${args.auth}` : ''
 
 			pushMessage({nick: '→', text: joinNotice, trip: args.trip || ''}, 'info'); // 仿Discord
 
@@ -974,6 +971,8 @@ $('#set-head').onclick = function () {
 
 // 从本地存储还原设置
 
+$('#auto-login').checked = localStorageGet('auto-login') == 'true';
+
 if (localStorageGet('pin-sidebar') == 'true') {
 	$('#pin-sidebar').checked = true;
 	$('#sidebar-content').classList.remove('hidden');
@@ -1053,6 +1052,10 @@ $('#syntax-highlight').onchange = function (e) {
 if (localStorageGet('allow-imgur') == 'false') {
 	$('#allow-imgur').checked = false;
 	allowImages = false;
+}
+
+$('#auto-login').onchange = function (e) {
+	localStorageSet('auto-login', !!e.target.checked);
 }
 
 $('#allow-imgur').onchange = function (e) {
@@ -1177,7 +1180,7 @@ function userInvite(nick) {
 }
 
 function userModAction(nick) {
-	if (modCmd === null){    //如果未设置
+	if (modCmd === null){	//如果未设置
 		return pushMessage({
 			nick: '!',
 			text: '您尚未设置管理员操作'
@@ -1218,14 +1221,14 @@ var uwuPrefixs = [
 	'onlyemoji',
 ]
 
-var modAction = [    //管理员操作
+var modAction = [	//管理员操作
 	{
 		text: '无',
 		data: null,
 	},
 	{
-		text: '踢出',    //对用户显示的文本
-		data: {    //用户选择了这个操作，客户端向服务器发送数据时使用的模板，客户端会自动加上nick参数
+		text: '踢出',	//对用户显示的文本
+		data: {	//用户选择了这个操作，客户端向服务器发送数据时使用的模板，客户端会自动加上nick参数
 			cmd: 'kick',
 		},
 	},
@@ -1317,7 +1320,7 @@ uwuPrefixs.forEach(function (scheme) {
 modAction.forEach((action) => {
 	var option = document.createElement('option');
 	option.textContent = action.text;
-	option.value = JSON.stringify(action.data);    //转换为JSON
+	option.value = JSON.stringify(action.data);	//转换为JSON
 	$('#mod-action').appendChild(option)
 })
 
@@ -1334,7 +1337,7 @@ $('#prefix-selector').onchange = function (e) {
 }
 
 $('#mod-action').onchange = (e) => {
-	modCmd = JSON.parse(e.target.value)    //解析为obj
+	modCmd = JSON.parse(e.target.value)	//解析为obj
 }
 
 // 从本地存储加载侧边栏配置（如果可用）
