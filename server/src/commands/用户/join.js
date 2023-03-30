@@ -111,6 +111,14 @@ export async function run(core, server, socket, data) {
     return true;
   }
 
+  if (!UAC.verifyChannel(channel)) {
+    server.reply({
+      cmd:'warn',
+      text: UAC.nameLimit.channel,
+    },socket)
+    return socket.terminate()
+  }
+
   const userInfo = this.parseNickname(core, data);
   if (typeof userInfo === 'string') {
     server.reply({
