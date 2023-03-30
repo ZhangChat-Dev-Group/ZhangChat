@@ -58,7 +58,8 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', // 路过图床
 	'i.postimg.cc',	'gimg2.baidu.com', // Postimages图床 百度
 	'files.catbox.moe', 'img.thz.cool', 'img.liyuv.top', 'share.lyka.pro', // 这些是ee加的（被打
-	document.domain,
+	document.domain,    // 允许我自己
+	'img.zhangsoft.cf',    // 小张图床
 ];
 
 function getDomain(link) {
