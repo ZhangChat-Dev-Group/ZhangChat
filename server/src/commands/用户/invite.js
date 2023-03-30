@@ -12,7 +12,7 @@ import * as UAC from '../utility/UAC/_info';
   */
 export function checkNickname (nick, inviterNick) {
   if (typeof nick !== 'string' || !UAC.verifyNickname(nick)) {
-    return "昵称无效";
+    return UAC.nameLimit.nick;
   } else if (nick === inviterNick) {
     return "不能邀请自己";
   }
@@ -95,6 +95,15 @@ export async function run(core, server, socket, data) {
       text: nickValid,
     }, socket);
     return true;
+  }
+
+  if (typeof data.to === 'string') {
+    if (!UAC.verifyChannel(data.to)) {    // 验证频道名是否合法
+      return server.reply({
+        cmd:'warn',
+        text: UAC.nameLimit.channel
+      },socket)
+    }
   }
 
   const channel = getChannel(data.to);

@@ -110,6 +110,17 @@ export function getUserDetails(socket) {
 }
 
 /**
+  * 名称的限制
+  * @typedef {Object} nameLimit
+  * @property {string} nick 昵称的要求
+  * @property {string} channel 频道名称的要求
+  */
+export const nameLimit = {
+  nick: '昵称只能由中文、字母、数字、下划线组成，且不能超过24个字符',
+  channel: '频道名称只能由中文、字母、数字、下划线和连接符（`-`）组成，且不能超过30个字符',
+};
+
+/**
   * Returns true if the nickname is valid
   * @public
   * @param {string} nick Nickname to verify
@@ -117,4 +128,14 @@ export function getUserDetails(socket) {
   */
 export function verifyNickname(nick) {
   return /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,24}$/.test(nick);
+}
+
+/**
+  * Returns true if the channel is valid
+  * @public
+  * @param {string} channel Channel to verify
+  * @return {boolean}
+  */
+export function verifyChannel(channel) {
+  return /^[\u4e00-\u9fa5_a-zA-Z0-9\-]{1,30}$/.test(channel);
 }

@@ -30,7 +30,7 @@ export function parseNickname(core, data) {
 
   if (!UAC.verifyNickname(userInfo.nick)) {
     // return error as string
-    return '昵称只能由中文、字母、数字、下划线组成，且不能超过24个字符';
+    return UAC.nameLimit.nick;
   }
 
   let password = undefined;
