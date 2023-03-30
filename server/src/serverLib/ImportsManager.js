@@ -103,6 +103,9 @@ class ImportsManager {
     Object.keys(this.imports).forEach((dir) => {
       Object.keys(this.imports[dir]).forEach((mod) => {
         delete require.cache[require.resolve(mod)];
+
+        // 上面的代码删了require的缓存，但是似乎忽略了 this.imports，我不知道这是不是BUG，也许是故意这么做的。
+        delete this.imports[dir][mod];    // 删掉 this.imports
       });
 
       errorText += this.loadDir(dir);
