@@ -2,15 +2,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin or mod
-  if (!UAC.isModerator(socket.level)) {
-    server.reply({
-      cmd:'warn',
-      text:'权限不足，无法操作！'
-    },socket)
-    return server.police.frisk(socket.address, 10);
-  }
-
   // check user input
   if (typeof data.nick !== 'string') {
     return true;
@@ -115,5 +106,6 @@ export const info = {
       len:1,
       check: UAC.verifyNickname
     }
-  ]
+  ],
+  level: UAC.levels.moderator,    // 指定权限
 };

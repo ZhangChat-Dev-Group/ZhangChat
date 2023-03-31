@@ -8,10 +8,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin
-  if (!UAC.isAdmin(socket.level)) {
-    return server.police.frisk(socket.address, 20);
-  }
   if (!data.name || typeof data.name !== 'string' || !data.key || typeof data.key !== 'string'){
     return server.reply({
       cmd:'warn',
@@ -57,5 +53,6 @@ export const info = {
       name:'key',
       len:1
     }
-  ]
+  ],
+  level: UAC.levels.admin,
 };

@@ -47,15 +47,6 @@ function isMute(core,hash){
 }
 // module main
 export async function run(core, server, socket, data) {
-  // 我认为让普通用户禁言别人很糟糕，你觉得呢？
-  if (!UAC.isModerator(socket.level)) {
-    server.reply({
-      cmd:'warn',
-      text:'权限不足，无法执行此操作。'
-    },socket)
-    return server.police.frisk(socket.address, 10);
-  }
-
   // check user input
   if (typeof data.nick !== 'string') {
     return true;
@@ -175,6 +166,7 @@ export const info = {
         return (!isNaN(num) && num >= 0)
       }
     }
-  ]
+  ],
+  level: UAC.levels.moderator,
 };
 info.aliases = ['muzzle', 'mute'];

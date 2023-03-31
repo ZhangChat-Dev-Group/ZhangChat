@@ -6,14 +6,6 @@ export async function init(core){
 }
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin
-  if (!UAC.isModerator(socket.level)) {
-    server.reply({
-      cmd:'warn',
-      text:'权限不足，无法操作。'
-    },socket)
-    return server.police.frisk(socket.address, 20);
-  }
   var new_list=''
   var i
   for (i in core.config.trips) {
@@ -53,5 +45,6 @@ export const info = {
   usage: `
     API: { cmd: 'triplist' }
     文本：以聊天形式发送 /triplist`,
-  fastcmd:[]
+  fastcmd:[],
+  level: UAC.levels.moderator,
 };

@@ -3,10 +3,6 @@ const sqlString = require('sqlstring')
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin
-  if (!UAC.isModerator(socket.level)) {
-    return server.police.frisk(socket.address, 20);
-  }
   var querySql = sqlString.format('update chat set show = 0 where channel = ?',[socket.channel])
   core.chatDB.queryData(querySql, (ret)=>{
     server.broadcast({
@@ -27,5 +23,6 @@ export const info = {
   usage: `
     API: { cmd: 'rm-history' }
     文本：以聊天形式发送 /rm-history`,
-  fastcmd:[]
+  fastcmd:[],
+  level: UAC.levels.moderator,
 };

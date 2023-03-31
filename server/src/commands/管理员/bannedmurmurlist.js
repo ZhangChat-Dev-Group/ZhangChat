@@ -8,10 +8,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin or mod
-  if (!UAC.isModerator(socket.level)) {
-    return server.police.frisk(socket.address, 10);
-  }
   var toSend = '目前封禁了以下指纹：\n'
   var i = 0
   for (i in core.config.bannedMurmurs){
@@ -29,5 +25,6 @@ export const info = {
   usage: `
     API: { cmd: 'bannedmurmurlist' }
     文本：以聊天形式发送 /bannedmurmurlist`,
-  fastcmd:[]
+  fastcmd:[],
+  level: UAC.levels.moderator,
 };

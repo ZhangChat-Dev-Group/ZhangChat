@@ -125,7 +125,7 @@ class CommandManager {
     if (typeof object !== 'object') { return '模块无效'; }
     if (typeof object.run !== 'function') { return '丢失run函数'; }
     if (typeof object.info !== 'object') { return '丢失info对象'; }
-    if (typeof object.info.name !== 'string') { return 'info对象的name有误'; }
+    if (typeof object.info.name !== 'string') { return 'info对象的name属性有误'; }
 
     return null;
   }
@@ -235,7 +235,7 @@ class CommandManager {
     return this.handleCommand(server, socket, {
       cmd: 'socketreply',
       cmdKey: server.cmdKey,
-      text: '未知命令',
+      text: `找不到 \`${data.cmd}\` 命令，请执行 \`help\` 命令来查看所有的命令`,
     });
   }
 
@@ -265,7 +265,19 @@ class CommandManager {
           cmdKey: server.cmdKey,
           text: `无法执行 ${
             command.info.name
-          } 命令，因为丢失了参数：${missing.join(', ')}\n\n`,
+          } 命令，因为丢失了参数：${missing.join('、')}\n\n`,
+        });
+
+        return null;
+      }
+    }
+
+    if (typeof command.info.level === 'number') {    // 如果命令模块限制了最低权限
+      if (typeof socket.level !== 'number' || socket.level < command.info.level) {    // 如果用户没有等级（未加入频道）或等级不够
+        this.handleCommand(server, socket, {
+          cmd: 'socketreply',
+          cmdKey: server.cmdKey,
+          text: `抱歉，您的权限不足，无法执行 \`${command.info.name}\` 命令，请检查权限后再试`,
         });
 
         return null;

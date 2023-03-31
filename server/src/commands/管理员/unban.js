@@ -2,11 +2,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin or mod
-  if (!UAC.isModerator(socket.level)) {
-    return server.police.frisk(socket.address, 10);
-  }
-
   // check user input
   if (typeof data.ip !== 'string') {
     return server.reply({
@@ -50,5 +45,6 @@ export const info = {
       name:'ip',
       len:1,
     }
-  ]
+  ],
+  level: UAC.levels.moderator,
 };

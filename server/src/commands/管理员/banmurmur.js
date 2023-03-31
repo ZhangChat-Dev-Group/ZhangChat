@@ -8,11 +8,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin or mod
-  if (!UAC.isModerator(socket.level)) {
-    return server.police.frisk(socket.address, 10);
-  }
-
   // check user input
   if (typeof data.murmur !== 'string') {
     return true;
@@ -71,5 +66,6 @@ export const info = {
       len:1,
       check: /^[a-z0-9]{32}$/
     }
-  ]
+  ],
+  level: UAC.levels.moderator,
 };

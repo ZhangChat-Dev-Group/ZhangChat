@@ -6,11 +6,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin
-  if (!UAC.isAdmin(socket.level)) {
-    return server.police.frisk(socket.address, 20);
-  }
-
   // add new trip to config
   core.config.mods.push({ trip: data.trip });
 
@@ -60,5 +55,6 @@ export const info = {
       len:1,
       check: /^[a-zA-Z0-9/\+]{6}$/
     }
-  ]
+  ],
+  level: UAC.levels.admin,
 };

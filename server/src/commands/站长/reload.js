@@ -6,11 +6,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin
-  if (!UAC.isAdmin(socket.level)) {
-    return server.police.frisk(socket.address, 20);
-  }
-
   // do command reload and store results
   let loadResult = core.dynamicImports.reloadDirCache();
   loadResult += core.commands.loadCommands();
@@ -43,7 +38,7 @@ ${loadResult}`;
 
 export const info = {
   name: 'reload',
-  description: '热重载命令，并输出报错',
+  description: '热重载服务器',
   usage: `
     API: { cmd: 'reload', reason: '<optional reason append>' }
     文本：以聊天形式发送 /reload 可选的原因`,
@@ -52,5 +47,6 @@ export const info = {
       name:'reason',
       len:0
     }
-  ]
+  ],
+  level: UAC.levels.admin,
 };

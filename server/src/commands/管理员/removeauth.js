@@ -14,14 +14,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin   //永远不会变的注释啊
-  if (!UAC.isModerator(socket.level)) {
-    server.reply({
-      cmd:"warn",
-      text:"权限不足，无法操作。",
-    },socket)
-    return server.police.frisk(socket.address, 20);
-  }
   var had = 0
   for (var i=0; i<core.config.auth.length; i++) {
       if(core.config.auth[i].trip == data.trip) {
@@ -62,5 +54,6 @@ export const info = {
       len:1,
       check: /^[a-zA-Z0-9/\+]{6}$/
     }
-  ]
+  ],
+  level: UAC.levels.moderator,
 };

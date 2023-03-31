@@ -2,11 +2,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-    // increase rate limit chance and ignore if not admin
-  if (!UAC.isAdmin(socket.level)) {
-    return server.police.frisk(socket.address, 20);
-  }
-
   // verify user data is string
   if (typeof data.nick !== 'string') {
     return true;
@@ -66,5 +61,6 @@ export const info = {
       len:1,
       check: UAC.verifyNickname
     }
-  ]
+  ],
+  level: UAC.levels.moderator,
 };

@@ -6,18 +6,13 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  // increase rate limit chance and ignore if not admin
-  if (!UAC.isAdmin(socket.level)) {
-    return server.police.frisk(socket.address, 20);
-  }
-
   // send text to all channels
   server.broadcast({
     cmd: 'info',
-    text: `站长通知：${data.text}`,
+    text: `来自 [\`${socket.trip}\`] \`${socket.nick}\` 的全站通知\n${data.text}`,
   }, {});
 
-  core.logger.logAction(socket,[],'addtrip',data)
+  core.logger.logAction(socket,[],'shout',data)
 
   return true;
 }
@@ -25,7 +20,7 @@ export async function run(core, server, socket, data) {
 export const requiredData = ['text'];
 export const info = {
   name: 'shout',
-  description: '向所有在线用户发送一条消息',
+  description: '发布一条全站通知，所有用户都能看到',
   usage: `
     API: { cmd: 'shout', text: '<shout text>' }
     文本：以聊天形式发送 /shout 信息`,
@@ -34,5 +29,6 @@ export const info = {
       name:'text',
       len:0
     }
-  ]
+  ],
+  level: UAC.levels.moderator
 };

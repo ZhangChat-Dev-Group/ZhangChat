@@ -2,15 +2,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  var power=false;
-  if (!UAC.isModerator(socket.level)) {
-    server.police.frisk(socket.address, 10);
-    return server.reply({
-      cmd:'warn',
-      text:'权限不足，无法操作！'
-    },socket)
-  }
-  
   if (!data.nick){
     data.nick = socket.nick
   }
@@ -44,5 +35,6 @@ export const info = {
       name:'nick',
       len:1
     }
-  ]
+  ],
+  level: UAC.levels.moderator,
 };

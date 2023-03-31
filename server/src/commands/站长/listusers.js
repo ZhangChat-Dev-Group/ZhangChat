@@ -6,11 +6,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket) {
-  // increase rate limit chance and ignore if not admin
-  if (!UAC.isAdmin(socket.level)) {
-    return server.police.frisk(socket.address, 20);
-  }
-
   // find all users currently in a channel
   const currentUsers = server.findSockets({
     channel: (channel) => true,
@@ -49,5 +44,6 @@ export const info = {
   usage: `
     API: { cmd: 'listusers' }
     文本：以聊天形式发送 /listusers`,
-  fastcmd:[]    //fastcmd支持
+  fastcmd:[],    //fastcmd支持
+  level: UAC.levels.admin,
 };
