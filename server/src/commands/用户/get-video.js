@@ -12,6 +12,12 @@ export function init (core){
   }
 }
 
+export function shouldRickRoll(){    //Ohh, give you up~
+  //return true    //haha
+  var date = new Date(); 
+  return (date.getMonth() + 1 === 4) && (date.getDate() === 1);    //Never gonna give, never gonna give 
+}
+
 // module main
 export async function run(core, server, socket, payload) {
   if (server.police.frisk(socket.address, 2)){
@@ -26,7 +32,17 @@ export async function run(core, server, socket, payload) {
       url: core.videos[socket.channel]
     },socket)
   }else{
-    return server.reply({
+    if (shouldRickRoll()) {
+      server.reply({
+        cmd:'info',
+        text:'您所在的频道没有设置公共视频，看个rickroll吧~'
+      },socket)
+      return server.reply({
+        cmd:'set-video',
+        url: 'https://1145.s3.ladydaily.com/rock.mp4'
+      },socket)
+    }
+    server.reply({
       cmd:'warn',
       text:'抱歉，您所在的房间没有设置公共视频，您可以联系房主或管理员设置'
     },socket)
