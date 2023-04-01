@@ -37,6 +37,10 @@ export async function run(core, server, socket, payload) {
         cmd:'info',
         text:'您所在的频道没有设置公共视频，看个rickroll吧~'
       },socket)
+      server.reply({
+        cmd:'info',
+        text:'# 愚人节限时彩蛋来咯！'
+      },socket)
       return server.reply({
         cmd:'set-video',
         url: 'https://1145.s3.ladydaily.com/rock.mp4'
