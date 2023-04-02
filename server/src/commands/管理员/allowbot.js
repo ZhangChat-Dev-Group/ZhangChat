@@ -20,7 +20,7 @@ export async function run(core, server, socket, data) {
     mode = '删除'
     core.config.bots = core.config.bots.filter((trip) => trip !== data.trip)
   }else{
-    core.config.bot.push(data.trip)
+    core.config.bots.push(data.trip)
   }
 
   server.broadcast({
