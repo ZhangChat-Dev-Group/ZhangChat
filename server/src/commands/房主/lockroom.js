@@ -7,14 +7,6 @@ export async function init(core) {
 
 // module main
 export async function run(core, server, socket,data) {
-  if (!UAC.isChannelOwner(socket.level)) {
-    server.reply({
-      cmd:'warn',
-      text:'权限不足，无法操作！'
-    },socket)
-    return server.police.frisk(socket.address, 20);
-  }
-
   const locked = core.lockedrooms.includes(socket.channel)
   var mode = locked ? '解除锁定' : '锁定'
 
@@ -83,5 +75,6 @@ export const info = {
   usage: `
     API: { cmd: 'lockroom' }
     文本：以聊天形式发送 /lockroom`,
-  fastcmd:[]
+  fastcmd:[],
+  level: UAC.levels.channelOwner
 };

@@ -14,12 +14,6 @@ export function init (core){
 
 // module main
 export async function run(core, server, socket, payload) {
-  if (!UAC.isChannelOwner(socket.level)){
-    return server.reply({
-      cmd:'warn',
-      text:'权限不足，无法操作！'
-    },socket)
-  }
   if (server.police.frisk(socket.address, 2)){
     return server.reply({
       cmd:'warn',
@@ -63,5 +57,6 @@ export const info = {
       name:'url',
       len:0
     }
-  ]
+  ],
+  level: UAC.levels.channelOwner
 };
