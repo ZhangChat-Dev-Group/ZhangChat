@@ -46,8 +46,6 @@ export async function run(core, server, socket) {
                        -----
                        实时统计：
                        在线用户数量：${uniqueClientCount}
-                       挂机用户数量：${(core.stats.get('users-afk') || 0)}
-                       挂机率：${((core.stats.get('users-afk') || 0) / (server.findSockets((c) => typeof c === 'string' && c).length)) * 100}%
                        活跃聊天室数量：${uniqueChannels}
                        -----
                        以下是从本次服务器启动时的统计信息：
@@ -55,7 +53,7 @@ export async function run(core, server, socket) {
                        邀请信息发送次数：${(core.stats.get('invites-sent') || 0)}
                        信息发送次数：${(core.stats.get('messages-sent') || 0)}
                        封禁用户数量：${(core.stats.get('users-banned') || 0)}
-                       被踢用户数量：${(core.stats.get('users-kicked') || 0)}
+                       踢出用户数量：${(core.stats.get('users-kicked') || 0)}
                        请求服务器状态次数：${(core.stats.get('stats-requested') || 0)}
                        服务器稳定运行时间：${formatTime(process.hrtime(core.stats.get('start-time')))}
                        ---
