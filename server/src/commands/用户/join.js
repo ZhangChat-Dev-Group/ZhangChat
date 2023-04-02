@@ -191,6 +191,7 @@ export async function run(core, server, socket, data) {
     userid: userInfo.userid,
     channel: data.channel,
     client: userInfo.client,
+    isBot: socket.isBot || false,
   };
 
   // send join announcement and prep online set
