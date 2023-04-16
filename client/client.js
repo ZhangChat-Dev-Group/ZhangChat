@@ -60,6 +60,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'files.catbox.moe', 'img.thz.cool', 'img.liyuv.top', 'share.lyka.pro', // 这些是ee加的（被打
 	document.domain,    // 允许我自己
 	'img.zhangsoft.cf',    // 小张图床
+        'bed.paperee.repl.co',    // 纸片君ee的纸床
 ];
 
 function getDomain(link) {
