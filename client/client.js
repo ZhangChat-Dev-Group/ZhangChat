@@ -61,6 +61,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	document.domain,    // 允许我自己
 	'img.zhangsoft.cf',    // 小张图床
         'bed.paperee.repl.co',    // 纸片君ee的纸床
+	'imagebed.s3.bitiful.net',    //Dr0让加的
 ];
 
 function getDomain(link) {
