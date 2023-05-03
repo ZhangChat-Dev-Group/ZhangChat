@@ -24,11 +24,19 @@ export async function run(core, server, socket, data) {
     trip: user_socket.trip || '',
     hash: user_socket.hash,
   };
+  /*
 
   // broadcast remove event and join event with new name, this is to support legacy clients and bots
   server.broadcast(leaveNotice, { channel: user_socket.channel });
   server.broadcast(joinNotice, { channel: user_socket.channel });
+  */
 
+  server.broadcast({
+    cmd: 'changeNick',
+    nick: user_socket.nick,
+    text: data.new_nick,
+    force: true,
+  }, { channel: socket.channel })
   // notify channel that the user has changed their name
   server.broadcast({
     cmd: 'info',
