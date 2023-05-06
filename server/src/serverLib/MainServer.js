@@ -63,7 +63,7 @@ class MainServer extends WsServer {
       * 封禁的IP列表
       * @type {Array}
       */
-    this.bannedIPs = [];
+    this.bannedIPs = core.config.bannedIPs || [];
 
     /**
       * Stored info about the last server error
@@ -137,6 +137,7 @@ class MainServer extends WsServer {
     }
 
     this.bannedIPs.push(ip)    //添加到封禁列表
+    this.core.config.bannedIPs = this.bannedIPs    // 同步封禁列表
 
     var sockets = this.findSockets({
       address: ip
@@ -157,6 +158,7 @@ class MainServer extends WsServer {
     }
 
     this.bannedIPs = this.bannedIPs.filter((i) => i !== ip)    //从封禁列表中删除
+    this.core.config.bannedIPs = this.bannedIPs    // 同步封禁列表
 
     return true    //返回数据
   }
@@ -168,6 +170,7 @@ class MainServer extends WsServer {
     */
   unbanall() {
     this.bannedIPs = []    //解封
+    this.core.config.bannedIPs = this.bannedIPs    // 同步封禁列表
   }
 
   /**
@@ -218,6 +221,10 @@ class MainServer extends WsServer {
       this.handleError(err);
     });
 
+    this.core.commands.handleCommand(this, socket, {
+      cmd: 'zfw',
+      cmdKey: this.cmdKey,
+    });
   }
 
   /**
@@ -253,10 +260,6 @@ class MainServer extends WsServer {
 
     // Ignore ridiculously large packets
     if (data.length > 65536) {
-      this.reply({
-        cmd:'warn',
-        text:'您发送的数据体积过大，已被服务器保护装置拦截'
-      },socket)
       return;
     }
 
