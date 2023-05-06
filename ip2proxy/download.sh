@@ -1,1 +1,0 @@
-wget https://www.ip2location.com/download/?token=JBZJ3eSPXqXoJHxEerKVKd8LwzmtHASUABc9b9irRqLxzT02n9RDmlkZmCvoeewX&file=PX1LITEBIN
