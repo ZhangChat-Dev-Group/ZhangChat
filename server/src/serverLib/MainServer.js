@@ -137,8 +137,7 @@ class MainServer extends WsServer {
     }
 
     this.bannedIPs.push(ip)    //添加到封禁列表
-    this.core.config.bannedIPs = this.bannedIPs    // 同步封禁列表
-
+    this.core.configManager.set('bannedIPs', this.bannedIPs)    // 设置并保存封禁列表
     var sockets = this.findSockets({
       address: ip
     })    //寻找目标IP的用户
@@ -158,7 +157,7 @@ class MainServer extends WsServer {
     }
 
     this.bannedIPs = this.bannedIPs.filter((i) => i !== ip)    //从封禁列表中删除
-    this.core.config.bannedIPs = this.bannedIPs    // 同步封禁列表
+    this.core.configManager.set('bannedIPs', this.bannedIPs)
 
     return true    //返回数据
   }
@@ -170,7 +169,7 @@ class MainServer extends WsServer {
     */
   unbanall() {
     this.bannedIPs = []    //解封
-    this.core.config.bannedIPs = this.bannedIPs    // 同步封禁列表
+    this.core.configManager.set('bannedIPs', this.bannedIPs)    // 同步封禁列表
   }
 
   /**
