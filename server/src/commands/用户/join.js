@@ -193,6 +193,11 @@ export async function run(core, server, socket, data) {
     client: userInfo.client,
     isBot: socket.isBot || false,
   };
+  
+  await core.commands.handleCommand(server,socket,{
+    cmd:'get-history',
+    channel: data.channel,
+  })
 
   // send join announcement and prep online set
   for (let i = 0, l = newPeerList.length; i < l; i += 1) {
@@ -236,10 +241,6 @@ export async function run(core, server, socket, data) {
     client: socket.client,
     isme: true,
   });
-
-  await core.commands.handleCommand(server,socket,{
-    cmd:'get-history'
-  })
 
   // reply with channel peer list
   server.reply({

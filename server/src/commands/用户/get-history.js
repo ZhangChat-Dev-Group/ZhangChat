@@ -5,7 +5,7 @@ export async function run(core,server,socket,data){
       text: '你获取聊天记录的速度过快，请稍后再试',
     }, socket);
   }
-  const sql = `select nick, trip, head, content, ctime from chat where channel ='${socket.channel}' and show=1 order by id desc limit 20;`;
+  const sql = `select nick, trip, head, content, ctime from chat where channel ='${data.channel}' and show=1 order by id desc limit 20;`;
   await core.chatDB.awaitQueryData(sql).then(ret=>{
     var i = 0
     var historyTag = []
@@ -23,9 +23,11 @@ export async function run(core,server,socket,data){
         history: historyTag,
     }, socket);
   });
+  return true
 }
 
 // module meta
+export const requiredData = ['channel']
 export const info = {
   name: 'get-history',
   description: '获取20条聊天历史记录',
