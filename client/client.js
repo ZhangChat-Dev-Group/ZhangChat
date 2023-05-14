@@ -307,7 +307,7 @@ function notify(args) {
 function getNick() {
 	return myNick.split('#')[0]
 }
-
+/*
 function getMurmur() {
 	return Fingerprint2.getPromise({}).then(components => {
 		// 参数
@@ -319,7 +319,7 @@ function getMurmur() {
 		// console.log(murmur)
 	})
 }
-
+*/
 /*
 function tokenCallback(token) {
 	// debugger
@@ -370,8 +370,8 @@ function join(channel) {
 			localStorageSet('my-nick', myNick);
 			await getMurmur();
 			// console.log(`murmur is: ${myMurmur}`)
-			var sendMurmur = encode(myMurmur)
-			send({ cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient', murmur: sendMurmur.toString() });
+			//var sendMurmur = encode(myMurmur)
+			send({ cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient', /* murmur: sendMurmur.toString() */ });
 		}
 
 		wasConnected = true;
