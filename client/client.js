@@ -355,8 +355,10 @@ function join(channel) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
 			} else {
-				var newNick = localStorageGet('my-nick') || '';
-				if (localStorageGet('auto-login') != 'true' || newNick == undefined) newNick = prompt('请输入昵称：', myNick);
+				var newNick = localStorageGet('my-nick') || ''; if 
+				(localStorageGet('auto-login') != 'true' || newNick 
+				== undefined) newNick = prompt('请输入昵称：', 
+				myNick);
 
 				if (newNick !== null) {
 					myNick = newNick;
@@ -368,7 +370,7 @@ function join(channel) {
 
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
-			await getMurmur();
+			//await getMurmur();
 			// console.log(`murmur is: ${myMurmur}`)
 			//var sendMurmur = encode(myMurmur)
 			send({ cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient', /* murmur: sendMurmur.toString() */ });
