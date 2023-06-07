@@ -159,13 +159,13 @@ var frontpage = [
 	'@[Dr0](https://greasyfork.org/zh-CN/users/1017687-greendebug) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
 	'---',
 	'友情链接：',
-	'[本站的服务器提供商——雨云](https://www.rainyun.com/MjcxMTc=_)',
 	'[HackChat聊天室](https://hack.chat/)',
 	'[hackchat\\+\\+客户端](https://hc.thz.cool/)',
 	'[TanChat聊天室](https://tanchat.fun/)',
 	'[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
 	'---',
 	'2023.02.23~2023.03.26 [小张聊天室开发组](https://github.com/ZhangChat-Dev-Group) 致',
+	'**本站由[雨云](https://www.rainyun.com/MjcxMTc=_)提供计算服务**',
 ].join("\n");
 
 function $(query) {
