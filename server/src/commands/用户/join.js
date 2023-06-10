@@ -49,7 +49,6 @@ export function parseNickname(core, data) {
 
     const trip = hash(password + core.config.tripSalt)
     userInfo.trip= core.config.trips[trip] || trip
-    userInfo.password = password
   }else{
     userInfo.trip=''
   }
