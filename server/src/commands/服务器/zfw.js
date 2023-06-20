@@ -11,7 +11,7 @@ export function init(core){
     core.ip2proxy = new IP2Proxy()
     if (!fs.existsSync('./ip2proxy/db.BIN')){
       core.ip2proxy = undefined
-      return console.error('找不到 `./ip2proxy/db.BIN`，请确保你已经下载了该文件。这可能会导致XFW在一定程度上防御能力下降。')
+      return console.error('找不到 `./ip2proxy/db.BIN`，请确保你已经下载了该文件。这可能会导致ZFW在一定程度上防御能力下降。')
     }
     core.ip2proxy.open('./ip2proxy/db.BIN')
   }
@@ -47,5 +47,5 @@ export const requiredData = ['cmdKey'];
 export const info = {
   name: 'zfw',
   usage: '服务器内部专用。~~如果你用就说明你不是人。~~',
-  description: 'ZFW（ZhangChat Fire Wall），XChat防火墙。本模块用于拦截不安全的连接，例如境外连接和代理连接。此站点或产品所使用的 IP2Proxy LITE 数据来自于 https://lite.ip2location.com',
+  description: 'ZFW（ZhangChat Fire Wall），ZhangChat防火墙。本模块用于拦截不安全的连接，例如境外连接和代理连接。此站点或产品所使用的 IP2Proxy LITE 数据来自于 https://lite.ip2location.com',
 };

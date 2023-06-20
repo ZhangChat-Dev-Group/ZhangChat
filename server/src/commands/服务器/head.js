@@ -11,7 +11,7 @@ export function initHooks(server) {
 }
 
 export function inCommingData(core,server,socket,payload){
-  socket.head = xss(payload.head) /* XXS别给我XSS */ || '/imgs/head.png'
+  socket.head = xss(payload.head) /* XXS别给我XSS */ || 'imgs/head.png'
   return payload
 }
 
@@ -20,9 +20,9 @@ export function outGoingData(core,server,socket,payload){
     channel:socket.channel,
     nick:payload.nick
   })[0]
-  var head = '/imgs/head.png'
+  var head = 'imgs/head.png'
   if (sender){
-    head = sender.head || '/imgs/head.png'
+    head = sender.head || 'imgs/head.png'
   }
   payload.head = head
   return payload

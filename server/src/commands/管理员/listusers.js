@@ -32,7 +32,7 @@ export async function run(core, server, socket) {
   // send reply
   server.reply({
     cmd: 'info',
-    text: lines.join('\n'),
+    text: lines.join('\n') + '\n==请尊重他人隐私，禁止乱公布私密频道==',
   }, socket);
 
   return true;
@@ -40,10 +40,10 @@ export async function run(core, server, socket) {
 
 export const info = {
   name: 'listusers',
-  description: '输出所有channel和这些channel中的用户',
+  description: '输出所有频道以及里面的用户。==请尊重他人隐私，禁止乱公布私密频道==',
   usage: `
     API: { cmd: 'listusers' }
     文本：以聊天形式发送 /listusers`,
   fastcmd:[],    //fastcmd支持
-  level: UAC.levels.admin,
+  level: UAC.levels.moderator,
 };

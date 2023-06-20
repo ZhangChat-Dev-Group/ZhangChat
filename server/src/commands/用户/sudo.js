@@ -21,7 +21,7 @@ export async function run(core, server, socket,data) {
       cmd:'warn',
       text:'您不是可提权用户，请稍后重试~~（因为我们要对你进行严格的频率限制）~~。'
     },socket)
-    server.police.frisk(socket.address, 30)
+    server.police.frisk(socket.address, 50)    // 严格的频率限制
     core.logger.logAction(socket,[],'sudo',data,'提权失败')
     return
   }else{
@@ -43,7 +43,7 @@ export async function run(core, server, socket,data) {
 // module meta
 export const info = {
   name: 'sudo',
-  description: '将你的权限提升至站长级别，仅可提权用户可用',
+  description: '将你的权限提升至站长级别，仅可提权用户可用。==警告：**非法提权**会被服务器进行**严格的频率限制**==',
   usage: `
     API: { cmd: 'sudo' }
     文本：以聊天形式发送 /sudo`,

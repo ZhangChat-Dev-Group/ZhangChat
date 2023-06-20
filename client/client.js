@@ -60,6 +60,9 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'files.catbox.moe', 'img.thz.cool', 'img.liyuv.top', 'share.lyka.pro', // 这些是ee加的（被打
 	document.domain,    // 允许我自己
 	'img.zhangsoft.cf',    // 小张图床
+        'bed.paperee.repl.co',    // 纸片君ee的纸床
+	'imagebed.s3.bitiful.net',    //Dr0让加的
+        'captcha.dr0.lol',        // Dr0's Captcha
 ];
 
 function getDomain(link) {
@@ -156,13 +159,13 @@ var frontpage = [
 	'@[Dr0](https://greasyfork.org/zh-CN/users/1017687-greendebug) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
 	'---',
 	'友情链接：',
-	'[物美价廉的云服务器——星云](https://cloud.nuee.cn/aff/FMOKBCMZ)',
 	'[HackChat聊天室](https://hack.chat/)',
 	'[hackchat\\+\\+客户端](https://hc.thz.cool/)',
 	'[TanChat聊天室](https://tanchat.fun/)',
 	'[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
 	'---',
 	'2023.02.23~2023.03.26 [小张聊天室开发组](https://github.com/ZhangChat-Dev-Group) 致',
+	'**本站由[雨云](https://www.rainyun.com/MjcxMTc=_)提供计算服务**',
 ].join("\n");
 
 function $(query) {
@@ -305,7 +308,7 @@ function notify(args) {
 function getNick() {
 	return myNick.split('#')[0]
 }
-
+/*
 function getMurmur() {
 	return Fingerprint2.getPromise({}).then(components => {
 		// 参数
@@ -317,7 +320,7 @@ function getMurmur() {
 		// console.log(murmur)
 	})
 }
-
+*/
 /*
 function tokenCallback(token) {
 	// debugger
@@ -338,7 +341,7 @@ function join(channel) {
 	var wsPath = ':6060';
 
 	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
-	const url = document.domain === 'chat.zhangsoft.cf' ? 'wss://chat.zhangsoft.cf/ws' : `${protocol}//${document.domain}${wsPath}`
+	const url = ( document.domain === 'chat.zhangsoft.cf' || document.domain === 'chat.zhangsoft.eu.org' ) ? protocol + '//chat.zhangsoft.cf/ws' : `${protocol}//${document.domain}${wsPath}`
 	//const url = 'ws://localhost:6060' //本地测试
 
 	//ws = new WebSocket('wss://chat.zhangsoft.cf/ws');
@@ -353,8 +356,10 @@ function join(channel) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
 			} else {
-				var newNick = localStorageGet('my-nick') || '';
-				if (localStorageGet('auto-login') != 'true' || newNick == undefined) newNick = prompt('请输入昵称：', myNick);
+				var newNick = localStorageGet('my-nick') || ''; if 
+				(localStorageGet('auto-login') != 'true' || newNick 
+				== undefined) newNick = prompt('请输入昵称：', 
+				myNick);
 
 				if (newNick !== null) {
 					myNick = newNick;
@@ -366,10 +371,10 @@ function join(channel) {
 
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
-			await getMurmur();
+			//await getMurmur();
 			// console.log(`murmur is: ${myMurmur}`)
-			var sendMurmur = encode(myMurmur)
-			send({ cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient', murmur: sendMurmur.toString() });
+			//var sendMurmur = encode(myMurmur)
+			send({ cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient', /* murmur: sendMurmur.toString() */ });
 		}
 
 		wasConnected = true;

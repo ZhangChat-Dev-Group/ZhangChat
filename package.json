@@ -22,6 +22,7 @@
     "crypto-js": "^4.1.1",
     "esm": "^3.2.25",
     "http-server": "^0.12.1",
+    "ip2proxy-nodejs": "^4.2.2",
     "pm2": "^5.2.0",
     "sqlite3": "^5.1.4",
     "sqlstring": "^2.3.3",
