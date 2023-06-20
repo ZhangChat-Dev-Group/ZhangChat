@@ -49,20 +49,18 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-//export const requiredData = [];
 export const info = {
   name: 'ip',
   description: '查询IP地址，非管理员只能查自己的',
   usage: `
     API: { cmd: 'ip', nick: '<目标用户的昵称，如果查自己的，可以为空>' }
     文本：以聊天形式发送 /ip <目标用户的昵称，如果查自己的，可以为空>`,
-  fastcmd:[
+  dataRules: [
     {
-      name:'nick',
-      len:1,
-      check: (text) => {
-        return UAC.verifyNickname(text) || !text
-      }
+      name: 'nick',
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick,
     }
-  ]
+  ],
+  runByChat: true,
 };

@@ -31,4 +31,5 @@ export const info = {
   description: '获取20条聊天历史记录',
   usage: `
     API: { cmd: 'get-history' }`,
+  dataRules: [],
 };

@@ -28,11 +28,6 @@ export async function run(core, server, socket, payload) {
   // check user input
   let text = parseText(payload.text);
 
-  if (!text) {
-    // lets not send objects or empty text, yea?
-    return server.police.frisk(socket.address, 8);
-  }
-
   // check for spam
   const score = text.length / 83 / 4;
   if (server.police.frisk(socket.address, score)) {
@@ -75,49 +70,21 @@ export async function run(core, server, socket, payload) {
   return true;
 }
 
-// module hook functions
-export function initHooks(server) {
-  server.registerHook('in', 'chat', this.emoteCheck.bind(this), 100);
-}
-
-// hooks chat commands checking for /me
-export function emoteCheck(core, server, socket, payload) {
-  if (typeof payload.text !== 'string') {
-    return false;
-  }
-
-  if (payload.text.startsWith('/me ')) {
-    const input = payload.text.split(' ');
-
-    // If there is no emote target parameter
-    if (input[1] === undefined) {
-      server.reply({
-        cmd: 'warn',
-        text: '请发送 `/help emote` 来查看帮助',
-      }, socket);
-
-      return false;
-    }
-
-    input.splice(0, 1);
-    const actionText = input.join(' ');
-
-    this.run(core, server, socket, {
-      cmd: 'emote',
-      text: actionText,
-    });
-
-    return false;
-  }
-
-  return payload;
-}
-
-export const requiredData = ['text'];
 export const info = {
+  aliases: ['me'],
   name: 'emote',
   description: '以第三人称形式发送文本',
   usage: `
     API: { cmd: 'emote', text: '<text>' }
     文本：以聊天形式发送 /me 信息`,
+  dataRules: [
+    {
+      name: 'text',
+      all: true,
+      verify: (text) => typeof text === 'string' && !!parseText(text),
+      errorMessage: '大哥，别用无效的信息玩我，OK？',
+      required: true
+    },
+  ],
+  runByChat: true,
 };

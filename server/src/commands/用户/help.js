@@ -8,7 +8,7 @@ export async function run(core, server, socket, payload) {
   if (server.police.frisk(socket.address, 2)) {
     return server.reply({
       cmd: 'warn',
-      text: '你发了太多信息，请稍后再试\n您可以点击上下键来恢复发送过的消息',
+      text: '你的操作速度太快了，请稍等一下再试',
     }, socket);
   }
 
@@ -36,12 +36,13 @@ export async function run(core, server, socket, payload) {
       reply += '未知命令';
     } else {
       reply += `# ${command.info.name} 命令：\n| | |\n|---:|---|\n`;
-      reply += `|**名称:**|${command.info.name}|\n`;
-      reply += `|**别名:**|${typeof command.info.aliases !== 'undefined' ? command.info.aliases.join('、') : '¯\\\\\\_(ツ)\\_/¯'}|\n`;
-      reply += `|**类别:**|${command.info.category.replace('../src/commands/', '').replace(/^\w/, (c) => c.toUpperCase())}|\n`;
-      reply += `|**必要参数:**|${command.requiredData || '¯\\\\\\_(ツ)\\_/¯'}|\n`;
-      reply += `|**描述:**|${command.info.description || '¯\\\\\\_(ツ)\\_/¯'}|\n\n`;
-      reply += `**使用方法:** ${command.info.usage || '¯\\\\\\_(ツ)\\_/¯'}`;
+      reply += `|**名称：**|${command.info.name}|\n`;
+      reply += `|**别名：**|${typeof command.info.aliases !== 'undefined' ? command.info.aliases.join('、') : '¯\\\\\\_(ツ)\\_/¯'}|\n`;
+      reply += `|**分类：**|${command.info.category.replace('../src/commands/', '').replace(/^\w/, (c) => c.toUpperCase())}|\n`;
+      reply += `|**权限是否足够：**|${typeof command.info.level !== 'number' ? '是' : (socket.level >= command.info.level ? '是' : '否')}|\n`;
+      reply += `|**必要参数：**|${command.requiredData || '¯\\\\\\_(ツ)\\_/¯'}|\n`;
+      reply += `|**描述：**|${command.info.description || '¯\\\\\\_(ツ)\\_/¯'}|\n\n`;
+      reply += `**使用方法：** ${command.info.usage || '¯\\\\\\_(ツ)\\_/¯'}`;
     }
   }
 
@@ -60,10 +61,10 @@ export const info = {
   usage: `
     API: { cmd: 'help', command: '<optional command name>' }
     文本：以聊天形式发送 /help <需要查询的命令名称>`,
-  fastcmd:[
+  dataRules: [
     {
-      name:'command',
-      len:1
-    }
-  ]
+      name: 'command',
+    },
+  ],
+  runByChat: true,
 };

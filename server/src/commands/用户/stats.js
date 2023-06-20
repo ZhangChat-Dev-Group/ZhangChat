@@ -74,5 +74,6 @@ export const info = {
   usage: `
     API: { cmd: 'stats' }
     文本：以聊天形式发送 /stats`,
-  fastcmd:[]
+  runByChat: true,
+  dataRules: [],
 };

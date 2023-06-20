@@ -3,6 +3,7 @@
 */
 
 import * as UAC from '../utility/UAC/_info';
+import { isArray } from 'util';
 
 // module support functions
 const parseText = (text) => {
@@ -30,10 +31,6 @@ export async function run(core, server, socket, data) {
   // check user input
   const text = parseText(data.text);
 
-  if (!text) {
-    // lets not send objects or empty text, yea?
-    return server.police.frisk(socket.address, 13);
-  }
 
   // check for spam
   const score = text.length / 83 / 4;
@@ -129,15 +126,28 @@ export function finalCmdCheck(core, server, socket, payload) {
     return payload;
   }
 
-  server.reply({
-    cmd: 'warn',
-    text: `未知命令: ${payload.text}`,
-  }, socket);
+  const cmd = payload.text.split(' ')[0].slice(1)
+  const command = core.commands.get(cmd)
+
+  if (!command) {
+    core.commands.handleFail(server, socket, { cmd })
+    return false
+  }
+
+  if (command.runByChat) {
+    if (isArray(command.info.dataRules)) {
+      const data = core.commands.parseText(command.info.dataRules, payload.text)
+      console.debug(data)
+      core.commands.handleCommand(server, socket, data)
+      return false
+    }
+  }
+
+  core.commands.handleFail(server, socket, { cmd })
 
   return false;
 }
 
-export const requiredData = ['text'];
 export const info = {
   name: 'chat',
   description: '发送信息。如果您不想制作客户端，就忽略我吧！',
@@ -147,4 +157,13 @@ export const info = {
     隐藏的命令:
     /myhash
     /shrug`,
+  dataRules: [
+    {
+      name: 'text',
+      verify: (text) => typeof text === 'string' && !!parseText(text),
+      all: true,
+      errorMessage: '大哥，别用无效的信息玩我，OK？',
+      required: true,
+    }
+  ],
 };

@@ -24,9 +24,14 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['cmdKey'];
 export const info = {
   name: 'disconnect',
   usage: '服务器内部专用。~~如果你用就说明你不是人。~~',
   description: '发送用户离开聊天室通知',
+  dataRules: [
+    {
+      name: 'cmdKey',
+      required: true,
+    }
+  ]
 };

@@ -16,7 +16,7 @@ export async function run(core, server, socket,data) {
     },socket)
     return
   }
-  if (core.config.sudoers.indexOf(socket.trip) === -1){
+  if (core.config.powerfulUsers[socket.trip] !== UAC.levels.admin){
     server.reply({
       cmd:'warn',
       text:'您不是可提权用户，请稍后重试~~（因为我们要对你进行严格的频率限制）~~。'
@@ -47,5 +47,6 @@ export const info = {
   usage: `
     API: { cmd: 'sudo' }
     文本：以聊天形式发送 /sudo`,
-  fastcmd:[]
+  dataRules:[],
+  runByChat: true,
 };

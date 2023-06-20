@@ -49,7 +49,6 @@ export async function run(core, server, socket, data) {
 // module hook functions
 export function initHooks(server) {
   server.registerHook('out','chat',this.addcolor.bind(this),9999)
-  server.registerHook('in','chat',this.colorCheck.bind(this),15)
   server.registerHook('in','join',this.autoChangeColor.bind(this),999)
 }
 
@@ -72,22 +71,6 @@ export function autoChangeColor(core,server,socket,payload){
   return payload
 }
 
-export function colorCheck(core,server,socket,payload){
-  if (!payload.text){
-    return payload
-  }
-  if (payload.text.startsWith('/color')){
-    const input = payload.text.split(' ')
-    if (!input[1]){
-      server.reply({cmd:'warn',text:'请发送 /help changecolor 来获取帮助'.socket})
-      return false
-    }
-    this.run(core,server,socket,{cmd:'changecolor',color:input[1]})
-    return false
-  }
-  return payload
-}
-
 export function addcolor(core,server,socket,payload){
   var senders = server.findSockets({channel:socket.channel,nick:payload.nick})
   if (senders.length === 0){return payload}    //这个代码是为虚拟人物“机娘”准备的
@@ -100,11 +83,22 @@ export function addcolor(core,server,socket,payload){
   return payload
 }
 
-export const requiredData = ['color'];
 export const info = {
   name: 'changecolor',
+  aliases: ['color'],
   description: '修改你的昵称的颜色',
   usage: `
     API: { cmd: 'changecolor', color: '<十六进制的颜色>' }
     文本：以聊天形式发送 /color 十六进制的颜色`,
+  dataRules: [
+    {
+      name: 'color',
+      verify: (text) => {
+        return /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(text.replace(/#/g,'')) || text.toLowerCase() === 'reset'
+      },
+      errorMessage: '无效的颜色，颜色必须是16进制代码或者 `reset`（重置颜色）',
+      required: true,
+    }
+  ],
+  runByChat: true,
 };

@@ -1,5 +1,3 @@
-import * as UAC from '../utility/UAC/_info';
-
 export function init (core){
   if (typeof core.videos !== 'object'){
     core.videos = {}
@@ -63,5 +61,6 @@ export const info = {
     服务器返回数据：
     当有公共视频时：{ cmd: 'set-video', url: 'video-url' }
     当没有公共视频时：{ cmd: 'warn', text: '抱歉，您所在的房间没有设置公共视频，您可以联系房主或管理员设置' }`,
-  fastcmd:[]
+  dataRules: [],
+  runByChat: true,
 };

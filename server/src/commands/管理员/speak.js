@@ -59,18 +59,20 @@ export const info = {
   usage: `
     API: { cmd: 'speak', hash: '<目标hash>' }
     文本：以聊天形式发送 /speak 目标hash（如果设置为“*”则解除所有禁言） ==（不是昵称！！！）==`,
-  fastcmd:[
+  dataRules: [
     {
       name:'hash',
-      len:1,
-      check: (text) => {
+      verify: (text) => {
         if (text === '*'){
           return true
         }
         return /^[a-zA-Z0-9/\+]{15}$/.test(text)
-      }
+      },
+      errorMessage: '无效的hash',
+      required: true,
     }
   ],
+  runByChat: true,
   level: UAC.levels.moderator,
 };
 info.aliases = ['unmuzzle', 'unmute'];

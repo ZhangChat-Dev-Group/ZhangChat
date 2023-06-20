@@ -8,12 +8,6 @@ export async function init(core) {
 
 // module main
 export async function run(core, server, socket,data) {
-  if (!data.to || typeof data.to !== 'string'){
-    return server.reply({
-      cmd:'warn',
-      text:'数据无效！'
-    },socket)
-  }
   var mode = true
   if (data.to === '*' || data.to === socket.channel) {
     mode = false
@@ -89,18 +83,20 @@ export function ChangeChannel(core, server, socket, payload) {
 }
 
 // module meta
-export const requiredData = ['to'];
 export const info = {
   name: 'goto',
   description: '给你所在的频道设置重定向规则，只有信任用户或更高等级的用户才不受该规则的限制，如果要使此规则失效，请将目标聊天室设置为 `*`',
   usage: `
     API: { cmd: 'goto',to:'<新的房间>' }
     文本：以聊天形式发送 /goto <新的房间>`,
-  fastcmd:[
+  dataRules:[
     {
       name:'to',
-      len:1
+      verify: UAC.verifyChannel,
+      errorMessage: UAC.nameLimit.channel,
+      required: true,
     }
   ],
+  runByChat: true,
   level: UAC.levels.moderator,
 };

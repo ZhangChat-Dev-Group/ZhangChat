@@ -13,21 +13,10 @@ export async function run(core, server, socket, data) {
     }, socket);
   }
 
-  // verify user data is string
-  if (typeof data.nick !== 'string') {
-    return true;
-  }
-
   const previousNick = socket.nick;
 
   // make sure requested nickname meets standards
   const newNick = data.nick.trim();
-  if (!UAC.verifyNickname(newNick)) {
-    return server.reply({
-      cmd: 'warn',
-      text: '昵称只能由字母、数字、下划线、中文组成，且不能超过24个字符',
-    }, socket);
-  }
 
   if (newNick == previousNick) {
     return server.reply({
@@ -103,48 +92,20 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-// module hook functions
-export function initHooks(server) {
-  server.registerHook('in', 'chat', this.nickCheck.bind(this), 100);
-}
-
-// hooks chat commands checking for /nick
-export function nickCheck(core, server, socket, payload) {
-  if (typeof payload.text !== 'string') {
-    return false;
-  }
-
-  if (payload.text.startsWith('/nick')) {
-    const input = payload.text.split(' ');
-
-    // If there is no nickname target parameter
-    if (input[1] === undefined) {
-      server.reply({
-        cmd: 'warn',
-        text: '请发送 `/help changenick` 来查看帮助',
-      }, socket);
-
-      return false;
-    }
-
-    const newNick = input[1].replace(/@/g, '');
-
-    this.run(core, server, socket, {
-      cmd: 'changenick',
-      nick: newNick,
-    });
-
-    return false;
-  }
-
-  return payload;
-}
-
-export const requiredData = ['nick'];
 export const info = {
   name: 'changenick',
   description: '用于修改你的昵称',
   usage: `
     API: { cmd: 'changenick', nick: '<new nickname>' }
-    文本：以聊天形式发送 /nick 新昵称`,
+    文本：以聊天形式发送 /changenick 新昵称 或 /nick 新昵称`,
+  aliases: ['nick'],
+  dataRules: [
+    {
+      name: 'nick',
+      verify: (nick) => typeof nick === 'string' && UAC.verifyNickname(nick.replace(/@/g, '').trim()),
+      errorMessage: UAC.nameLimit.nick,
+      required: true,
+    }
+  ],
+  runByChat: true,
 };

@@ -71,10 +71,11 @@ export function joinCheck(core, server, socket, payload) {
 // module meta
 export const info = {
   name: 'lockroom',
+  runByChat: true,
   description: '锁定你所在的频道，如果当前频道已被锁定则执行解除锁定操作',
   usage: `
     API: { cmd: 'lockroom' }
     文本：以聊天形式发送 /lockroom`,
-  fastcmd:[],
+  dataRules: [],
   level: UAC.levels.channelOwner
 };

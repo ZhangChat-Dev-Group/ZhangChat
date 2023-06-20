@@ -22,6 +22,7 @@ export const info = {
   usage: `
     API: { cmd: 'lockedroomlist' }
     文本：以聊天形式发送 /lockedroomlist`,
-  fastcmd:[],
+  dataRules:[],
+  runByChat: true,
   level: UAC.levels.moderator,
 };

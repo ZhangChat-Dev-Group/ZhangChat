@@ -100,24 +100,7 @@ export async function run(core, server, socket, data) {
     return true;
   }
 
-  // check user input
-  if (typeof data.channel !== 'string' || typeof data.nick !== 'string') {
-    return true;
-  }
-
   const channel = data.channel.trim();
-  if (!channel) {
-    // must join a non-blank channel
-    return true;
-  }
-
-  if (!UAC.verifyChannel(channel)) {
-    server.reply({
-      cmd:'warn',
-      text: UAC.nameLimit.channel,
-    },socket)
-    return socket.terminate()
-  }
 
   const userInfo = this.parseNickname(core, data);
   if (typeof userInfo === 'string') {
@@ -259,10 +242,24 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['channel', 'nick'];
 export const info = {
   name: 'join',
   description: '加入某个房间，并通知该房间内所有用户。如果你不打算制作客户端，那就忽略我吧！',
   usage: `
     API: { cmd: 'join', nick: '<your nickname>', password: '<optional password>', channel: '<target channel>' }`,
+  dataRules: [
+    {
+      name: 'nick',
+      required: true
+    },
+    {
+      name: 'password',
+    },
+    {
+      name: 'channel',
+      verify: UAC.verifyChannel,
+      errorMessage: UAC.nameLimit.channel,
+      required: true,
+    }
+  ]
 };

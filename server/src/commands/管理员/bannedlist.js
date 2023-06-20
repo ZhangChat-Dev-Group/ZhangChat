@@ -15,6 +15,7 @@ export const info = {
   usage: `
     API: { cmd: 'bannedlist' }
     文本：以聊天形式发送 /bannedlist`,
-  fastcmd:[],
+  runByChat: true,
+  dataRules: [],
   level: UAC.levels.moderator,
 };

@@ -61,5 +61,6 @@ export const info = {
   usage: `
     API: { cmd: 'uwu' }
     文本：以聊天形式发送 /uwu`,
-  fastcmd:[]
+  dataRules: [],
+  runByChat: true,
 };

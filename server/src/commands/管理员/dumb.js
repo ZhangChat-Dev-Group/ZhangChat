@@ -47,11 +47,6 @@ function isMute(core,hash){
 }
 // module main
 export async function run(core, server, socket, data) {
-  // check user input
-  if (typeof data.nick !== 'string') {
-    return true;
-  }
-
   // find target user
   let badClient = server.findSockets({ channel: socket.channel, nick: data.nick });
   if (badClient.length === 0) {
@@ -90,12 +85,6 @@ export async function run(core, server, socket, data) {
   }
   var time_text = '0 分钟（永久禁言，直到管理员手动解除）'
   data.time = Number(data.time)
-  if (data.time < 0 || isNaN(data.time)){
-    return server.reply({
-      cmd:'warn',
-      text:'数据无效'
-    },socket)
-  }
   if (typeof data.time === 'number' && !isNaN(data.time) && data.time >0){
     core.mute[badClient.hash] = {
       time : Date.now() + (data.time * 60000)
@@ -152,19 +141,28 @@ export const info = {
   usage: `
     API: { cmd: 'dumb', nick: '<目标用户的昵称>', time: 禁言时长（单位：分钟）（0为永久禁言）（类型：数字）}
     文本：以聊天形式发送 /dumb 目标昵称 禁言时长（单位：分钟）（0为永久禁言）`,
-  fastcmd:[
+  runByChat: true,
+  dataRules: [
     {
-      name:'nick',
-      len:1,
-      check: UAC.verifyNickname
+      name: 'nick',
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick,
+      required: true
     },
     {
-      name:'time',
-      len:1,
-      check: (text) => {
-        var num = Number(text)
-        return (!isNaN(num) && num >= 0)
-      }
+      name: 'time',
+      verify: (time) => {
+        const num = Number(time)
+        if (isNaN(num)) {
+          return false
+        }
+        
+        if (num < 0) {
+          return false
+        }
+      },
+      required: true,
+      errorMessage: '时间必须为数字，并且大于0',
     }
   ],
   level: UAC.levels.moderator,

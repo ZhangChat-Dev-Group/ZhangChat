@@ -17,34 +17,15 @@ export async function run(core, server, socket, data) {
   },socket)
   return true;
 }
-/*
-export function initHooks(server) {
-  server.registerHook('in', 'chat', this.triplistCheck.bind(this));
-}
-*/
-export function triplistCheck(core, server, socket, payload) {
-  if (typeof payload.text !== 'string') {
-      return false;
-  }
 
-  if (payload.text.startsWith('/triplist')) {
-      const input = payload.text.split(' ');
-      this.run(core, server, socket, {
-          cmd: 'triplist',
-      });
 
-      return false;
-  }
-
-  return payload;
-}
-export const requiredData = [];
 export const info = {
   name: 'triplist',
   description: '查看替换的识别码',
   usage: `
     API: { cmd: 'triplist' }
     文本：以聊天形式发送 /triplist`,
-  fastcmd:[],
+  runByChat: true,
+  dataRules: [],
   level: UAC.levels.moderator,
 };

@@ -7,12 +7,6 @@ export async function run(core,server,socket,data){
       text: '你获取曾用名的速度过快，请稍后再试',
     }, socket);
   }
-  if (!data.nick || typeof data.nick !== 'string'){
-    return server.reply({
-      cmd:'warn',
-      text:'数据无效！'
-    },socket)
-  }
   var targetSockets = server.findSockets({channel:socket.channel,nick:data.nick.replace('@','')})
   if (targetSockets.length === 0){
     return server.reply({
@@ -20,7 +14,7 @@ export async function run(core,server,socket,data){
       text:'找不到您指定的用户'
     },socket)
   }
-  var targetIP = targetSockets[0].address.replace('::ffff:','')
+  var targetIP = targetSockets[0].address
   const sql = `select nick from user_join where ip = '${targetIP}';`;
   await core.chatDB.awaitQueryData(sql).then(ret=>{
     var nicks = []
@@ -38,18 +32,19 @@ export async function run(core,server,socket,data){
 }
 
 // module meta
-export const requiredData = ['nick'];
 export const info = {
   name: 'oldnick',
   description: '获取某人的曾用名',
   usage: `
     API: { cmd: 'oldnick', nick: '<target nick>' }
     文本：以聊天形式发送 /oldnick 目标昵称`,
-  fastcmd:[
+  dataRules:[
     {
       name:'nick',
-      len:1,
-      check: UAC.verifyNickname
+      required: true,
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick
     }
-  ]
+  ],
+  runByChat: true,
 };

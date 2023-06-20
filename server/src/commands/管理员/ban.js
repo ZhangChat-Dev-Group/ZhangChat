@@ -90,21 +90,29 @@ export async function run(core, server, socket, data) {
 
   core.logger.logAction(socket,[],'ban',data,`[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}`)
 
+  if (!core.configManager.save()) {
+    return server.broadcast({
+      cmd: 'warn',
+      text: '保存配置失败，请检查日志。',
+    }, {level:UAC.isModerator});
+  }
+
   return true;
 }
 
-export const requiredData = ['nick'];
 export const info = {
   name: 'ban',
   description: '封禁一名用户',
   usage: `
     API: { cmd: 'ban', nick: '<target nickname>' }
     文本：以聊天形式发送 /ban 目标昵称`,
-  fastcmd:[
+  runByChat: true,
+  dataRules: [
     {
-      name:'nick',
-      len:1,
-      check: UAC.verifyNickname
+      name: 'nick',
+      required: true,
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick,
     }
   ],
   level: UAC.levels.moderator,    // 指定权限

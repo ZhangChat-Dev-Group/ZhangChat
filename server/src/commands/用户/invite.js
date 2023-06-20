@@ -133,10 +133,24 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['nick'];
 export const info = {
   name: 'invite',
   description: '邀请一个用户去随机频道或指定频道。如果你不打算制作客户端，那就忽略我吧！',
   usage: `
     API: { cmd: 'invite', nick: '<target nickname>', to: '<optional destination channel>' }`,
+  dataRules: [
+    {
+      name: 'nick',
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick,
+      required: true,
+    },
+    {
+      name: 'channel',
+      verify: UAC.verifyChannel,
+      errorMessage: UAC.nameLimit.channel,
+      required: false,
+    },
+  ],
+  runByChat: true,
 };

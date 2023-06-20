@@ -79,18 +79,19 @@ export async function run(core, server, socket, data) {
   },{channel:socket.channel})
 }
 
-export const requiredData = ['nick'];
 export const info = {
   name: 'give',
+  runByChat: true,
   description: '将您的房主权限转让给他人',
   usage: `
     API: { cmd: 'give', nick: '<target nick>' }
     文本：以聊天形式发送 /give 昵称`,
-  fastcmd:[
+  dataRules: [
     {
-      name:'nick',
-      len:1,
-      check: UAC.verifyNickname
+      name: 'nick',
+      required: true,
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick
     }
   ]
 };

@@ -6,6 +6,10 @@ import {
   relative,
 } from 'path';
 import didYouMean from 'didyoumean2';
+import {
+  isRegExp,
+  isArray,
+} from 'util';
 
 // default command modules path
 const CmdDir = 'src/commands';
@@ -189,6 +193,75 @@ class CommandManager {
   }
 
   /**
+   * 通过命令模块info对象的dataRules属性验证用户输入值是否正确
+   * @param {Array} rules 命令模块info对象的dataRules属性
+   * @param {Object} data 数据
+   * @returns {String|true} 如果是字符串，则代表报错；如果是true，则代表验证成功
+   */
+
+  verifyData(rules, data) {
+    const missing = []
+    let i = 0
+    for (i in rules) {
+      if (typeof data[rules[i].name] === 'undefined' && rules[i].required) {
+        // 丢了个参数
+        missing.push(rules[i].name)
+        continue    // 继续执行下一次循环
+      }
+
+      if (typeof rules[i].verify === 'function') {
+        // 参数验证模式：自定义函数
+        // 返回值类型为string则报错，为false返回errorMessage的内容（没有则返回默认报错内容），为true则说明验证通过
+        let result = rules[i].verify(data[rules[i].name])
+
+        if (result === true) {
+          // 验证通过
+          continue
+        }
+
+        return result || rules[i].errorMessage || `错误：参数 ${rules[i].name} 的值有误，请查证后再试`    // 报错
+
+      }else if (isRegExp(rules[i].verify)) {
+        // 参数验证模式：正则表达式
+        if (!rules[i].verify.test(data[rules[i].name])) {
+          // 验证失败
+          return rules[i].errorMessage || `错误：参数 ${rules[i].name} 的值有误，请查证后再试`    // 报错
+        }
+      }
+    }
+
+    if (missing.length !== 0) {
+      // 如果真的丢失参数，则返回错误信息
+      return `错误：您没有提供参数 ${missing.join('、')}`
+    }
+    return true
+  }
+
+  parseText(rules, text) {
+    // 实例：/color 44FF00
+
+    var data = {}
+    var textArray = text.split(' ')
+
+    data.cmd = textArray[0].slice(1)
+
+    for (let i = 0; i < rules.length; i++) {    // Do you know the rules? You know the rules and so do I~
+      if (!textArray[i + 1]) {
+        return data
+      }
+
+      if (rules[i].all) {
+        data[rules[i].name] = textArray.slice(i + 1).join(' ')
+        return data
+      }
+      
+      data[rules[i].name] = textArray[i + 1]
+    }
+
+    return data
+  }
+
+  /**
     * Finds and executes the requested command, or fails with semi-intelligent error
     * @param {Object} server main server reference
     * @param {Object} socket calling socket reference
@@ -249,23 +322,15 @@ class CommandManager {
     * @return {*} Arbitrary module return data
     */
   async execute(command, server, socket, data) {
-    if (typeof command.requiredData !== 'undefined') {
-      const missing = [];
-      for (let i = 0, len = command.requiredData.length; i < len; i += 1) {
-        if (typeof data[command.requiredData[i]] === 'undefined') { missing.push(command.requiredData[i]); }
-      }
-
-      if (missing.length > 0) {
-        console.error(`无法执行 ${
-          command.info.name
-        } 命令，因为丢失了参数：${missing.join(', ')}\n\n`);
-
+    if (isArray(command.info.dataRules)) {
+      // 命令模块要求检查用户输入值是否合法
+      const msg = this.verifyData(command.info.dataRules, data)
+      console.debug('验证信息：'+msg)
+      if (typeof msg === 'string') {
         this.handleCommand(server, socket, {
           cmd: 'socketreply',
           cmdKey: server.cmdKey,
-          text: `无法执行 ${
-            command.info.name
-          } 命令，因为丢失了参数：${missing.join('、')}\n\n`,
+          text: msg,
         });
 
         return null;

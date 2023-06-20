@@ -44,18 +44,19 @@ export async function run(core, server, socket, data) {
     return true;
 }
 
-export const requiredData = ['nick'];
 export const info = {
     name: 'kickzom',
     description: '踢出由于网络问题而尚未离开聊天室的自己',
     usage: `
     API: { cmd: 'kickzom', nick: '<nickname>' }
     文本：以聊天形式发送 /kickzom <目标昵称>`,
-    fastcmd:[
+    dataRules: [
         {
-            name:'nick',
-            len:1,
-            check: UAC.verifyNickname
+            name: 'nick',
+            required: true,
+            verify: UAC.verifyNickname,
+            errorMessage: UAC.nameLimit.nick,
         }
-    ]
+    ],
+    runByChat: true,
 };

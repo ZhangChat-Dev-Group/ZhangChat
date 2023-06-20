@@ -6,15 +6,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  // check user input
-  if (typeof data.nick !== 'string' || typeof data.channel !== 'string') {
-    server.reply({
-      cmd: 'warn',
-      text: '数据无效',
-    }, socket);
-    return true;
-  }
-
   if (data.channel === socket.channel) {
     // moving them into the same channel? y u do this?
     server.reply({
@@ -138,15 +129,19 @@ export const info = {
   usage: `
     API: { cmd: 'moveuser', nick: '<target nick>', channel: '<new channel>' }
     文本：以聊天形式发送 /moveuser 目标昵称 目标房间`,
-  fastcmd:[
+  runByChat: true,
+  dataRules: [
     {
       name:'nick',
-      len:1,
-      check: UAC.verifyNickname
+      required: true,
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick,
     },
     {
       name:'channel',
-      len:1
+      required: true,
+      verify: UAC.verifyChannel,
+      errorMessage: UAC.nameLimit.channel,
     }
   ],
   level: UAC.levels.moderator,

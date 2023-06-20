@@ -40,11 +40,12 @@ export const info = {
   usage: `
     API: { cmd: 'unban', ip: '<target ip>' }
     文本：以聊天形式发送 /unban 目标IP地址`,
-  fastcmd:[
+  dataRules:[
     {
       name:'ip',
-      len:1,
+      required: true,
     }
   ],
+  runByChat: true,
   level: UAC.levels.moderator,
 };

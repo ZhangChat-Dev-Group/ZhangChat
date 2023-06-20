@@ -65,18 +65,19 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['nick'];
 export const info = {
   name: 'kick',
   description: '踢出一个或多个用户。当nick为数组时则踢出多名用户',
+  runByChat: true,
   usage: `
     API: { cmd: 'kick', nick: '<target nick>' }
     文本：以聊天形式发送 /kick 目标昵称`,
-  fastcmd:[
+  dataRules: [
     {
-      name:'nick',
-      len:1,
-      check: UAC.verifyNickname
+      name: 'nick',
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick,
+      required: true,
     }
   ],
   level: UAC.levels.channelOwner,

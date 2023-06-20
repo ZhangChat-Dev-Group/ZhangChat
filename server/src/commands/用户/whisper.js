@@ -99,76 +99,30 @@ export async function run(core, server, socket, payload) {
   return true;
 }
 
-// module hook functions
-export function initHooks(server) {
-  server.registerHook('in', 'chat', this.whisperCheck.bind(this), 100);
-}
-
-// hooks chat commands checking for /whisper
-export function whisperCheck(core, server, socket, payload) {
-  if (typeof payload.text !== 'string') {
-    return false;
-  }
-
-  if (payload.text.startsWith('/whisper') || payload.text.startsWith('/w ')) {
-    const input = payload.text.split(' ');
-
-    // If there is no nickname target parameter
-    if (input[1] === undefined) {
-      server.reply({
-        cmd: 'warn',
-        text: '请发送 `/help whisper` 来查看帮助',
-      }, socket);
-
-      return false;
-    }
-
-    const target = input[1].replace(/@/g, '');
-    input.splice(0, 2);
-    const whisperText = input.join(' ');
-
-    this.run(core, server, socket, {
-      cmd: 'whisper',
-      nick: target,
-      text: whisperText,
-    });
-
-    return false;
-  }
-
-  if (payload.text.startsWith('/r ')) {
-    if (typeof socket.whisperReply === 'undefined') {
-      server.reply({
-        cmd: 'warn',
-        text: '找不到需要回复的人',
-      }, socket);
-
-      return false;
-    }
-
-    const input = payload.text.split(' ');
-    input.splice(0, 1);
-    const whisperText = input.join(' ');
-
-    this.run(core, server, socket, {
-      cmd: 'whisper',
-      nick: socket.whisperReply,
-      text: whisperText,
-    });
-
-    return false;
-  }
-
-  return payload;
-}
-
-export const requiredData = ['nick', 'text'];
 export const info = {
   name: 'whisper',
+  aliases: ['w'],
   description: '向某人发送私信',
   usage: `
     API: { cmd: 'whisper', nick: '<target name>', text: '<text to whisper>' }
     文本：以聊天形式发送 /whisper 目标昵称 信息
     文本：以聊天形式发送 /w 目标昵称 信息
     快速回复上一个私信你的人：以聊天形式发送 /r 信息`,
+  dataRules: [
+    {
+      name: 'nick',    // 参数名
+      verify: UAC.verifyNickname,    // 验证模式为自定义函数，还可以用正则表达式
+      errorMessage: UAC.nameLimit.nick,    // 如果内容不匹配，则返回这个信息
+      all: false,    // 是否获取后面所有的字符串
+      required: true,
+    },
+    {
+      name: 'text',
+      all: true,
+      verify: (text) => !!parseText(text),
+      errorMessage: '大哥，别拿个无效的信息糊弄我，OK？',
+      required: true,
+    }
+  ],
+  runByChat: true,
 };

@@ -22,6 +22,7 @@ export const info = {
   usage: `
     API: { cmd: 'unbanall' }
     文本：以聊天形式发送 /unbanall`,
-  fastcmd:[],
+  dataRules:[],
+  runByChat: true,
   level: UAC.levels.moderator,
 };

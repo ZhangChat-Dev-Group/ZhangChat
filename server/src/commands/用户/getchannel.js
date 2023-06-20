@@ -63,9 +63,10 @@ export async function run(core, server, socket, payload) {
 
 export const info = {
   name: 'getchannel',
-  description: '获取您所在的房间的所有权，即成为房主',
+  description: '获取您所在的频道的所有权，即成为房主',
   usage: `
     API: { cmd: 'getchannel' }
     文本：以聊天形式发送 /getchannel`,
-  fastcmd:[]
+  dataRules: [],
+  runByChat: true,
 };

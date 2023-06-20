@@ -52,6 +52,7 @@ export const info = {
   usage: `
     API: { cmd: 'clearpower' }
     文本：以聊天形式发送 /clearpower`,
-  fastcmd:[],
+  runByChat: true,
+  dataRules: [],
   level: UAC.levels.moderator,
 };
