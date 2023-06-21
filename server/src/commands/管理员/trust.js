@@ -39,10 +39,11 @@ export async function run(core, server, socket, data) {
 
   server.findSockets({ trip: target }).forEach((s) => {
     s.level = mode ? UAC.levels.trustedUser : UAC.levels.default
+    s.uType = mode ? 'trusted' : 'user'
 
     server.reply({
       cmd: 'info',
-      text: '已更新您的等级为：'+ mode ? '信任用户' : '普通用户',
+      text: `已更新您的等级为：${mode ? '信任用户' : '普通用户'}`,
     }, s)
   })    // 修改用户等级
 
@@ -63,7 +64,7 @@ export async function run(core, server, socket, data) {
 
 export const info = {
   name: 'trust',
-  description: '为指定识别码添加或删除信任用户权限',
+  description: '为指定识别码添加或删除信任用户权限，不传递参数则显示所有信任用户',
   usage: `
     API: { cmd: 'trust', trip: '<target trip>' }
     文本：以聊天形式发送 /trust 目标识别码`,

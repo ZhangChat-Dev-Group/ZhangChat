@@ -97,15 +97,6 @@ export async function run(core, server, socket, data) {
     return true;
   }
 
-  if (typeof data.to === 'string') {
-    if (!UAC.verifyChannel(data.to)) {    // 验证频道名是否合法
-      return server.reply({
-        cmd:'warn',
-        text: UAC.nameLimit.channel
-      },socket)
-    }
-  }
-
   const channel = getChannel(data.to);
 
   // build and send invite

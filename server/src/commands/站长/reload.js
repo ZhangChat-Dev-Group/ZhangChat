@@ -42,11 +42,13 @@ export const info = {
   usage: `
     API: { cmd: 'reload', reason: '<optional reason append>' }
     文本：以聊天形式发送 /reload 可选的原因`,
-  fastcmd:[
+  runByChat: true,
+  dataRules: [
     {
-      name:'reason',
-      len:0
-    }
+      name: 'reason',
+      verify: reason => typeof reason === 'string' && !!reason,
+      all: true,
+    },
   ],
   level: UAC.levels.admin,
 };

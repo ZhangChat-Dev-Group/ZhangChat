@@ -8,9 +8,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  if (typeof data.command !== 'string'){
-    return true
-  }
   if (core.removedCommands.filter((cmd) => cmd.info.name === data.command).length === 0){
     return server.reply({
       cmd:'warn',
@@ -41,11 +38,11 @@ export const info = {
   usage: `
     API: { cmd: 'addcmd', command: '<目标命令的名称>' }
     文本：以聊天形式发送 /addcmd 目标命令的名称`,
-  fastcmd:[
-    {
-      name:'command',
-      len:1
-    }
-  ],
+  runByChat: true,
+  dataRules: [{
+    name: 'command',
+    required: true,
+    verify: command => typeof command === 'string' && !!command,
+  }],
   level: UAC.levels.admin,
 };

@@ -8,13 +8,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  if (!data.key || typeof data.key !== 'string'){
-    return server.reply({
-      cmd:'warn',
-      text:'数据无效！'
-    },socket)
-  }
-
   if (core.config.clients.filter((c) => c.key === data.key) === 0){
     return server.reply({
       cmd:'warn',
@@ -34,17 +27,18 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['key'];
 export const info = {
   name: 'removeclient',
   description: '删除一个客户端',
   usage: `
     API: { cmd: 'removeclient', key: '<client key>' }
     文本：以聊天形式发送 /removeclient 客户端key`,
-  fastcmd:[    //fastcmd支持
+  runByChat: true,
+  dataRules: [
     {
-      name:'key',
-      len:1
+      name: 'key',
+      required: true,
+      verify: key => typeof key === 'string' && !!key
     }
   ],
   level: UAC.levels.admin,

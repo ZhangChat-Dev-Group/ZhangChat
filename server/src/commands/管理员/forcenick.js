@@ -13,6 +13,8 @@ export async function run(core, server, socket, data) {
       text:'找不到这名用户'
     },socket)
   }
+
+  if (user_socket.level >= socket.level) return server.replyWarn('越权操作不被允许', socket)
   const leaveNotice = {
     cmd: 'onlineRemove',
     nick: data.nick,
@@ -51,24 +53,26 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['nick', 'new_nick'];
 export const info = {
   name: 'forcenick',
   description: '==强制==修改某人的昵称',
   usage: `
     API: { cmd: 'changenick', nick: '<原昵称>', new_nick:'<新昵称>' }
-    文本：以聊天形式发送 /changeusernick 原昵称 新昵称`,
-  fastcmd:[
+    文本：以聊天形式发送 /forcenick 原昵称 新昵称`,
+  runByChat: true,
+  dataRules: [
     {
-      name:'nick',
-      len:1,
-      check: UAC.verifyNickname
+      name: 'nick',
+      verify: UAC.verifyNickname,
+      required: true,
+      errorMessage: UAC.nameLimit.nick,
     },
     {
-      name:'new_nick',
-      len:1,
-      check: UAC.verifyNickname
-    }
+      name: 'new_nick',
+      verify: UAC.verifyNickname,
+      errorMessage: UAC.nameLimit.nick,
+      required: true
+    },
   ],
   level: UAC.levels.moderator,
 };

@@ -25,10 +25,11 @@ export async function run(core, server, socket, data) {
 
 export const info = {
   name: 'clientlist',
-  description: '添加一个客户端',
+  description: '显示所有客户端',
   usage: `
     API: { cmd: 'clientlist' }
     文本：以聊天形式发送 /clientlist`,
-  fastcmd:[],
+  runByChat: true,
+  dataRules: [],
   level: UAC.levels.admin,
 };

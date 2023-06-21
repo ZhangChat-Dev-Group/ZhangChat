@@ -9,14 +9,6 @@ export async function run(core, server, socket, data) {
         }, socket);
     }
 
-    // verify user data is string
-    if (typeof data.nick !== 'string') {
-        return server.reply({
-            cmd: 'warn',
-            text: '数据无效',
-        }, socket);
-    }
-
     const zom_socket = server.findSockets({ channel:socket.channel, nick: data.nick });
     if (zom_socket == [] || zom_socket == null || zom_socket.length == 0) {
         return server.reply({

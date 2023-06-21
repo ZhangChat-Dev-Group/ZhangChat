@@ -6,17 +6,6 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  // check user input
-  if (typeof data.nick !== 'string') {
-    if (typeof data.nick !== 'object' && !Array.isArray(data.nick)) {
-      server.reply({
-        cmd: 'warn',
-        text: '参数无效',
-      }, socket);
-      return true;
-    }
-  }
-
   // find target user(s)
   const badClients = server.findSockets({ channel: socket.channel, nick: data.nick });
 
@@ -75,7 +64,19 @@ export const info = {
   dataRules: [
     {
       name: 'nick',
-      verify: UAC.verifyNickname,
+      verify: (data) => {
+        if (typeof data === 'object') {
+          if (!Array.isArray(data)) return false
+          let i = 0
+          for (i in data) {
+            if (typeof data[i] !== 'string') return false
+            if (!UAC.verifyNickname(data[i])) return false
+          }
+          return true
+        }else if (typeof data === 'string') {
+          return UAC.verifyNickname(data)
+        }
+      },
       errorMessage: UAC.nameLimit.nick,
       required: true,
     }

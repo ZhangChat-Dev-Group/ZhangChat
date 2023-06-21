@@ -44,6 +44,7 @@ export const info = {
   usage: `
     API: { cmd: 'listusers' }
     文本：以聊天形式发送 /listusers`,
-  fastcmd:[],    //fastcmd支持
+  runByChat: true,
+  dataRules: [],
   level: UAC.levels.moderator,
 };

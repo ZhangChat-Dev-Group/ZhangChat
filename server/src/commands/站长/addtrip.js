@@ -53,16 +53,12 @@ export const info = {
   usage: `
     API: { cmd: 'addtrip', trip: '<旧的识别码>', new_trip:'<新的识别码>' }
     文本：以聊天形式发送 /addtrip <旧的识别码> <新的识别码>`,
-  fastcmd:[
+  runByChat: true,
+  dataRules: [
     {
-      name:'trip',
-      len:1,
-      check: /^[a-zA-Z0-9/\+]{6}$/
-    },
-    {
-      name:'new_trip',
-      len:1,
-      check: /^[a-zA-Z0-9/\+]{6}$/
+      name: 'trip',
+      required: true,
+      verify: UAC.verifyTrip,
     }
   ],
   level: UAC.levels.admin,

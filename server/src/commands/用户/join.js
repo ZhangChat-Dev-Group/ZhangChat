@@ -28,11 +28,6 @@ export function parseNickname(core, data) {
   const nickArray = data.nick.split('#', 2);
   userInfo.nick = nickArray[0].trim();
 
-  if (!UAC.verifyNickname(userInfo.nick)) {
-    // return error as string
-    return UAC.nameLimit.nick;
-  }
-
   let password = undefined;
   // prioritize hash in nick for password over password field
   if (typeof nickArray[1] === 'string') {
@@ -53,24 +48,21 @@ export function parseNickname(core, data) {
     userInfo.trip=''
   }
 
-  core.config.trusted.forEach((trip) => {
-    if (userInfo.trip === trip) {
-      userInfo.uType = 'trusted'; /* @legacy */
-      userInfo.level = UAC.levels.trustedUser;
+  if (userInfo.trip) {
+    userInfo.level = core.config.powerfulUsers[userInfo.trip] || UAC.levels.default
+    const isChannelOwner = core.config.channelOwners[data.channel] === userInfo.trip
+    
+    if (UAC.isTrustedUser(userInfo.level)) userInfo.uType = 'trusted'
+    if (isChannelOwner) {
+      userInfo.level = UAC.levels.channelOwner
+      userInfo.uType = 'channelOwner'
     }
-  });
-
-  if (core.channelOwners[data.channel] === userInfo.trip){
-    userInfo.uType = 'channelOwner'; /* @legacy */
-    userInfo.level = UAC.levels.channelOwner;
+    if (UAC.isModerator(userInfo.level)) userInfo.uType = 'mod'
+    if (UAC.isAdmin(userInfo.level)) {
+      userInfo.level = UAC.levels.moderator
+      userInfo.uType = 'mod'
+    }
   }
-
-  core.config.mods.forEach((mod) => {
-    if (userInfo.trip === mod.trip) {
-      userInfo.uType = 'mod'; /* @legacy */
-      userInfo.level = UAC.levels.moderator;
-    }
-  });
 
   if (data.client){
     var targetClient = core.config.clients.filter((c) => c.key === data.client)
@@ -98,8 +90,6 @@ export async function run(core, server, socket, data) {
   if (typeof socket.channel !== 'undefined') {
     return true;
   }
-
-  const channel = data.channel.trim();
 
   const userInfo = this.parseNickname(core, data);
   if (typeof userInfo === 'string') {
@@ -143,14 +133,12 @@ export async function run(core, server, socket, data) {
         cmd:'info',
         text: `${userExists[0].nick} 可能是僵尸号，已被自动踢出聊天室`
       },{channel:data.channel})
-      
+      userExists[0].channel = ''    //去掉channel，防止disconnect.js再次广播onlineRemove
+      userExists[0].terminate()    //关闭连接
       server.broadcast({    //广播用户离开通知，如果直接用terminate会出现异步的问题
         cmd:'onlineRemove',
         nick: userExists[0].nick
       },{channel:data.channel})
-      userExists[0].channel = ''    //去掉channel，防止disconnect.js再次广播onlineRemove
-      
-      userExists[0].terminate()    //关闭连接
     }else{
       // that nickname is already in that channel
       server.reply({
@@ -262,6 +250,11 @@ export const info = {
   dataRules: [
     {
       name: 'nick',
+      verify: nick => {
+        if (!nick || typeof nick !== 'string') return false
+        return UAC.verifyNickname(nick.split('#')[0])
+      },
+      errorMessage: UAC.nameLimit.nick,
       required: true
     },
     {

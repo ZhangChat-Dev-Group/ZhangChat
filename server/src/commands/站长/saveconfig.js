@@ -32,6 +32,7 @@ export const info = {
   usage: `
     API: { cmd: 'saveconfig' }
     文本：以聊天形式发送 /saveconfig`,
-  fastcmd:[],
+  runByChat: true,
+  dataRules: [],
   level: UAC.levels.admin,
 };

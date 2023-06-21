@@ -1,6 +1,6 @@
 import * as UAC from '../utility/UAC/_info';
 
-export function checkShield(core,text) {
+export function shieldCheck(core,text) {
   const txt = text.trim().toLowerCase()
   for (let i = 0; i < core.config.shield.length; i++) {
     if (txt.includes(core.config.shield[i])) {
@@ -15,7 +15,7 @@ export function init(core){
     core.config.shield = []
   }
 
-  core.checkShield = checkShield
+  core.shieldCheck = shieldCheck
 }
 
 // module main
@@ -49,7 +49,7 @@ export async function run(core, server, socket, data) {
 
   server.broadcast({
     cmd: 'info',
-    text: `已${socket.nick} ${mode ? '添加' : '删除'}屏蔽内容：\n${text}`
+    text: `已${mode ? '添加' : '删除'}屏蔽内容：\n${text}`
   }, { level: (level) => level < UAC.levels.moderator })
 
   core.logger.logAction(socket,[],'shield',data, `[${socket.trip}] ${socket.nick} ${mode ? '添加' : '删除'}了屏蔽内容：\n${text}`)

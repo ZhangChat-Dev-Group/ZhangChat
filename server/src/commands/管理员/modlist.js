@@ -8,26 +8,17 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-    var content = '以下是所有管理员：\n'
-    for (var i = 0; i < core.config.mods.length; i++) {
-        content += `\`${core.config.mods[i].trip}\`\n`
-    }
-
-    server.reply({
-        cmd: 'info',
-        text: content,
-    }, socket);
-
-    return true;
+  let mods = Object.keys(core.config.powerfulUsers).filter((t) => core.config.powerfulUsers[t] === UAC.levels.moderator)
+  server.replyInfo(`全体管理员：\`${mods.join('`\n`')}\``, socket)
 }
 
 export const info = {
-    name: 'modlist',
-    description: '查看所有管理员',
-    usage: `
+  name: 'modlist',
+  description: '查看所有管理员',
+  usage: `
     API: { cmd: 'modlist' }
     文本：以聊天形式发送 /modlist`,
-    runByChat: true,
-    dataRules: [],
-    level: UAC.levels.moderator,
+  runByChat: true,
+  dataRules: [],
+  level: UAC.levels.moderator,
 };

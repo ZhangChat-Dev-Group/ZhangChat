@@ -12,11 +12,6 @@ export async function run(core, server, socket, payload) {
     }, socket);
   }
 
-  // verify user input
-  if (typeof payload.command !== 'undefined' && typeof payload.command !== 'string') {
-    return true;
-  }
-
   let reply = '';
   if (typeof payload.command === 'undefined') {
     reply += '# 所有命令:\n|类别:|名称:|\n|---:|---|\n';
@@ -64,6 +59,8 @@ export const info = {
   dataRules: [
     {
       name: 'command',
+      verify: command => typeof command === 'string' && !!command,
+      errorMessage: '命令名称无效'
     },
   ],
   runByChat: true,

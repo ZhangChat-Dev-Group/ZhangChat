@@ -22,13 +22,7 @@ export async function run(core, server, socket, data) {
       text: '你修改颜色的速度太快，请稍后再试',
     }, socket);
   }
-  if(typeof data.color !== 'string'){
-    return true;
-  }
-  if (!data.color){
-    return true
-  }
-  if (data.color === 'reset'){
+  if (data.color.toLowerCase() === 'reset'){
     socket.color = false
     server.reply({
       cmd:'info',
@@ -38,7 +32,7 @@ export async function run(core, server, socket, data) {
     socket.color = data.color.replace(/#/g, '');
   }
   if (socket.trip){
-    if (data.color === 'reset'){
+    if (data.color.toLowerCase() === 'reset'){
       delete core.colors[socket.trip]
     }else{
       core.colors[socket.trip] = socket.color
@@ -73,7 +67,6 @@ export function autoChangeColor(core,server,socket,payload){
 
 export function addcolor(core,server,socket,payload){
   var senders = server.findSockets({channel:socket.channel,nick:payload.nick})
-  if (senders.length === 0){return payload}    //这个代码是为虚拟人物“机娘”准备的
   var sender = senders[0]
   if (!sender.color){
     return payload

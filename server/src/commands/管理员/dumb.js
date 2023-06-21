@@ -4,47 +4,26 @@
  */
 
 import * as UAC from '../utility/UAC/_info';
+const moment = require('moment')
 
-// module constructor
-export function init(core) {
-  if (typeof core.mute === 'undefined') {
-    core.mute = {};
-  }
-}
-function get_time_text(str){  
-  var oDate = new Date(str),  
-  oYear = oDate.getFullYear(),  
-  oMonth = oDate.getMonth()+1,  
-  oDay = oDate.getDate(),  
-  oHour = oDate.getHours(),  
-  oMin = oDate.getMinutes(),  
-  oSen = oDate.getSeconds(),  
-  oTime = oYear +' 年 '+ getzf(oMonth) +' 月 '+ getzf(oDay) +' 日 '+ getzf(oHour) +' 时 '+ getzf(oMin) +' 分 '+getzf(oSen)+' 秒';//最后拼接时间  
-  return oTime;  
-};  
-//补0操作  
-function getzf(num){  
-  if(parseInt(num) < 10){  
-      num = '0'+num;  
-  }  
-  return num;  
-}  
-function isMute(core,hash){
-  if (core.mute[hash] === undefined){
+export function isMuted(core, ip){
+  if (!core.mutedIP.has(ip)) return false
+  const time = core.mutedIP.get(ip)
+  if (time <= Date.now()) {
+    core.mutedIP.delete(ip)
     return false
-  }else{
-    if (core.mute[hash].time == 0 || core.mute[hash].time === undefined){
-      return '你已被永久禁言，请等待管理员手动为你解除禁言。'
-    }else{
-      if (Date.now() >= core.mute[hash].time){
-        core.mute[hash] = undefined
-        return false
-      }else{
-        return '你已被禁言，禁言将在 '+get_time_text(core.mute[hash].time) +' 解除'
-      }
-    }
   }
+  return time
 }
+
+export function init(core) {
+  if (typeof core.mutedIP !== 'object') {
+    core.mutedIP = new Map()
+  }
+  core.isMuted = isMuted
+}
+
+
 // module main
 export async function run(core, server, socket, data) {
   // find target user
@@ -77,38 +56,20 @@ export async function run(core, server, socket, data) {
   }
 
   //用户已经受伤了，别再捅刀了……
-  if (core.mute[badClient.hash] !== undefined){
-    return server.reply({
-      cmd:'warn',
-      text:'该用户已被禁言，无需重复操作'
-    },socket)
-  }
-  var time_text = '0 分钟（永久禁言，直到管理员手动解除）'
-  data.time = Number(data.time)
-  if (typeof data.time === 'number' && !isNaN(data.time) && data.time >0){
-    core.mute[badClient.hash] = {
-      time : Date.now() + (data.time * 60000)
-    }
-    time_text = data.time.toString()+' 分钟'
-  }else if (data.time == 0){
-    core.mute[badClient.hash] = {
-      time : 0
-    }
-  }
-  if (data.time == 0){
-    time_text = '0 分钟（永久禁言，直到管理员手动解除）'
-  }
-  // notify mods
+  if (isMuted(core, badClient.address)) return server.replyWarn('目标用户已经被禁言了，无需重复操作', socket)
+  
+  const time = Number.parseFloat(data.time)
+  core.mutedIP.set(badClient.address, Date.now() + time * 60 * 1000)
   server.broadcast({
     cmd: 'info',
-    text: `${socket.nick} 已在 ?${socket.channel} 禁言 ${badClient.nick}，被禁言的用户的hash为：${badClient.hash}\n禁言时长：${time_text}`,
+    text: `${socket.nick} 在 ?${socket.channel} 禁言了 ${badClient.nick} ${time} 分钟，被禁言的用户的IP为：${badClient.address}`,
   }, { level: UAC.isModerator });
   server.broadcast({
     cmd:'info',
-    text:`${badClient.nick} 被禁言 ${time_text}`
+    text:`${badClient.nick} 被禁言 ${time} 分钟`
   }, { level: (level) => level < UAC.levels.moderator });
 
-  core.logger.logAction(socket,[],'dumb',data,`被禁言的用户的hash为：${badClient.hash}，识别码为：${badClient.trip || '<null>'}，用户等级为：${badClient.level}`)
+  core.logger.logAction(socket,[],'dumb',data,`被禁言的用户的IP为：${badClient.address}，识别码为：${badClient.trip || '<null>'}，用户等级为：${badClient.level}`)
   return true;
 }
 
@@ -121,26 +82,21 @@ export function initHooks(server) {
   //server.registerHook('in', 'chat', this.dumbCheck.bind(this));
 }
 export function AreYouMute(core,server,socket,payload){
-  if (!socket.hash){
-    return payload  //推给别人
-  }
-  if (typeof isMute(core,socket.hash) === 'string'){
-    server.reply({
-      cmd:'warn',
-      text:isMute(core,socket.hash)
-    },socket)
+  if (isMuted(core, socket.address)){
+    const time = moment(isMuted(core, socket.address)).format('YYYY-MM-DD HH:mm:ss')
+    server.replyWarn(`很抱歉，你已经被禁言，禁言将在 ${time} 自动解除，请耐心等待，==不要进进出出==。`)
     return false
   }else{
     return payload
   }
 }
-export const requiredData = ['nick','time'];
+
 export const info = {
   name: 'dumb',
   description: '禁言某个用户',
   usage: `
-    API: { cmd: 'dumb', nick: '<目标用户的昵称>', time: 禁言时长（单位：分钟）（0为永久禁言）（类型：数字）}
-    文本：以聊天形式发送 /dumb 目标昵称 禁言时长（单位：分钟）（0为永久禁言）`,
+    API: { cmd: 'dumb', nick: '<目标用户的昵称>', time: 禁言时长（单位：分钟）（类型：数字）}
+    文本：以聊天形式发送 /dumb 目标昵称 禁言时长（单位：分钟）`,
   runByChat: true,
   dataRules: [
     {
@@ -152,14 +108,9 @@ export const info = {
     {
       name: 'time',
       verify: (time) => {
-        const num = Number(time)
-        if (isNaN(num)) {
-          return false
-        }
-        
-        if (num < 0) {
-          return false
-        }
+        const num = Number.parseFloat(time)
+        if (isNaN(num)) return false
+        return num > 0
       },
       required: true,
       errorMessage: '时间必须为数字，并且大于0',

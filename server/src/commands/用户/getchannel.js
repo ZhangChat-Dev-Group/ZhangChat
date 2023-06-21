@@ -1,14 +1,8 @@
 import * as UAC from '../utility/UAC/_info';
 
-export function init (core){
-  if (typeof core.channelOwners !== 'object'){
-    core.channelOwners = {}
-    /*
-      格式：
-      {
-        channel1: trip1
-      }
-    */
+export function init(core) {
+  if (typeof core.config.channelOwners !== 'object') {
+    core.config.channelOwners = {}
   }
 }
 
@@ -28,37 +22,26 @@ export async function run(core, server, socket, payload) {
     },socket)
   }
 
-  if (core.channelOwners[socket.channel]){
-    if (server.findSockets({channel:socket.channel,trip:core.channelOwners[socket.channel]}).length !== 0){
-      return server.reply({
-        cmd:'warn',
-        text:'抱歉，目前本房间的房主在线，您不能成为房主'
-      },socket)
-    }
-    core.channelOwners[socket.channel] = socket.trip
-    var i = 0
-    var mySockets = server.findSockets({channel:socket.channel,trip:socket.trip})
-    for (i in mySockets){
-      mySockets[i].level = UAC.levels.channelOwner
-      mySockets[i].uType = 'channelOwner'
-    }
-    server.broadcast({
-      cmd:'info',
-      text:`${socket.nick} 成为新房主，识别码为 ${socket.trip}`
-    },{channel:socket.channel})
-  }else{
-    core.channelOwners[socket.channel] = socket.trip
-    var i = 0
-    var mySockets = server.findSockets({channel:socket.channel,trip:socket.trip})
-    for (i in mySockets){
-      mySockets[i].level = UAC.levels.channelOwner
-      mySockets[i].uType = 'channelOwner'
-    }
-    server.broadcast({
-      cmd:'info',
-      text:`${socket.nick} 成为新房主，识别码为 ${socket.trip}`
-    },{channel:socket.channel})
+  if (core.config.channelOwners[socket.channel]) {
+    if (server.findSocket({
+      channel: socket.channel,
+      trip: core.config.channelOwners[socket.channel]
+    })) return server.replyWarn('当前频道的房主在线，你无法成为房主', socket)
   }
+
+  core.config.channelOwners[socket.channel] = socket.trip
+  server.findSockets({
+    channel: socket.channel,
+    trip: socket.trip,
+  }).forEach((s) => {
+    s.level = UAC.levels.channelOwner
+    s.uType = 'channelOwner'
+  })
+  server.broadcast({
+    cmd: 'info',
+    text: `恭喜 ${socket.nick} 成为房主，识别码为 ${socket.trip}`
+  }, { channel: socket.channel })
+  core.configManager.save()
 }
 
 export const info = {

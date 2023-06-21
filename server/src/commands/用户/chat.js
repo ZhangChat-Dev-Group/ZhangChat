@@ -3,7 +3,6 @@
 */
 
 import * as UAC from '../utility/UAC/_info';
-import { isArray } from 'util';
 
 // module support functions
 const parseText = (text) => {
@@ -30,7 +29,6 @@ const sleep = (time) => {
 export async function run(core, server, socket, data) {
   // check user input
   const text = parseText(data.text);
-
 
   // check for spam
   const score = text.length / 83 / 4;
@@ -122,7 +120,6 @@ export function finalCmdCheck(core, server, socket, payload) {
 
   if (payload.text.startsWith('//')) {
     payload.text = payload.text.substr(1);
-
     return payload;
   }
 
@@ -134,10 +131,9 @@ export function finalCmdCheck(core, server, socket, payload) {
     return false
   }
 
-  if (command.runByChat) {
-    if (isArray(command.info.dataRules)) {
+  if (command.info.runByChat) {
+    if (Array.isArray(command.info.dataRules)) {
       const data = core.commands.parseText(command.info.dataRules, payload.text)
-      console.debug(data)
       core.commands.handleCommand(server, socket, data)
       return false
     }

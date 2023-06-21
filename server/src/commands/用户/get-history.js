@@ -1,3 +1,5 @@
+import * as UAC from '../utility/UAC/_info'
+
 export async function run(core,server,socket,data){
   if (server.police.frisk(socket.address, 3)) {
     return server.reply({
@@ -19,19 +21,24 @@ export async function run(core,server,socket,data){
       })
     }
     server.reply({
-        cmd: 'history',
-        history: historyTag,
+      cmd: 'history',
+      history: historyTag,
     }, socket);
   });
   return true
 }
 
-// module meta
-export const requiredData = ['channel']
 export const info = {
   name: 'get-history',
   description: '获取20条聊天历史记录',
   usage: `
     API: { cmd: 'get-history' }`,
-  dataRules: [],
+  dataRules: [
+    {
+      name: 'channel',
+      required: true,
+      verify: UAC.verifyChannel,
+      errorMessage: UAC.nameLimit.channel,
+    }
+  ],
 };

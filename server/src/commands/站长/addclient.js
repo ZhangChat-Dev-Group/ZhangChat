@@ -8,13 +8,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  if (!data.name || typeof data.name !== 'string' || !data.key || typeof data.key !== 'string'){
-    return server.reply({
-      cmd:'warn',
-      text:'数据无效！'
-    },socket)
-  }
-
   if (core.config.clients.filter((c) => c.key.toLowerCase() === data.key.toLowerCase()).length || core.config.clients.filter((c) => c.name.toLowerCase() === data.name.toLowerCase()).length){
     return server.reply({
       cmd:'warn',
@@ -37,21 +30,23 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['name','key'];
 export const info = {
   name: 'addclient',
   description: '添加一个客户端',
   usage: `
     API: { cmd: 'addclient', name: '<client name>', key: '<client key>' }
     文本：以聊天形式发送 /addclient 客户端名称 客户端key`,
-  fastcmd:[    //fastcmd支持
+  runByChat: true,
+  dataRules: [
     {
-      name:'name',
-      len:1
+      name: 'name',
+      required: true,
+      verify: text => typeof text === 'string' && !!text,
     },
     {
-      name:'key',
-      len:1
+      name: 'key',
+      required: true,
+      verify: key => typeof key === 'string' && !!key,
     }
   ],
   level: UAC.levels.admin,

@@ -20,14 +20,8 @@ export async function run(core, server, socket, payload) {
       text:'您设置视频的速度太快了，请稍后再试'
     },socket)
   }
-  if (typeof payload.url !== 'string' || !payload.url){
-    return server.reply({
-      cmd:'warn',
-      text:'数据无效'
-    },socket)
-  }
   if (payload.url === 'nothing'){
-    core.videos[socket.channel] = undefined
+    delete core.videos[socket.channel]
     return server.broadcast({
       cmd:'info',
       text:`${socket.nick} 清除了本房间的公共视频`
@@ -37,7 +31,7 @@ export async function run(core, server, socket, payload) {
   core.videos[socket.channel] = payload.url
   server.broadcast({
     cmd:'info',
-    text:`${socket.nick} 更新了本房间的公共视频，点击[此处](${payload.url})即可在新的标签页里打开视频`
+    text:`${socket.nick} 更新了本房间的公共视频，点击[此处](${payload.url})即可在新的标签页里打开视频，也可以在侧边栏中点击“一起看视频”按钮`
   },{channel:socket.channel})
 
   // 保存为档案
@@ -56,7 +50,11 @@ export const info = {
     {
       name: 'url',
       required: true,
-      all: true
+      verify: (url) => {
+        if (typeof url !== 'string') return false
+        if (url.toLowerCase() === 'nothing') return true
+        return /http(s)?:\/\/[\w.]+[\w\/]*[\w.]*\??[\w=&\+\%]*/is.test(url)
+      }
     }
   ],
   level: UAC.levels.channelOwner

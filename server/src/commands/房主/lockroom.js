@@ -26,7 +26,7 @@ export async function run(core, server, socket,data) {
     text: `已${mode}该频道`
   }, { channel: socket.channel, level: (level) => level < UAC.levels.moderator })    // 通知本频道内的非管理员
 
-  core.logger.logAction(socket,[],'lockroom',data)
+  core.logger.logAction(socket,[],'lockroom',data, '方法：'+mode)
 }
 
 // module hook functions

@@ -1,9 +1,3 @@
-/*
-  本模块用于添加系统认证信息。
-  本模块由小张软件总程序员Mr_Zhang编写
-  本模块是ZHC专用的，所以不建议其他聊天室使用。
-*/
-
 import * as UAC from '../utility/UAC/_info';
 
 export function init(core){
@@ -92,8 +86,8 @@ export function addAuthToPayload(core,server,socket,payload){
 }
 
 export const info = {
-  name: 'addauth',
-  description: '添加一个认证信息',
+  name: 'auth',
+  description: '添加、删除指定识别码的认证信息，不传递参数则显示所有认证',
   usage: `
     API: { cmd: 'addauth', trip: '<目标识别码>', text:'<认证信息>' }
     文本：以聊天形式发送 /addauth <目标识别码> <认证信息>`,
@@ -106,9 +100,7 @@ export const info = {
     },
     {
       name: 'text',
-      verify: (text) => {
-        return typeof text === 'string' && !!text.trim()
-      },
+      verify: (text) => typeof text === 'string' && !!text.trim(),
       all: true,
       errorMessage: '认证信息无效，请重试。',
     }

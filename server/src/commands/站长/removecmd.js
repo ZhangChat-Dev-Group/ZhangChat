@@ -8,9 +8,6 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
-  if (typeof data.command !== 'string'){
-    return true
-  }
   if (core.commands.commands.filter((cmd) => cmd.info.name === data.command).length === 0){
     return server.reply({
       cmd:'warn',
@@ -39,18 +36,18 @@ export async function run(core, server, socket, data) {
   return true;
 }
 
-export const requiredData = ['command'];
 export const info = {
   name: 'removecmd',
   description: '从内存中移除一个命令',
   usage: `
     API: { cmd: 'removecmd', command: '<目标命令的名称>' }
     文本：以聊天形式发送 /removecmd 目标命令的名称`,
-  fastcmd:[
+  dataRules: [
     {
-      name:'command',
-      len:1
-    }
+      name: 'command',
+      required: true,
+      verify: command => typeof command === 'string' && !!command,
+    },
   ],
   level: UAC.levels.admin,
 };

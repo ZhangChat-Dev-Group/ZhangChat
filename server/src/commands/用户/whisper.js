@@ -31,11 +31,6 @@ export async function run(core, server, socket, payload) {
   // check user input
   const text = parseText(payload.text);
 
-  if (!text) {
-    // lets not send objects or empty text, yea?
-    return server.police.frisk(socket.address, 13);
-  }
-
   // check for spam
   const score = text.length / 83 / 4;
   if (server.police.frisk(socket.address, score)) {

@@ -85,18 +85,7 @@ export async function run(core, server, socket, data) {
     banner: UAC.getUserDetails(socket),
   }, { level: UAC.isModerator });
 
-  // stats are fun
-  core.stats.increment('users-banned');
-
   core.logger.logAction(socket,[],'ban',data,`[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}`)
-
-  if (!core.configManager.save()) {
-    return server.broadcast({
-      cmd: 'warn',
-      text: '保存配置失败，请检查日志。',
-    }, {level:UAC.isModerator});
-  }
-
   return true;
 }
 

@@ -10,7 +10,7 @@ export async function run(core, server, socket, data) {
     // moving them into the same channel? y u do this?
     server.reply({
       cmd: 'warn',
-      text: '不能把目标用户移动到相同的房间里',
+      text: '不能把目标用户移动到相同的频道里',
     }, socket);
     return true;
   }
@@ -43,7 +43,7 @@ export async function run(core, server, socket, data) {
     // That nickname is already in that channel
     server.reply({
       cmd: 'warn',
-      text: '不能移动该用户，因为目标房间内已经有人使用了他昵称了',
+      text: '不能移动该用户，因为目标频道内已经有人使用了他昵称了',
     }, socket);
     return true;
   }
@@ -106,7 +106,7 @@ export async function run(core, server, socket, data) {
   }, { channel: data.channel, level: UAC.isModerator });
   server.broadcast({
     cmd: 'info',
-    text:`${badClient.nick} 被移出该房间`
+    text:`${badClient.nick} 被移出该频道`
   },{ channel: socket.channel, level: (level) => level < UAC.levels.moderator })
   server.broadcast({
     cmd:'info',
@@ -125,10 +125,10 @@ export async function run(core, server, socket, data) {
 export const requiredData = ['nick', 'channel'];
 export const info = {
   name: 'moveuser',
-  description: '将目标用户正常移动到指定的房间',
+  description: '将目标用户正常移动到指定的频道',
   usage: `
     API: { cmd: 'moveuser', nick: '<target nick>', channel: '<new channel>' }
-    文本：以聊天形式发送 /moveuser 目标昵称 目标房间`,
+    文本：以聊天形式发送 /moveuser 目标昵称 目标频道`,
   runByChat: true,
   dataRules: [
     {

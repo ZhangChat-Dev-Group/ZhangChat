@@ -138,6 +138,7 @@ class MainServer extends WsServer {
 
     this.bannedIPs.push(ip)    //添加到封禁列表
     this.core.configManager.set('bannedIPs', this.bannedIPs)    // 设置并保存封禁列表
+    this.core.stats.set('users-banned', this.bannedIPs.length)
     var sockets = this.findSockets({
       address: ip
     })    //寻找目标IP的用户
@@ -158,6 +159,7 @@ class MainServer extends WsServer {
 
     this.bannedIPs = this.bannedIPs.filter((i) => i !== ip)    //从封禁列表中删除
     this.core.configManager.set('bannedIPs', this.bannedIPs)
+    this.core.stats.set('users-banned', this.bannedIPs.length)
 
     return true    //返回数据
   }
@@ -170,6 +172,7 @@ class MainServer extends WsServer {
   unbanall() {
     this.bannedIPs = []    //解封
     this.core.configManager.set('bannedIPs', this.bannedIPs)    // 同步封禁列表
+    this.core.stats.set('users-banned', this.bannedIPs.length)
   }
 
   /**
@@ -401,6 +404,33 @@ class MainServer extends WsServer {
   }
 
   /**
+   * 快速给一个socket发送一个warn，仿十字街
+   * @param {String} text 警告信息
+   * @param {ws#WebSocket} socket 目标socket
+   * @public
+   * @example
+   * server.replyWarn('我是傻逼', targetSocket)
+   */
+  replyWarn(text, socket) {
+    this.reply({
+      cmd: 'warn',
+      text,
+    }, socket)
+  }
+
+  /**
+   * 快速给一个Socket发送一个info，仿十字街
+   * @param {String} text 信息
+   * @param {ws#WebSocket} socket 目标socket
+   */
+  replyInfo(text, socket) {
+    this.reply({
+      cmd: 'info',
+      text,
+    }, socket)
+  }
+
+  /**
     * Finds sockets/clients that meet the filter requirements, then passes the data to them
     * @param {Object} payload Object to convert to json for transmission
     * @param {Object} filter see `this.findSockets()`
@@ -427,8 +457,25 @@ class MainServer extends WsServer {
   }
 
   /**
+    * 广播一个info，仿十字街
+    * @param {String} text 要广播的info的文本
+    * @param {Object} filter see `this.findSockets()`
+    * @example
+    * server.broadcastInfo('提示：MrZhang365是傻逼', { channel: 'programming' });
+    * @public
+    * @return {Boolean} 请参考 `this.broadcast()`
+    */
+  broadcastInfo(text, filter) {
+    return this.broadcast({
+      cmd: 'info',
+      text,
+    }, filter)
+  }
+
+  // 这里本来想再写一个broadcastWarn，但是我觉得很少用到这个东西，所以就暂时不写了
+
+  /**
     * Finds sockets/clients that meet the filter requirements, returns result as array
-    * @param {Object} data Object to convert to json for transmission
     * @param {Object} filter The socket must of equal or greater attribs matching `filter`
     * @example
     * // match all sockets:
@@ -487,6 +534,16 @@ class MainServer extends WsServer {
     });
 
     return matches;
+  }
+
+  /**
+   * 查找一个与提供的过滤规则相匹配的客户端，如果有多个则返回第一个（按照连接时间先后排序），没有则返回 null
+   * @param {Object} filter 过滤规则
+   * @public
+   * @returns {ws#WebSocket|null} 目标客户端
+   */
+  findSocket(filter) {
+    return this.findSockets(filter)[0] || null
   }
 
   /**

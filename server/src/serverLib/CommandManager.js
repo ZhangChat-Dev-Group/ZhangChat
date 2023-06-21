@@ -8,7 +8,6 @@ import {
 import didYouMean from 'didyoumean2';
 import {
   isRegExp,
-  isArray,
 } from 'util';
 
 // default command modules path
@@ -203,7 +202,8 @@ class CommandManager {
     const missing = []
     let i = 0
     for (i in rules) {
-      if (typeof data[rules[i].name] === 'undefined' && rules[i].required) {
+      if (typeof data[rules[i].name] === 'undefined' && !rules[i].required) continue
+      if (typeof data[rules[i].name] === 'undefined') {
         // 丢了个参数
         missing.push(rules[i].name)
         continue    // 继续执行下一次循环
@@ -214,10 +214,7 @@ class CommandManager {
         // 返回值类型为string则报错，为false返回errorMessage的内容（没有则返回默认报错内容），为true则说明验证通过
         let result = rules[i].verify(data[rules[i].name])
 
-        if (result === true) {
-          // 验证通过
-          continue
-        }
+        if (result === true) continue
 
         return result || rules[i].errorMessage || `错误：参数 ${rules[i].name} 的值有误，请查证后再试`    // 报错
 
@@ -322,10 +319,9 @@ class CommandManager {
     * @return {*} Arbitrary module return data
     */
   async execute(command, server, socket, data) {
-    if (isArray(command.info.dataRules)) {
+    if (Array.isArray(command.info.dataRules)) {
       // 命令模块要求检查用户输入值是否合法
       const msg = this.verifyData(command.info.dataRules, data)
-      console.debug('验证信息：'+msg)
       if (typeof msg === 'string') {
         this.handleCommand(server, socket, {
           cmd: 'socketreply',

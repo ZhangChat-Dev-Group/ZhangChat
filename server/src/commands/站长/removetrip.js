@@ -48,18 +48,20 @@ export async function run(core, server, socket, data) {
   },socket)
   core.logger.logAction(socket,[],'removetrip',data)
 }
-export const requiredData = ['trip'];
+
 export const info = {
   name: 'removetrip',
   description: '取消替换识别码',
   usage: `
     API: { cmd: 'removetrip', trip: '<识别码>' }
     文本：以聊天形式发送 /removetrip <识别码>`,
-  fastcmd:[
+  runByChat: true,
+  dataRules: [
     {
-      name:'trip',
-      len:1,
-      check: /^[a-zA-Z0-9/\+]{6}$/
+      name: 'trip',
+      verify: UAC.verifyTrip,
+      errorMessage: UAC.nameLimit.trip,
+      required: true,
     }
   ],
   level: UAC.levels.admin,

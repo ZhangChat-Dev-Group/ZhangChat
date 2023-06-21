@@ -128,7 +128,7 @@ export const nameLimit = {
   * @return {boolean}
   */
 export function verifyNickname(nick) {
-  return /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,24}$/.test(nick);
+  return typeof nick === 'string' && /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,24}$/.test(nick);
 }
 
 /**
@@ -138,7 +138,7 @@ export function verifyNickname(nick) {
   * @return {boolean}
   */
 export function verifyChannel(channel) {
-  return /^[\u4e00-\u9fa5_a-zA-Z0-9\-]{1,30}$/.test(channel);
+  return typeof channel === 'string' && /^[\u4e00-\u9fa5_a-zA-Z0-9\-]{1,30}$/.test(channel);
 }
 
 /**
@@ -148,5 +148,5 @@ export function verifyChannel(channel) {
   * @return {boolean}
   */
 export function verifyTrip(trip) {
-  return /^[a-zA-Z0-9/\+]{6}$/.test(trip);
+  return typeof trip === 'string' && /^[a-zA-Z0-9/\+]{6}$/.test(trip);
 }
