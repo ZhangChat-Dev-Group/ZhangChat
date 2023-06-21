@@ -79,8 +79,8 @@ export function addAuthToPayload(core,server,socket,payload){
   if (!payload.trip){
     return payload
   }
-  if (core.config.auth.filter((a) => a.trip === payload.trip).length > 0){
-    payload.auth = core.config.auth.filter((a) => a.trip === payload.trip)[0].text
+  if (core.config.auth.find((a) => a.trip === payload.trip)){
+    payload.auth = core.config.auth.find((a) => a.trip === payload.trip).info
   }
   return payload
 }
