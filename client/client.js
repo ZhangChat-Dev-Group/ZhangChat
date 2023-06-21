@@ -63,6 +63,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
         'bed.paperee.repl.co',    // 纸片君ee的纸床
 	'imagebed.s3.bitiful.net',    //Dr0让加的
         'captcha.dr0.lol',        // Dr0's Captcha
+	'img1.imgtp.com', 'imgtp.com',    // imgtp
 ];
 
 function getDomain(link) {
