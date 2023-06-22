@@ -114,7 +114,7 @@ export async function run(core, server, socket, data) {
   }
 
   if (core.shieldCheck(core, userInfo.nick)) return server.replyWarn(`昵称包含屏蔽内容，已被拒绝加入`, socket)
-  if (core.shieldCheck(core, userInfo.channel)) return server.replyWarn(`频道名称包含屏蔽内容，已被拒绝加入`, socket)
+  if (core.shieldCheck(core, data.channel)) return server.replyWarn(`频道名称包含屏蔽内容，已被拒绝加入`, socket)
 
   if (userInfo.passwordWarning){
     server.reply({
