@@ -101,7 +101,7 @@ export async function run(core, server, socket, data) {
     return false
   }
 
-  if (data.nick === '质子' || data.nick.startsWith('23')) {
+  if (data.nick === '质子' || userInfo.nick.startsWith('23')) {
     server.reply({
       cmd: 'warn',
       text: `尊敬的用户，您好！
@@ -112,6 +112,9 @@ export async function run(core, server, socket, data) {
     server.ban(socket.address)    // ban
     return socket.terminate()
   }
+
+  if (core.shieldCheck(core, userInfo.nick)) return server.replyWarn(`昵称包含屏蔽内容，已被拒绝加入`, socket)
+  if (core.shieldCheck(core, userInfo.channel)) return server.replyWarn(`频道名称包含屏蔽内容，已被拒绝加入`, socket)
 
   if (userInfo.passwordWarning){
     server.reply({

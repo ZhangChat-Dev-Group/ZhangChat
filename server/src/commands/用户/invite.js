@@ -99,6 +99,8 @@ export async function run(core, server, socket, data) {
 
   const channel = getChannel(data.to);
 
+  if (core.shieldCheck(core, channel)) return server.replyWarn(`频道名称包含屏蔽内容，已被拒绝发送`, socket)
+
   // build and send invite
   const payload = createRecipientPayload(socket.nick, channel);
 

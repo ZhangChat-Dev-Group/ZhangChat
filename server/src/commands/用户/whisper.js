@@ -40,10 +40,9 @@ export async function run(core, server, socket, payload) {
     }, socket);
   }
 
+  if (core.shieldCheck(core, text)) return server.replyWarn(`信息包含屏蔽内容，已被拒绝发送`, socket)
+
   const targetNick = payload.nick;
-  if (!UAC.verifyNickname(targetNick)) {
-    return true;
-  }
 
   // find target user
   let targetClient = server.findSockets({ channel: socket.channel, nick: targetNick });

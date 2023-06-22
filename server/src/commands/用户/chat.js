@@ -39,6 +39,8 @@ export async function run(core, server, socket, data) {
     }, socket);
   }
 
+  if (core.shieldCheck(core, text)) return server.replyWarn(`信息包含屏蔽内容，已被拒绝发送`, socket)
+
   // build chat payload
   const payload = {
     cmd: 'chat',

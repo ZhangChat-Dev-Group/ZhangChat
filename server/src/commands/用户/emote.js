@@ -41,6 +41,8 @@ export async function run(core, server, socket, payload) {
     text = ` ${text}`;
   }
 
+  if (core.shieldCheck(core, text)) return server.replyWarn(`信息包含屏蔽内容，已被拒绝发送`, socket)
+
   const newPayload = {
     cmd: 'info',
     type: 'emote',
