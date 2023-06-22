@@ -92,7 +92,7 @@ export const info = {
   dataRules:[
     {
       name:'to',
-      verify: UAC.verifyChannel,
+      verify: channel => UAC.verifyChannel(channel) || channel === '*',
       errorMessage: UAC.nameLimit.channel,
       required: true,
     }
