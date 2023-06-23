@@ -5,13 +5,6 @@ export async function run(core, server, socket, data) {
   const ip = data.ip
   let badClients = server.findSockets({ address: ip });
 
-  if (badClients.length === 0) {
-    return server.reply({
-      cmd: 'warn',
-      text: '找不到目标用户',
-    }, socket);
-  }
-
   if (badClients.find(s => s.level >= socket.level)){    //防止封禁其他管理员开的小号
     return server.reply({
       cmd: 'warn',
@@ -52,18 +45,14 @@ export async function run(core, server, socket, data) {
     })
   }
 
-  console.log(`[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}`)
-
   // notify mods
   server.broadcast({
     cmd: 'info',
-    text: `[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}\n您可以通过上面提供的IP来解除封禁该用户`,
+    text: `[${socket.trip}] ${socket.nick} 封禁了IP地址：${ip}\n波及用户：\n${strUsersList}`,
     channel: socket.channel,
-    user: UAC.getUserDetails(badClient),
-    banner: UAC.getUserDetails(socket),
   }, { level: UAC.isModerator });
 
-  core.logger.logAction(socket,[],'ban',data,`[${socket.trip}] ${socket.nick} 封禁了 ?${socket.channel} 的 ${targetNick}。\n波及用户：\n${strUsersList} \n${targetNick} IP地址为：${badClient.address}`)
+  core.logger.logAction(socket,[],'banip',data,`[${socket.trip}] ${socket.nick} 封禁了IP地址：${ip}\n波及用户：\n${strUsersList}`)
   return true;
 }
 
