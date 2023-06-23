@@ -12,6 +12,8 @@ export async function run(core, server, socket, data) {
     }, socket);
   }
 
+  if (server.ban(ip) === false) return server.replyWarn('此IP已经被封禁了', socket)
+
   var formated = {}
   badClients.forEach((user) => {
     if (typeof formated[user.channel || server.cmdKey] !== 'object'){
