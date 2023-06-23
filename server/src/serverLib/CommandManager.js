@@ -202,7 +202,11 @@ class CommandManager {
     const missing = []
     let i = 0
 
-    if (typeof data.nick === 'string') data.nick = data.nick.replace(/@/g, '')    // 自动去掉 @
+    if (typeof data.nick === 'string') {
+      var nickArr = data.nick.split('#')
+      nickArr[0] = nickArr[0].replace(/@/g, '')
+      data.nick = nickArr.join('#')
+    }
 
     for (i in rules) {
       if (typeof data[rules[i].name] === 'undefined' && !rules[i].required) continue
