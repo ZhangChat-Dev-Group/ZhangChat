@@ -201,6 +201,9 @@ class CommandManager {
   verifyData(rules, data) {
     const missing = []
     let i = 0
+
+    if (typeof data.nick === 'string') data.nick = data.nick.replace(/@/g, '')    // 自动去掉 @
+
     for (i in rules) {
       if (typeof data[rules[i].name] === 'undefined' && !rules[i].required) continue
       if (typeof data[rules[i].name] === 'undefined') {
