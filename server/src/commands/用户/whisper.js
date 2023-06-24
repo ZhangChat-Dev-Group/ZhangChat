@@ -79,7 +79,7 @@ export async function run(core, server, socket, payload) {
     from: socket.nick,
     trip: socket.trip || '',
     msg:text,    //bot支持
-    text: `${socket.nick} 向你发送私信：${text}`,
+    text: `${socket.nick} 向你发送私信: ${text}`,
   }, targetClient);
 
   targetClient.whisperReply = socket.nick;
@@ -87,7 +87,7 @@ export async function run(core, server, socket, payload) {
   server.reply({
     cmd: 'info',
     type: 'whisper',
-    text: `你向 @${targetNick} 发送私信：${text}`,
+    text: `你向 @${targetNick} 发送私信: ${text}`,
   }, socket);
 
   return true;

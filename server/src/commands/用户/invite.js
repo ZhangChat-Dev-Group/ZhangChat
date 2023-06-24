@@ -44,7 +44,7 @@ export function createRecipientPayload (inviter, channel) {
     cmd: 'info',
     type: 'invite',
     from: inviter,
-    text: `${inviter} 邀请你去 ?${channel}`,
+    text: `${inviter} 邀请你去[另一个频道](/?${channel})`,
   };
 }
 
@@ -58,7 +58,7 @@ export function createSuccessPayload (nick, channel) {
     cmd: 'info',
     type: 'invite',
     invite: channel,
-    text: `你邀请了 ${nick} 去 ?${channel}`,
+    text: `你邀请了 ${nick} 去[另一个频道](/?${channel})`,
   };
 }
 

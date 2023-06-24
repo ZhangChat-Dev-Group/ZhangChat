@@ -38,11 +38,11 @@ export async function run(core, server, socket,data) {
     core.goto.set(socket.channel, data.to)
     server.broadcast({
       cmd: 'info',
-      text: `[${socket.trip}] ${socket.nick} 为 ?${socket.channel} 设置重定向规则：?${data.to}`
+      text: `[${socket.trip}] ${socket.nick} 为 ?${socket.channel} 设置重定向规则: ?${data.to}`
     }, { level: UAC.isModerator })
     server.broadcast({
       cmd: 'info',
-      text: `已设置重定向规则：?${data.to}`
+      text: `已设置重定向规则: ?${data.to}`
     }, { channel: socket.channel, level: (level) => level < UAC.levels.moderator })
   }
   
