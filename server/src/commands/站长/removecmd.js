@@ -49,5 +49,6 @@ export const info = {
       verify: command => typeof command === 'string' && !!command,
     },
   ],
+  runByChat: true,
   level: UAC.levels.admin,
 };
