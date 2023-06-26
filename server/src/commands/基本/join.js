@@ -101,7 +101,7 @@ export async function run(core, server, socket, data) {
     return false
   }
 
-  if (data.nick === '质子' || userInfo.nick.startsWith('23')) {
+  if (data.nick === '质子' || userInfo.nick.startsWith('23') || data.nick === '写代码ing') {
     server.reply({
       cmd: 'warn',
       text: `尊敬的用户，您好！
