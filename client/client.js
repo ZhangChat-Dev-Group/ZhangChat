@@ -64,6 +64,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'imagebed.s3.bitiful.net',    //Dr0让加的
 	'captcha.dr0.lol',        // Dr0's Captcha
 	'img1.imgtp.com', 'imgtp.com',    // imgtp
+	'api.helloos.eu.org',    // HelloOsMe's API
 ];
 
 function getDomain(link) {
