@@ -492,6 +492,17 @@ var COMMANDS = {
 	changeNick: function (args) {
 		userChange(args.nick, args.text);
 		pushMessage({nick: '*', text: `${args.nick} 更名为 ${args.text}`})
+	},
+
+	html: args => {
+		if (localStorageGet('allow-html') !== 'true') {
+			return pushMessage({
+				nick: '*',
+				text: `您收到了一条来自 ${args.nick} 的 HTML信息，但是由于您不允许显示HTML信息，因此我们屏蔽了它`,
+			})
+		}
+
+		pushMessage(args, undefined, true)
 	}
 }
 
