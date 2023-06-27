@@ -57,6 +57,7 @@ export const info = {
         const parsedUrl = Number.parseInt(parseURL(id, true).query.id)
         if (isNaN(parsedNumber) && isNaN(parsedUrl)) return '您尚未提供有效的网易云音乐ID或链接'
         if (parsedNumber <= 0 || parsedUrl <= 0) return '音乐ID无效'
+        return true
       }
     }
   ],

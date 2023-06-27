@@ -1024,6 +1024,10 @@ if (localStorageGet('rainbow-nick') == 'true') {
 	$('#rainbow-nick').checked = true;
 }
 
+if (localStorageGet('allow-html') == 'true') {
+	$('#allow-html').checked = true;
+}
+
 if (localStorageGet('show-head') == 'false') {
 	$('#show-head').checked = false;
 }
@@ -1045,6 +1049,15 @@ $('#joined-left').onchange = function (e) {
 
 $('#fun-system').onchange = function (e) {
 	localStorageSet('fun-system', !!e.target.checked);
+}
+
+$('#allow-html').onchange = function (e) {
+	localStorageSet('allow-html', !!e.target.checked);
+	if (!!!e.target.checked) return
+	pushMessage({
+		nick: '!',
+		text: 'HTML信息给我们带来了很多欢乐，但同时，也有一些安全风险，请慎用！\nMrZhang365：这件[事](https://hiyoteam.github.io/ChatroomHistoryBook/#html%E6%BC%8F%E6%B4%9E)确确实实是吓到我了，以至于我现在还有点心理阴影！',
+	})
 }
 
 $('#parse-latex').onchange = function (e) {
