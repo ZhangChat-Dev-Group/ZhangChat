@@ -8,6 +8,7 @@ export async function run(core, server, socket, payload) {
 export function initHooks(server) {
   server.registerHook('in', 'chat', this.inCommingData.bind(this));
   server.registerHook('out', 'chat', this.outGoingData.bind(this));
+  server.registerHook('out', 'html', this.outGoingData.bind(this));
 }
 
 export function inCommingData(core,server,socket,payload){

@@ -656,7 +656,7 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 			$('#chatinput').focus();
 		}
 
-		nickLinkEl.oncontextmenu = function(e){
+		if (!html) nickLinkEl.oncontextmenu = function(e){
 			e.preventDefault();
 			var replyText = buildReplyText({nick:args.nick, trip: args.trip || ''}, args.text)
 			replyText += $('#chatinput').value
