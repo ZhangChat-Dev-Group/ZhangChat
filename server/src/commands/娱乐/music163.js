@@ -2,7 +2,7 @@ import * as UAC from '../utility/UAC/_info';
 import { parse as parseURL } from 'url';
 
 // module main
-export async function run(core, server, socket, payload) {
+export async function run(core, server, socket, data) {
   if (server.police.frisk(socket.address, 2)){
     return server.reply({
       cmd:'warn',
@@ -10,8 +10,8 @@ export async function run(core, server, socket, payload) {
     },socket)
   }
 
-  const parsedNumber = Number.parseInt(id)
-  const parsedUrl = Number.parseInt(parseURL(id, true).query.id)
+  const parsedNumber = Number.parseInt(data.id)
+  const parsedUrl = Number.parseInt(parseURL(data.id, true).query.id)
   const id = parsedNumber || parsedUrl
 
   const payload = {
