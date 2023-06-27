@@ -29,7 +29,7 @@ export async function run(core, server, socket, data) {
   }
 
   try{
-    const url = getBilibiliPlayerLink(data.id)
+    const url = await getBilibiliPlayerLink(data.id)
   } catch(e) {
     return server.replyWarn(`获取哔哩哔哩外链播放器链接失败，请将此问题上报给管理员或开发人员，谢谢合作`, socket)
   }
