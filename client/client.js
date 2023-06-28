@@ -78,6 +78,8 @@ function isWhiteListed(link) {
 	return imgHostWhitelist.indexOf(getDomain(link)) !== -1;
 }
 
+var allowAudio = true;    // 允许音频
+
 // 这个函数由 @Dr0（https://greasyfork.org/zh-CN/users/1017687-greendebug） 编写
 function isAudioFile(filename) {
     var audioRegex = /\.(mp3|wav|ogg|mp4|flac|m4a|aac)$/i; // 音频文件后缀的正则表达式
@@ -97,7 +99,7 @@ md.renderer.rules.image = function (tokens, idx, options) {
         var suffix = options.xhtmlOut ? ' /' : '';
         var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
         return `<a href="${src}" target="_blank" rel="noreferrer"><img${scrollOnload}${imgSrc}${alt}${title}${suffix} class="text"></a>`;
-    } else if (isAudioFile(src)) {
+    } else if (isAudioFile(src) && allowAudio) {
         var audioSrc = ` src="${Remarkable.utils.escapeHtml(tokens[idx].src)}"`;
         var title = tokens[idx].title ? (` title="${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title))}"`) : '';
         var alt = ` alt="${(tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '')}"`;
@@ -1105,6 +1107,11 @@ if (localStorageGet('allow-imgur') == 'false') {
 	allowImages = false;
 }
 
+if (localStorageGet('allow-audio') == 'false') {
+	$('#allow-audio').checked = false;
+	allowAudio = false;
+}
+
 $('#auto-login').onchange = function (e) {
 	localStorageSet('auto-login', !!e.target.checked);
 }
@@ -1113,6 +1120,12 @@ $('#allow-imgur').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('allow-imgur', enabled);
 	allowImages = enabled;
+}
+
+$('#allow-audio').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('allow-audio', enabled);
+	allowAudio = enabled;
 }
 
 $('#rainbow-nick').onchange = function (e) {
