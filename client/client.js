@@ -78,19 +78,35 @@ function isWhiteListed(link) {
 	return imgHostWhitelist.indexOf(getDomain(link)) !== -1;
 }
 
+// 这个函数由 @Dr0（https://greasyfork.org/zh-CN/users/1017687-greendebug） 编写
+function isAudioFile(filename) {
+    var audioRegex = /\.(mp3|wav|ogg|mp4|flac|m4a|aac)$/i; // 音频文件后缀的正则表达式
+	// MrZhang365：6，mp4当成音频播放
+	// m4a和aac是MrZhang365、zzChumo（https://www.zzchat.cf/）等人额外添加的
+
+    return audioRegex.test(filename);
+}
+
 md.renderer.rules.image = function (tokens, idx, options) {
-	var src = Remarkable.utils.escapeHtml(tokens[idx].src);
+    var src = Remarkable.utils.escapeHtml(tokens[idx].src);
 
-	if (isWhiteListed(src) && allowImages) {
-		var imgSrc = ` src="${Remarkable.utils.escapeHtml(tokens[idx].src)}"`;
-		var title = tokens[idx].title ? (` title="${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title))}"`) : '';
-		var alt = ` alt="${(tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '')}"`;
-		var suffix = options.xhtmlOut ? ' /' : '';
-		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
-		return `<a href="${src}" target="_blank" rel="noreferrer"><img${scrollOnload}${imgSrc}${alt}${title}${suffix} class="text"></a>`;
-	}
+    if (isWhiteListed(src) && allowImages) {
+        var imgSrc = ` src="${Remarkable.utils.escapeHtml(tokens[idx].src)}"`;
+        var title = tokens[idx].title ? (` title="${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title))}"`) : '';
+        var alt = ` alt="${(tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '')}"`;
+        var suffix = options.xhtmlOut ? ' /' : '';
+        var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
+        return `<a href="${src}" target="_blank" rel="noreferrer"><img${scrollOnload}${imgSrc}${alt}${title}${suffix} class="text"></a>`;
+    } else if (isAudioFile(src)) {
+        var audioSrc = ` src="${Remarkable.utils.escapeHtml(tokens[idx].src)}"`;
+        var title = tokens[idx].title ? (` title="${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title))}"`) : '';
+        var alt = ` alt="${(tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '')}"`;
+        var suffix = options.xhtmlOut ? ' /' : '';
+        var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
+        return `<a href="${src}" target="_blank" rel="noreferrer"><audio ${scrollOnload}${audioSrc}${alt}${title}${suffix} controls></audio></a>`;
+    }
 
-	return `<a href="${src}" target="_blank" rel="noreferrer">${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src))}</a>`;
+    return `<a href="${src}" target="_blank" rel="noreferrer">${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src))}</a>`;
 };
 
 md.renderer.rules.link_open = function (tokens, idx, options) {
