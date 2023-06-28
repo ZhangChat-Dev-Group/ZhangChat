@@ -2,7 +2,7 @@ import * as UAC from '../utility/UAC/_info';
 
 export async function getBilibiliPlayerLink(videoId) {
   // 构建请求链接
-  const apiUrl = `https://api.bilibili.com/x/player/playurl?bvid=${videoId}`;
+  const apiUrl = `https://api.bilibili.com/x/web-interface/view?bvid=${videoId}`;
 
   // 发送异步请求
   const response = await fetch(apiUrl);
@@ -13,10 +13,7 @@ export async function getBilibiliPlayerLink(videoId) {
     throw new Error(`请求错误：${data.message}`);
   }
 
-  // 提取外链播放器链接
-  const playerUrl = data.data.durl[0].url;
-
-  return playerUrl;
+  return `https://player.bilibili.com/player.html?aid=${data.data.aid}&bvid=${data.data.bvid}&cid=${data.data.pages[0].cid}&page=1`
 }
 
 // module main
@@ -29,7 +26,7 @@ export async function run(core, server, socket, data) {
   }
 
   try{
-    const url = await getBilibiliPlayerLink(data.id)
+    var url = await getBilibiliPlayerLink(data.id)
   } catch(e) {
     return server.replyWarn(`获取哔哩哔哩外链播放器链接失败，请将此问题上报给管理员或开发人员，谢谢合作。\n异常：${e.message}`, socket)
   }
