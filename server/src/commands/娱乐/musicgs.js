@@ -15,7 +15,7 @@ export async function run(core, server, socket, data) {
   const payload = {
     cmd: 'html',
     nick: socket.nick,
-    text: `<iframe frameborder="0" style="width:400px;height:145px;" src="https://music.zzcm.fun/ply.html?${id}"></iframe>`,
+    text: `<iframe frameborder="0" style="width:300px;border-radius:20px;height:145px;" src="https://music.zzcm.fun/ply.html?${id}"></iframe>`,
     level: socket.level,
   }
 
