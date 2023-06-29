@@ -45,7 +45,7 @@ export function initHooks(server) {
 
 export function joinCheck(core, server, socket, payload) {
   const joinModule = core.commands.get('join')
-  const userInfo = joinModule.parseNickname(payload)
+  const userInfo = joinModule.parseNickname(core, payload)
 
   for (let i of core.config.xxs) {
     if (userInfo.nick.toLowerCase().includes(i)) {
