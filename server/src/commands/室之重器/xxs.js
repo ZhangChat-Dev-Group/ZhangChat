@@ -60,7 +60,7 @@ export function joinCheck(core, server, socket, payload) {
     }
   }
 
-  return true
+  return payload
 }
 
 // module meta
