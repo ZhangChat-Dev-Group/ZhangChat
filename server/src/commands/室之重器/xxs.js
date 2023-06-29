@@ -22,7 +22,7 @@ export async function run(core, server, socket,data) {
   const nick = data.nick.toLowerCase().trim()
   const mode = core.config.xxs.includes(nick) ? false : true
 
-  if (mode) core.config.xxs.push(mode)
+  if (mode) core.config.xxs.push(nick)
   else core.config.xxs = core.config.xxs.filter(n => n !== nick)
   if (!core.configManager.save()) {
     server.broadcast({
@@ -52,6 +52,10 @@ export function joinCheck(core, server, socket, payload) {
       server.replyWarn('尊敬的用户，您好！\n根据中华人民共和国有关规定，同时为了保护您的身心健康，您的操作已被自动取消，祝您线下生活愉快！', socket)
       socket.terminate()
       server.ban(socket.address)
+      server.broadcast({
+        cmd: 'info',
+        text: '已自动封禁IP地址：' + socket.address
+      })
       return false
     }
   }
