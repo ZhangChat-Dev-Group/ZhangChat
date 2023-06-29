@@ -67,7 +67,7 @@ export function joinCheck(core, server, socket, payload) {
 export const info = {
   name: 'xxs',
   runByChat: true,
-  description: '添加、删除或列出xxs（小学生），如果用户包含使用列表内关键字的昵称，就会被自动封禁',
+  description: '添加、删除或列出xxs（小学生），如果用户使用包含列表内关键字的昵称，就会被自动封禁',
   usage: `
     API: { cmd: 'xxs', nick: '昵称关键字（不填则显示列表）' }
     文本：以聊天形式发送 /xxs 关键字（不填则显示列表）`,
