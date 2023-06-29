@@ -100,19 +100,7 @@ export async function run(core, server, socket, data) {
     socket.terminate()
     return false
   }
-
-  if (data.nick === '质子' || userInfo.nick.startsWith('23') || data.nick === '写代码ing') {
-    server.reply({
-      cmd: 'warn',
-      text: `尊敬的用户，您好！
-	    根据中华人民共和国网络部门有关规定，同时为了保护您的身心健康，我司决定于2023年6月11日正式启用小学生防沉迷模块。
-	    根据防沉迷模块的检测结果，您的操作已被自动取消。
-	    感谢您对我们的大力支持，祝您生活愉快！`
-    },socket)
-    server.ban(socket.address)    // ban
-    return socket.terminate()
-  }
-
+  
   if (core.shieldCheck(core, userInfo.nick)) return server.replyWarn(`昵称包含屏蔽内容，已被拒绝加入`, socket)
   if (core.shieldCheck(core, data.channel)) return server.replyWarn(`频道名称包含屏蔽内容，已被拒绝加入`, socket)
 
