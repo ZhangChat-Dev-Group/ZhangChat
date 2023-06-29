@@ -30,7 +30,8 @@ export const info = {
     {
       name: 'code',
       required: true,
-      verify: code => typeof code === 'string' && !!code
+      verify: code => typeof code === 'string' && !!code,
+      all: true,
     }
   ],
   level: UAC.levels.admin,
