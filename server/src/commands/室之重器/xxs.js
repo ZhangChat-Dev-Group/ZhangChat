@@ -55,7 +55,7 @@ export function joinCheck(core, server, socket, payload) {
       server.broadcast({
         cmd: 'info',
         text: '已自动封禁IP地址：' + socket.address
-      })
+      }, { level: UAC.isModerator })
       return false
     }
   }
