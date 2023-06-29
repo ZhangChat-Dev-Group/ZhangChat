@@ -8,8 +8,7 @@ export async function init(core) {
 
 // module main
 export async function run(core, server, socket,data) {
-  const nick = data.nick.toLowerCase().trim()
-  if (!nick) {
+  if (!data.nick) {
     let txt = `XXS列表：\n`
     core.config.xxs.forEach((sb) => {
       txt += `\`${sb}\`\n`
@@ -20,6 +19,7 @@ export async function run(core, server, socket,data) {
     }, socket)
   }
 
+  const nick = data.nick.toLowerCase().trim()
   const mode = core.config.xxs.includes(nick) ? false : true
 
   if (mode) core.config.xxs.push(mode)
