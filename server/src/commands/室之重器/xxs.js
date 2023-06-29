@@ -1,7 +1,7 @@
 import * as UAC from '../utility/UAC/_info';
 
 export async function init(core) {
-  if (core.config.xxs === undefined){
+  if (!Array.isArray(core.config.xxs)){
     core.config.xxs = []
   }
 }
