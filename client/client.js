@@ -674,7 +674,16 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 			$('#chatinput').focus();
 		}
 
-		if (!html) nickLinkEl.oncontextmenu = function(e){
+		nickLinkEl.oncontextmenu = function(e){
+			if (html) {
+				if (!window.showHtmlCode) return
+				e.preventDefault();
+				pushMessage({
+					nick: '*',
+					text: '```html\n' + args.text
+				})
+				return
+			}
 			e.preventDefault();
 			var replyText = buildReplyText({nick:args.nick, trip: args.trip || ''}, args.text)
 			replyText += $('#chatinput').value
@@ -1075,6 +1084,15 @@ $('#allow-html').onchange = function (e) {
 	pushMessage({
 		nick: '!',
 		text: 'HTML信息给我们带来了很多欢乐，但同时，也有一些安全风险，请慎用！\nMrZhang365：这件[事](https://hiyoteam.github.io/ChatroomHistoryBook/#html%E6%BC%8F%E6%B4%9E)确确实实是吓到我了，以至于我现在还有点心理阴影！',
+	})
+}
+
+$('#show-html-code').onchange = function (e) {
+	window.showHtmlCode = !!e.target.checked
+	if (!!!e.target.checked) return
+	pushMessage({
+		nick: '*',
+		text: '您已开启HTML信息调试模式，右键点击HTML信息对应的昵称即可查看HTML信息源码，此模式将在下次打开网页的时候自动关闭',
 	})
 }
 
