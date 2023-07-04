@@ -7,6 +7,8 @@ export async function init(core) {
 
 // module main
 export async function run(core, server, socket,data) {
+  if (core.lockedrooms.includes('*')) return server.replyWarn('全站锁定时本命令不可用', socket)
+  
   const locked = core.lockedrooms.includes(socket.channel)
   var mode = locked ? '解除锁定' : '锁定'
 
@@ -35,10 +37,10 @@ export function initHooks(server) {
   // TODO: add whisper hook, need hook priorities todo finished first
 }
 export function joinCheck(core, server, socket, payload) {
-  if (payload.channel===undefined || payload.channel===""){
+  if (payload.channel===undefined || !payload.channel){
     return payload
   }
-  if (!core.lockedrooms.includes(payload.channel)){
+  if (!core.lockedrooms.includes(payload.channel) && !core.lockedrooms.includes('*') /* 判断是否全站锁定 */){
     return payload
   }
   const joinModule = core.commands.get('join');
@@ -72,7 +74,7 @@ export function joinCheck(core, server, socket, payload) {
 export const info = {
   name: 'lockroom',
   runByChat: true,
-  description: '锁定你所在的频道，如果当前频道已被锁定则执行解除锁定操作',
+  description: '锁定你所在的频道，如果当前频道已被锁定则执行解除锁定操作（全站锁定时本命令不可用）',
   usage: `
     API: { cmd: 'lockroom' }
     文本：以聊天形式发送 /lockroom`,
