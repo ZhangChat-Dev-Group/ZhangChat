@@ -546,7 +546,7 @@ function buildReplyText(user, text) {
 
 window.captchaCallback = token => {
 	// 验证码回调函数
-	$('captcha').remove()    // 删除验证码元素，防止后面验证码自动重置导致页面自动滚动（新XChat开发时的经验）
+	$('#captcha').remove()    // 删除验证码元素，防止后面验证码自动重置导致页面自动滚动（新XChat开发时的经验）
 	pushMessage({
 		nick: '*',
 		text: '已确认你是人，正在加入频道，请稍等片刻...'
