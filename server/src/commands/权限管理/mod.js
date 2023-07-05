@@ -34,7 +34,7 @@ export async function run(core, server, socket, data) {
     text: `记得去运行saveconfig命令来保存配置`,
   }, socket);
 
-  core.logger.logAction(socket,[],'mode',data, mode ? '添加' : '删除')
+  core.logger.logAction(socket,[],'mod',data, mode ? '添加' : '删除')
 
   return true;
 }
