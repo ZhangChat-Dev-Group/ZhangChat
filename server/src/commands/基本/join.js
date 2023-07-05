@@ -142,7 +142,7 @@ export async function run(core, server, socket, data) {
     }
   }
 
-  if (typeof data.captcha === 'string' && data.captcha) {
+  if (typeof data.captcha === 'string' && data.captcha && core.captcha.includes(data.channel)) {
     // 请看 captcha.js 的 joinCheck
     var success = false
     try{
