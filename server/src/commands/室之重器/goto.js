@@ -51,7 +51,7 @@ export async function run(core, server, socket,data) {
 
 // module hook functions
 export function initHooks(server) {
-  server.registerHook('in', 'join', this.ChangeChannel.bind(this),-1);
+  server.registerHook('in', 'join', this.ChangeChannel.bind(this), -1);
   // TODO: add whisper hook, need hook priorities todo finished first
 }
 export function ChangeChannel(core, server, socket, payload) {

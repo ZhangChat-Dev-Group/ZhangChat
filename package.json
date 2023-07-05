@@ -21,6 +21,7 @@
   "dependencies": {
     "crypto-js": "^4.1.1",
     "esm": "^3.2.25",
+    "hcaptcha": "^0.1.1",
     "http-server": "^0.12.1",
     "ip2proxy-nodejs": "^4.2.2",
     "moment": "^2.29.4",

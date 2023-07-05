@@ -329,29 +329,6 @@ function notify(args) {
 function getNick() {
 	return myNick.split('#')[0]
 }
-/*
-function getMurmur() {
-	return Fingerprint2.getPromise({}).then(components => {
-		// 参数
-		const values = components.map(function (component) {
-			return component.value
-		});
-		// 指纹
-		myMurmur = Fingerprint2.x64hash128(values[19].join(''), 31);
-		// console.log(murmur)
-	})
-}
-*/
-/*
-function tokenCallback(token) {
-	// debugger
-	setTimeout(() => {
-		document.getElementById('captcha').innerHTML = '' // 清除验证码，防止出现BUG
-	}, 1800)
-
-	join(myChannel, token)
-}
-*/
 
 function join(channel) {
 /*
@@ -395,7 +372,8 @@ function join(channel) {
 			//await getMurmur();
 			// console.log(`murmur is: ${myMurmur}`)
 			//var sendMurmur = encode(myMurmur)
-			send({ cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient', /* murmur: sendMurmur.toString() */ });
+			window.joinPayload = { cmd: 'join', channel: channel, nick: myNick, client: 'ZhangChatClient'}
+			send(window.joinPayload);
 		}
 
 		wasConnected = true;
@@ -522,7 +500,15 @@ var COMMANDS = {
 		}
 
 		pushMessage(args, undefined, true)
-	}
+	},
+	captcha: args => {
+		// 显示验证码
+		pushMessage({
+			nick: '*',
+			text: '当前频道认为你不是人，所以请先完成下面的人机验证：'
+		})
+		pushCaptcha(args.sitekey)
+	},
 }
 
 function buildReplyText(user, text) {
@@ -556,6 +542,58 @@ function buildReplyText(user, text) {
 	}
 
 	return replyText
+}
+
+window.captchaCallback = token => {
+	// 验证码回调函数
+	$('captcha').remove()    // 删除验证码元素，防止后面验证码自动重置导致页面自动滚动（新XChat开发时的经验）
+	pushMessage({
+		nick: '*',
+		text: '已确认你是人，正在加入频道，请稍等片刻...'
+	})
+	if (!window.joinPayload) return pushMessage({
+		nick: '!',
+		text: '发生未知错误：找不到存档的join包\n请尝试刷新网页，如果此问题重复出现，请联系~~大傻逼~~开发者'
+	})
+	window.joinPayload.captcha = token    // 追加验证码token
+	send(window.joinPayload)
+}
+
+function pushCaptcha(sitekey){
+	// Message container
+	var messageEl = document.createElement('div');
+	messageEl.id = 'captcha'
+
+	messageEl.classList.add('message');
+	messageEl.classList.add('info');
+
+	// Nickname
+	var nickSpanEl = document.createElement('span');
+	nickSpanEl.classList.add('nick');
+	messageEl.appendChild(nickSpanEl);
+
+	var nickLinkEl = document.createElement('a');
+	nickLinkEl.textContent = '#';
+
+	var date = new Date(Date.now());
+	nickLinkEl.title = date.toLocaleString();
+	nickSpanEl.appendChild(nickLinkEl);
+
+	hcaptcha.render(messageEl, {
+		sitekey,
+		theme: 'dark',
+		callback: 'captchaCallback',
+	})
+
+	// Scroll to bottom
+	var atBottom = isAtBottom();
+	$('#messages').appendChild(messageEl);
+	if (atBottom && myChannel) {
+		window.scrollTo(0, document.body.scrollHeight);
+	}
+
+	unread += 1;
+	updateTitle();
 }
 
 function pushMessage(args, cls = undefined, html = false) { // cls指定messageEl添加什么classList
@@ -794,7 +832,7 @@ function insertAtCursor(text) {
 }
 
 function send(data) {
-	if (ws && ws.readyState == ws.OPEN) {
+	if (ws && ws.readyState === ws.OPEN) {
 		if ($('#rainbow-nick').checked && data['cmd'] == 'chat') {
 			ws.send(JSON.stringify({cmd: 'changecolor', color: `#${Math.floor(Math.random()*0xffffff).toString(16).padEnd(6,"0")}`}));
 		};

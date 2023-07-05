@@ -17,7 +17,6 @@ export async function run(core, server, socket,data) {
   server.broadcastInfo(`已执行全站${mode ? '锁定' : '解锁'}操作`, { level: (l) => l < UAC.levels.moderator })
 
   core.logger.logAction(socket,[],'locksite',data, '方法：' + mode ? '锁定' : '解锁')
-
 }
 
 // Hook代码请看 lockroom.js

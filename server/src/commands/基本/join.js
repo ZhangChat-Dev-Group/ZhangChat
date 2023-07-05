@@ -3,6 +3,7 @@
 */
 
 import * as UAC from '../utility/UAC/_info';
+const hCaptcha = require('hcaptcha')
 
 // module support functions
 const crypto = require('crypto');
@@ -126,7 +127,7 @@ export async function run(core, server, socket, data) {
       },{channel:data.channel})
       userExists[0].channel = ''    //去掉channel，防止disconnect.js再次广播onlineRemove
       userExists[0].terminate()    //关闭连接
-      server.broadcast({    //广播用户离开通知，如果直接用terminate会出现异步的问题
+      server.broadcast({    // 广播用户离开通知，如果直接用terminate会出现异步的问题
         cmd:'onlineRemove',
         nick: userExists[0].nick
       },{channel:data.channel})
@@ -138,6 +139,25 @@ export async function run(core, server, socket, data) {
       }, socket);
       socket.terminate()
       return false
+    }
+  }
+
+  if (typeof data.captcha === 'string' && data.captcha) {
+    // 请看 captcha.js 的 joinCheck
+    var success = false
+    try{
+      const result = await hCaptcha.verify(core.config.secret, data.captcha, socket.address, core.config.sitekey)
+      success = result.success
+    } catch(e) {
+      return server.replyWarn('无法请求人机验证API，请稍后再试', socket)
+    }
+
+    if (socket.readyState !== 1) return false    // 用户等不及了，直接离开了，那就不执行下面的代码了
+
+    if (!success) {
+      server.replyWarn('我觉得你不是人，请稍后再试', socket)
+      server.police.frisk(socket.address, 30)    // 比较严格的频率限制
+      return socket.terminate()
     }
   }
 

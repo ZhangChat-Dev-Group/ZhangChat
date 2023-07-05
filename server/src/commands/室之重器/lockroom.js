@@ -40,9 +40,11 @@ export function joinCheck(core, server, socket, payload) {
   if (payload.channel===undefined || !payload.channel){
     return payload
   }
+  
   if (!core.lockedrooms.includes(payload.channel) && !core.lockedrooms.includes('*') /* 判断是否全站锁定 */){
     return payload
   }
+
   const joinModule = core.commands.get('join');
   const userInfo = joinModule.parseNickname(core, payload);
   if (typeof userInfo === "string"){
