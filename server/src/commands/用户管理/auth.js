@@ -1,8 +1,8 @@
 import * as UAC from '../utility/UAC/_info';
 
 export function init(core){
-  if (!core.config.auth) {
-    core.config.auth = {}
+  if (!Array.isArray(core.config.auth)) {
+    core.config.auth = []
   }
 }
 
@@ -11,8 +11,8 @@ export async function run(core, server, socket, data) {
   if (typeof data.trip !== 'string') {
     // 未提供识别码，显示列表
     let text = '当前系统认证有：\n'
-    Object.keys(core.config.auth).forEach((trip) => {
-      text += `[\`${trip}\`] \`${core.config.auth[trip]}\`\n`
+    core.config.auth.forEach((a) => {
+      text += `[\`${a.trip}\`] \`${a.info}\`\n`
     })
 
     return server.reply({
@@ -26,14 +26,14 @@ export async function run(core, server, socket, data) {
 
   if (!auth) {
     // 模式：删除
-    if (typeof core.config.auth[trip] !== 'string') {
+    if (typeof core.config.auth.find(a => a.trip === trip) !== 'object') {
       return server.reply({
         cmd: 'warn',
         text: `识别码 ${trip} 没有认证信息`
       }, socket)
     }
 
-    delete core.config.auth[trip]    // 删除
+    core.config.auth = core.config.auth.filter(a => a.trip !== trip)
     server.broadcast({
       cmd: 'info',
       text: `[${socket.trip}] ${socket.nick} 删除了认证信息：${trip}`
@@ -44,7 +44,9 @@ export async function run(core, server, socket, data) {
     }, { trip: trip })
   }else{
     // 模式：添加/修改
-    core.config.auth[trip] = auth
+    core.config.auth.push({
+      trip, info: auth
+    })
 
     server.broadcast({
       cmd: 'info',
