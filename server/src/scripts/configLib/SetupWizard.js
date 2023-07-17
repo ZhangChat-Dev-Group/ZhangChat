@@ -79,22 +79,11 @@ class SetupWizard {
     }
 
     // initialize default mods config
-    if (typeof result.mods === 'undefined') {
-      result.mods = [];
+    if (typeof result.powerfulUsers !== 'object') {
+	    result.powerfulUsers = {}
     }
 
-    if (typeof result.sudoers === 'undefined') {
-      result.sudoers = [];
-    }
-
-    if (result.mods.indexOf(result.trip) === -1){
-      result.mods.push({trip:result.trip})
-    }
-
-    if (result.sudoers.indexOf(result.trip) === -1){
-      result.sudoers.push(result.trip)
-    }
-
+    result[result.trip] = 9999999
     delete result.trip    // 删除trip属性，防止隐私暴漏
 
     // 下面的代码已弃用，因为 EventsLogger.js 可以更好地处理错误
