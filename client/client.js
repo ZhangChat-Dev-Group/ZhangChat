@@ -66,6 +66,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'img1.imgtp.com', 'imgtp.com',    // imgtp
 	'api.helloos.eu.org',    // HelloOsMe's API
 	'cdn.luogu.com.cn',    // luogu
+	'images.weserv.nl',    // 22c的图片代理
 ];
 
 function getDomain(link) {
@@ -339,7 +340,7 @@ function join(channel) {
 	var wsPath = ':6060';
 
 	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
-	const url = ( document.domain === 'xhappy.chat.zhangsoft.cf' ) ? protocol + '//xhappy.chat.zhangsoft.cf/ws/zhc/chat/' : `${protocol}//${document.domain}${wsPath}`
+	const url = ( document.domain === 'chat.zhangsoft.link' ) ? 'wss://chat.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
 	//const url = 'ws://localhost:6060' //本地测试
 
 	//ws = new WebSocket('wss://chat.zhangsoft.cf/ws');

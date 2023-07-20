@@ -19,6 +19,7 @@ export function init(core){
 
 // module main
 export async function run(core, server, socket, data) {
+  return
   if (data.cmdKey !== server.cmdKey) {
     server.reply({
       cmd:'warn',
