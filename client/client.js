@@ -66,7 +66,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'img1.imgtp.com', 'imgtp.com',    // imgtp
 	'api.helloos.eu.org',    // HelloOsMe's API
 	'cdn.luogu.com.cn',    // luogu
-	'images.weserv.nl',    // 22c的图片代理
+	'images.weserv.nl',    // Weserv的图片代理
 ];
 
 function getDomain(link) {
