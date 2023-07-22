@@ -186,6 +186,10 @@ export async function run(core, server, socket, data) {
     client: userInfo.client,
     isBot: socket.isBot || false,
   };
+
+  if (socket.country) {
+    joinAnnouncement.country = socket.country
+  }
   
   await core.commands.handleCommand(server,socket,{
     cmd:'get-history',
