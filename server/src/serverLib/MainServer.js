@@ -197,6 +197,7 @@ class MainServer extends WsServer {
     const newSocket = socket;
 
     newSocket.address = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
+    socket.headers = request.headers
 
     if (newSocket.address.startsWith('::ffff:')){    //去除IPv4里面多余的东西，防止后面识别IP的代码报错。
       newSocket.address = newSocket.address.replace('::ffff:','')
@@ -205,7 +206,7 @@ class MainServer extends WsServer {
     if (this.isBanned(newSocket.address)){    //检查是否被封禁
       this.send({
         cmd:'warn',
-        text:'您已经被封禁，目前无法连接服务器。'
+        text:'您已经被全境封禁，目前无法连接服务器。'
       },newSocket)
       newSocket.terminate()    //强制断开连接
       return false    //不要向下执行
@@ -240,7 +241,7 @@ class MainServer extends WsServer {
     if (this.isBanned(socket.address)){    //检查是否被封禁
       this.send({
         cmd:'warn',
-        text:'您已经被封禁。'
+        text:'您已经被全境封禁。'
       },socket)
       socket.terminate()    //强制断开连接
       return false    //不要向下执行
