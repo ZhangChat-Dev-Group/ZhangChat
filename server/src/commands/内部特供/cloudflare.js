@@ -5,9 +5,9 @@ export function initHooks(server) {
 }
 
 export function location(core,server,socket,payload){
-  console.log(socket.headers)
   if (!socket.headers['cf-ipcountry']) return payload
   socket.country = socket.headers['cf-ipcountry']
+  return payload
 }
 
 export const info = {
