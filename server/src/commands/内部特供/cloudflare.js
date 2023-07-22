@@ -9,6 +9,8 @@ export function location(core,server,socket,payload){
   socket.country = socket.headers['cf-ipcountry']
   if (socket.country.toLowerCase() !== 'CN') {
     server.replyWarn(`很抱歉，我们检测到您不在中华人民共和国境内，所以拒绝了您的访问请求。请到中华人民共和国境内访问本网站，感谢您对我们的支持。\nSorry, we have detected that you are not in the PRC, so we have refused your request for visit. Please visit this website in the PRC and thank you for your support.`, socket)
+    socket.terminate()
+    return false
   }
   return payload
 }
