@@ -55,6 +55,8 @@ export async function run(core, server, socket) {
                        封禁用户数量：${(core.stats.get('users-banned') || 0)}
                        踢出用户数量：${(core.stats.get('users-kicked') || 0)}
                        请求服务器状态次数：${(core.stats.get('stats-requested') || 0)}
+                       有效入站数据：${core.stats.get('incoming-data')} MiB
+                       有效出站数据：${core.stats.get('outgoing-data')} MiB
                        服务器稳定运行时间：${formatTime(process.hrtime(core.stats.get('start-time')))}
                        ---
                        我们以匠心，铸造优秀的匿名聊天室；以标杆，赢得广大用户！

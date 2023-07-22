@@ -300,6 +300,9 @@ class MainServer extends WsServer {
       return;
     }
     // End @todo //
+
+    // 祖传注释：stats are fun
+    this.core.stats.increment('incoming-data', data.length / 1024 / 1024)    // 字节 => MiB
     
     // Execute `in` (incoming data) hooks and process results
     payload = this.executeHooks('in', socket, payload);
@@ -384,6 +387,9 @@ class MainServer extends WsServer {
     try {
       if (socket.readyState === SocketReady) {
         socket.send(JSON.stringify(outgoingPayload));
+
+        // 祖传注释：stats are fun
+        this.core.stats.increment('outgoing-data', JSON.stringify(outgoingPayload).length / 1024 / 1024)
       }
     } catch (e) { /* yolo */ }
   }
