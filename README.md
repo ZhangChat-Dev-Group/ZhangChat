@@ -1,7 +1,7 @@
 # 小张聊天室  
 
 ## 成品  
-https://chat.zhangsoft.cf/  
+https://chat.zhangsoft.link/  
 
 ## 简介  
 这是一个黑客风格的匿名聊天室，基于开源项目 HackChat 编写。  
@@ -31,4 +31,4 @@ XChat基于HackChat，HackChat的GitHub仓库地址为：https://github.com/hack
 - [HackChat](https://github.com/Hack-Chat) 编写底层代码  
 - [MrZhang365](https://blog.mrzhang365.cf) 汉化前端与后端，并在前后端上编写了许多新功能  
 - [paperee](https://paperee.guru) 为前端编写部分主题和功能
-- [Dr0](https://greasyfork.org/zh-CN/users/1017687-greendebug) 为前端编写部分功能，编写油猴脚本
+- [Dr0](https://github.com/redble) 为前端编写部分功能，编写油猴脚本
