@@ -68,6 +68,8 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'cdn.luogu.com.cn',    // luogu
 	'images.weserv.nl',    // Weserv的图片代理
 	'api.remelens.link',    // HelloOsMe's API (another domain
+	'pic.imgdb.cn',    // 聚合图床
+	'blog.mrzhang365.cf',    // MrZhang365's blog
 ];
 
 function getDomain(link) {
