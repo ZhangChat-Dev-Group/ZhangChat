@@ -173,6 +173,9 @@ function getHome() {
 		client.onclose = () => {
 			rej('Connection closed')
 		}
+		client.onopen = () => client.send(JSON.stringify({
+			cmd: 'home'
+		}))
 	})
 }
 
