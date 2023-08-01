@@ -3,7 +3,7 @@ export async function run(core, server, socket, payload) {
   if (socket.channel) return server.replyWarn('现在不应该运行此命令', socket)
   server.reply({
     cmd: 'home',
-    users: server.findSockets({ channel: !!channel }).length,
+    users: server.findSockets({ channel: channel => !!channel }).length,
   }, socket)
   socket.terminate()
 }
