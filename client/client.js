@@ -159,7 +159,7 @@ var verifyNickname = function (nick) {
 function getHome() {
 	return new Promise((res, rej) => {
 		const client = new WebSocket(getWsAddress())
-		client.onerror(() => rej('Failed to connect to server'))
+		client.onerror = () => rej('Failed to connect to server')
 		client.onmessage = message => {
 			const payload = JSON.parse(message.data)
 
