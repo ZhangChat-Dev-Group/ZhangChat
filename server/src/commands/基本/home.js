@@ -4,7 +4,6 @@ export async function run(core, server, socket, payload) {
   server.reply({
     cmd: 'home',
     users: server.findSockets({ channel: !!channel }).length,
-    channels: core.pubChannels,
   }, socket)
   socket.terminate()
 }

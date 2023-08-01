@@ -17,6 +17,15 @@ export async function run(core, server, socket, payload) {
   server.broadcastInfo(`${socket.nick} 设置 ?${socket.channel} 为${mode ? '' : '非'}公开频道`, { level: UAC.isModerator })
 }
 
+export function showChannels(core, server, socket, payload) {
+  payload.channels = core.pubChannels
+  return payload
+}
+
+export function initHooks(server) {
+  server.registerHook('out', 'home', this.showChannels.bind(this))
+}
+
 export const info = {
   name: 'public',
   description: '设置当前频道为公开或非公开频道',

@@ -238,6 +238,9 @@ class MainServer extends WsServer {
     * @return {void}
     */
   handleData(socket, data) {
+    // 祖传注释：stats are fun
+    this.core.stats.increment('incoming-data', data.length / 1024 / 1024)    // 字节 => MiB
+
     if (this.isBanned(socket.address)){    //检查是否被封禁
       this.send({
         cmd:'warn',
@@ -292,7 +295,7 @@ class MainServer extends WsServer {
       return;
     }
 
-    if (typeof socket.channel === 'undefined' && (payload.cmd !== 'join' && payload.cmd !== 'chat')) {
+    if (typeof socket.channel === 'undefined' && (payload.cmd !== 'join' && payload.cmd !== 'chat' && payload.cmd !== 'home')) {
       return;
     }
 
@@ -300,9 +303,6 @@ class MainServer extends WsServer {
       return;
     }
     // End @todo //
-
-    // 祖传注释：stats are fun
-    this.core.stats.increment('incoming-data', data.length / 1024 / 1024)    // 字节 => MiB
     
     // Execute `in` (incoming data) hooks and process results
     payload = this.executeHooks('in', socket, payload);
