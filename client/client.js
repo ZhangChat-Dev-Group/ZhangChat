@@ -188,7 +188,7 @@ function buildHome() {
 			'注意：在这里，我们把"房间（chatroom）"称作"频道（channel）"。',
 			`当前在线用户数量：${data.users}`,
 			'主频道（在线用户多）： ?chat',
-			`其他公开频道：${data.channels.map(c => `?${c}`).join(' ')}`,
+			`其他公开频道： ${data.channels.map(c => `?${c}`).join(' ')}`,
 			`您也可以自己创建频道，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
 			`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
 			'---',
