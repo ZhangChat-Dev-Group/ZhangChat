@@ -156,42 +156,78 @@ var verifyNickname = function (nick) {
 	return /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,24}$/.test(nick);
 }
 
-var frontpage = [
-	'# 小张聊天室',
-	'---',
-	'欢迎来到小张聊天室，这是一个黑客风格的聊天室。',
-	'注意：在这里，我们把"房间（chatroom）"称作"频道（channel）"。',
-	'公共频道（在线用户多）：[?chat](/?chat)',
-	`您也可以自己创建频道，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
-	`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
-	'---',
-	'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录。',
-	'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内相关规定。',
-	'您如果对本聊天室不满意或认为受到不公平对待，则可以选择向管埋员申诉或选择离开。',
-	'---',
-	'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室。',
-	'但是由于某些原因，它被开发者魔改成了现在的小张聊天室。',
-	'XChat基于HackChat，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main',
-	'小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat',
-	'在此对HackChat的开发者深表感谢。',
-	'---',
-	'本聊天室开发者：',
-	'@MrZhang365 - [小张的博客](https://blog.mrzhang365.cf/) && [小张软件](https://www.zhangsoft.link/)',
-	'@paperee - [纸片君ee的个人主页](https://paperee.guru/)',
-	'---',
-	'更多代码贡献者：',
-	'@[4n0n4me](http://github.com/xjzh123/) - 编写了[hackchat\\+\\+客户端](https://hc.thz.cool/)',
-	'@[Dr0](https://github.com/redble) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
-	'---',
-	'友情链接：',
-	'[HackChat聊天室](https://hack.chat/)',
-	'[hackchat\\+\\+客户端](https://hc.thz.cool/)',
-	'[TanChat聊天室](https://tanchat.fun/)',
-	'[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
-	'---',
-	'2023.02.23~2023.03.26 [小张聊天室开发组](https://github.com/ZhangChat-Dev-Group) 致',
-	'**本站由[雨云](https://www.rainyun.com/MjcxMTc=_)提供计算服务**',
-].join("\n");
+function getHome() {
+	return new Promise((res, rej) => {
+		const client = new WebSocket(getWsAddress())
+		client.onerror(() => rej('Failed to connect to server'))
+		client.onmessage = message => {
+			const payload = JSON.parse(message.data)
+
+			if (payload.cmd === 'home') {
+				res(payload)
+				client.close()
+			} else {
+				rej('Not home command')
+			}
+		}
+		client.onclose = () => {
+			rej('Connection closed')
+		}
+	})
+}
+
+function buildHome() {
+	getHome().then(data => {
+		const frontpage = [
+			'# 小张聊天室',
+			'---',
+			'欢迎来到小张聊天室，这是一个黑客风格的聊天室。',
+			'注意：在这里，我们把"房间（chatroom）"称作"频道（channel）"。',
+			`当前在线用户数量：${data.users}`,
+			'主频道（在线用户多）： ?chat',
+			`其他公开频道：${data.channels.map(c => `?${c}`).join(' ')}`,
+			`您也可以自己创建频道，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
+			`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
+			'---',
+			'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录。',
+			'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内相关规定。',
+			'您如果对本聊天室不满意或认为受到不公平对待，则可以选择向管埋员申诉或选择离开。',
+			'---',
+			'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室。',
+			'但是由于某些原因，它被开发者魔改成了现在的小张聊天室。',
+			'XChat基于HackChat，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main',
+			'小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat',
+			'在此对HackChat的开发者深表感谢。',
+			'---',
+			'本聊天室开发者：',
+			'@MrZhang365 - [小张的博客](https://blog.mrzhang365.cf/) && [小张软件](https://www.zhangsoft.link/)',
+			'@paperee - [纸片君ee的个人主页](https://paperee.guru/)',
+			'---',
+			'更多代码贡献者：',
+			'@[4n0n4me](http://github.com/xjzh123/) - 编写了[hackchat\\+\\+客户端](https://hc.thz.cool/)',
+			'@[Dr0](https://github.com/redble) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
+			'---',
+			'友情链接：',
+			'[HackChat聊天室](https://hack.chat/)',
+			'[hackchat\\+\\+客户端](https://hc.thz.cool/)',
+			'[TanChat聊天室](https://tanchat.fun/)',
+			'[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
+			'---',
+			'2023.02.23~2023.03.26 [小张聊天室开发组](https://github.com/ZhangChat-Dev-Group) 致',
+			'**本站由[雨云](https://www.rainyun.com/MjcxMTc=_)提供计算服务**',
+		].join("\n");
+		pushMessage({
+			text: frontpage,
+		})
+	})
+	.catch((reason) => {
+		console.error(reason)
+		pushMessage({
+			nick: '!',
+			text: '# 出错了！\n无法连接服务器，这可能是您的网络问题，或者服务器崩溃。\n请稍后再试。'
+		})
+	})
+}
 
 function $(query) {
 	return document.querySelector(query);
@@ -334,20 +370,21 @@ function getNick() {
 	return myNick.split('#')[0]
 }
 
-function join(channel) {
-/*
-	如果在服务器配置期间更改了端口，请更改wsPath端口（例如：':8080'）
-	如果是反向代理，请将wsPath更改为新ws地址（例如：'/chat-ws'）
-*/
+function getWsAddress() {
+	/*
+		如果在服务器配置期间更改了端口，请更改wsPath端口（例如：':8080'）
+		如果是反向代理，请将wsPath更改为新ws地址（例如：'/chat-ws'）
+	*/
 	var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
 	var wsPath = ':6060';
 
 	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
 	const url = ( document.domain === 'chat.zhangsoft.link' ) ? 'wss://chat.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
-	//const url = 'ws://localhost:6060' //本地测试
+	return url
+}
 
-	//ws = new WebSocket('wss://chat.zhangsoft.cf/ws');
-	ws = new WebSocket(url);
+function join(channel) {
+	ws = new WebSocket(getWsAddress());
 	
 	var wasConnected = false;
 
@@ -1487,7 +1524,7 @@ if (!myChannel) {
 	$('#messages').innerHTML = '';
 	$('#footer').classList.add('hidden');
 	$('#sidebar').classList.add('hidden');
-	pushMessage({text: frontpage});
+	buildHome()
 } else {
 	join(myChannel);
 }
