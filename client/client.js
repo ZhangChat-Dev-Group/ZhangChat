@@ -68,6 +68,8 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'cdn.luogu.com.cn',    // luogu
 	'images.weserv.nl',    // Weserv的图片代理
 	'api.remelens.link',    // HelloOsMe's API (another domain
+	'pic.imgdb.cn',    // 聚合图床
+	'blog.mrzhang365.cf',    // MrZhang365's blog
 ];
 
 function getDomain(link) {
@@ -174,12 +176,12 @@ var frontpage = [
 	'在此对HackChat的开发者深表感谢。',
 	'---',
 	'本聊天室开发者：',
-	'@MrZhang365 - [小张的博客](https://blog.mrzhang365.cf/) && [小张软件](https://www.zhangsoft.cf/)',
+	'@MrZhang365 - [小张的博客](https://blog.mrzhang365.cf/) && [小张软件](https://www.zhangsoft.link/)',
 	'@paperee - [纸片君ee的个人主页](https://paperee.guru/)',
 	'---',
 	'更多代码贡献者：',
 	'@[4n0n4me](http://github.com/xjzh123/) - 编写了[hackchat\\+\\+客户端](https://hc.thz.cool/)',
-	'@[Dr0](https://greasyfork.org/zh-CN/users/1017687-greendebug) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
+	'@[Dr0](https://github.com/redble) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
 	'---',
 	'友情链接：',
 	'[HackChat聊天室](https://hack.chat/)',
