@@ -84,7 +84,7 @@ export function initHooks(server) {
 export function AreYouMute(core,server,socket,payload){
   if (isMuted(core, socket.address)){
     const time = moment(isMuted(core, socket.address)).format('YYYY-MM-DD HH:mm:ss')
-    server.replyWarn(`很抱歉，你已经被禁言，禁言将在 ${time} 自动解除，请耐心等待，==不要进进出出==。`)
+    server.replyWarn(`很抱歉，你已经被禁言，禁言将在 ${time} 自动解除，请耐心等待，==不要进进出出==。`, socket)
     return false
   }else{
     return payload
