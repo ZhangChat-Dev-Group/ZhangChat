@@ -70,6 +70,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'api.remelens.link',    // HelloOsMe's API (another domain
 	'pic.imgdb.cn',    // 聚合图床
 	'blog.mrzhang365.cf',    // MrZhang365's blog
+	't00img.yangkeduo.com',    // Dr0反向的拼多多图床
 ];
 
 function getDomain(link) {
