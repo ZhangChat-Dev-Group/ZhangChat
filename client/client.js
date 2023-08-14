@@ -554,6 +554,14 @@ var COMMANDS = {
 		})
 		pushCaptcha(args.sitekey)
 	},
+	delmsg: args => {
+		const nick = document.getElementById(args.id + '-nick')
+		const text = document.getElementById(args.id + '-text')
+
+		if (!nick || !text) return
+		nick.textContent = '[已撤回]' + nick.textContent
+		text.innerHTML = '该信息已被撤回。如果此功能被滥用，请立刻报告管理员。'
+	}
 }
 
 function buildReplyText(user, text) {
@@ -791,6 +799,12 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 	textEl.classList.add('text');
 
 	messageEl.appendChild(textEl)
+
+	// 添加信息ID，方便撤回
+	if (args.id) {
+		nickLinkEl.id = args.id + '-nick'
+		textEl.id = args.id + '-text'
+	}
 	
 	// Scroll to bottom
 	var atBottom = isAtBottom();

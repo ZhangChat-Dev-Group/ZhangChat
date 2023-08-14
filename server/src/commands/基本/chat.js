@@ -3,6 +3,7 @@
 */
 
 import * as UAC from '../utility/UAC/_info';
+const uuid = require('uuid')
 
 // module support functions
 const parseText = (text) => {
@@ -72,8 +73,14 @@ export async function run(core, server, socket, data) {
   }
   
   //记录信息
-  var tileData = [[socket.channel, socket.nick, text, 'chat', 1, socket.head || '/imgs/head.png', socket.address.replace('::ffff:', ''), socket.trip || '无识别码', socket.murmur || '无指纹', socket.location || '定位失败', String(socket.level), socket.token || '无token']]
-  var insertTileSql = "insert into chat(channel, nick, content, cmd, show, head, ip, trip, murmur, city, level, token) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  socket.lastMsg = {
+    id: uuid.v4(),
+    time: Date.now(),
+    msg: payload.text
+  }
+  payload.id = socket.lastMsg.id
+  var tileData = [[socket.channel, socket.nick, text, 'chat', 1, socket.head || '/imgs/head.png', socket.address.replace('::ffff:', ''), socket.trip || '无识别码', socket.murmur || '无指纹', socket.location || '定位失败', String(socket.level), socket.token || '无token', socket.lastMsg.id]]
+  var insertTileSql = "insert into chat(channel, nick, content, cmd, show, head, ip, trip, murmur, city, level, token, msg_id) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
   core.chatDB.insertData(insertTileSql, tileData);
 
   // broadcast to channel peers
