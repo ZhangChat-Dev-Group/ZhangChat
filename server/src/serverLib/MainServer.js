@@ -223,11 +223,6 @@ class MainServer extends WsServer {
     newSocket.on('error', (err) => {
       this.handleError(err);
     });
-
-    this.core.commands.handleCommand(this, socket, {
-      cmd: 'zfw',
-      cmdKey: this.cmdKey,
-    });
   }
 
   /**

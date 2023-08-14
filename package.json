@@ -23,9 +23,9 @@
     "esm": "^3.2.25",
     "hcaptcha": "^0.1.1",
     "http-server": "^0.12.1",
-    "ip2proxy-nodejs": "^4.2.2",
+    "ip2location-nodejs": "^9.5.0",
     "moment": "^2.29.4",
-    "sqlite3": "^5.1.4",
+    "sqlite3": "^5.1.6",
     "sqlstring": "^2.3.3",
     "uwuify": "^1.0.1",
     "xss": "^1.0.14"

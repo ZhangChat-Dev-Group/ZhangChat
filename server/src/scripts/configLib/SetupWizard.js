@@ -83,7 +83,7 @@ class SetupWizard {
 	    result.powerfulUsers = {}
     }
 
-    result[result.trip] = 9999999
+    result.powerfulUsers[result.trip] = 9999999
     delete result.trip    // 删除trip属性，防止隐私暴漏
 
     // 下面的代码已弃用，因为 EventsLogger.js 可以更好地处理错误

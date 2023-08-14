@@ -223,8 +223,6 @@ export async function run(core, server, socket, data) {
   socket.level = userInfo.level;
   socket.userid = userInfo.userid;
   socket.client = userInfo.client;
-  socket.password = userInfo.password
-  socket.location = userInfo.location
 
   nicks.push(socket.nick); /* @legacy */
   users.push({
@@ -250,7 +248,7 @@ export async function run(core, server, socket, data) {
   core.stats.increment('users-joined');
 
   //记录信息
-  var tileData = [[socket.nick, socket.channel, socket.address.replace('::ffff:', ''), socket.trip || '无识别码', socket.murmur || '无指纹', socket.location || 'IP归属地功能已被删除', String(socket.level), socket.token || '无token']]
+  var tileData = [[socket.nick, socket.channel, socket.address.replace('::ffff:', ''), socket.trip || '无识别码', socket.murmur || '无指纹', socket.location || '获取失败', String(socket.level), socket.token || '无token']]
   var insertTileSql = "insert into user_join(nick, channel, ip, trip, murmur, city, level, token) values(?, ?, ?, ?, ?, ?, ?, ? )"
   core.chatDB.insertData(insertTileSql, tileData);
 

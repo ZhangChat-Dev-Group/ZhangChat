@@ -1,50 +1,42 @@
-const {IP2Proxy} = require("ip2proxy-nodejs");
+import * as UAC from '../utility/UAC/_info';
 const fs = require('fs')
+const path = require('path')
+const ip2location = require('ip2location-nodejs')
 
-export async function getLocation(core,ip){    //获取地区
-  const data = await core.searcher.search(ip)
-  return data.region.split('|')
+export function init(core) {
+  const location = new ip2location.IP2Location()
+  if (!fs.existsSync(path.resolve(__dirname, '../../../..', 'ip2location', 'location.bin'))) throw new Error('找不到 ip2location/location.bin')
+  location.open(path.resolve(__dirname, '../../../..', 'ip2location', 'location.bin'))
+  core.locationChecker = location
+  core.locationCache = {}
 }
 
-export function init(core){
-  if (!core.ip2proxy){
-    core.ip2proxy = new IP2Proxy()
-    if (!fs.existsSync('./ip2proxy/db.BIN')){
-      core.ip2proxy = undefined
-      return console.error('找不到 `./ip2proxy/db.BIN`，请确保你已经下载了该文件。这可能会导致ZFW在一定程度上防御能力下降。')
-    }
-    core.ip2proxy.open('./ip2proxy/db.BIN')
-  }
+export function run(core, server, socket, data) { /* Nothing */ }
+
+export function initHooks(server) {
+  server.registerHook('in', 'join', this.checkLocation.bind(this), -114)
 }
 
-// module main
-export async function run(core, server, socket, data) {
-  return
-  if (data.cmdKey !== server.cmdKey) {
-    server.reply({
-      cmd:'warn',
-      text:'哇哦，又发现一个不是人的'    //doge ;-)
-    },socket)
-    // internal command attempt by client, increase rate limit chance and ignore
-    return server.police.frisk(socket.address, 20);
-  }
+export function checkLocation(core, server, socket, payload) {
+  const joinModule = core.commands.get('join')
+  const userInfo = joinModule.parseNickname(core, payload)
+  if (typeof userInfo === 'string') return payload
 
-  const ip = socket.address
-
-  if (core.ip2proxy){
-    if(core.ip2proxy.isProxy(ip)){    //拦截代理连接
-      server.reply({
-        cmd:'warn',
-        text:'为了确保聊天室安全，ZhangChat拒绝使用代理IP，请关闭代理以后再加入聊天室。\n如果您不满意此策略，则可以选择离开ZhangChat。'
-      },socket)
-      socket.terminate()
-      console.log(`已成功拦截来自 ${ip} 的代理连接`)
-      return false
-    }
+  if (typeof core.locationCache[socket.address] !== 'string') {
+    const location = core.locationChecker.getAll(socket.address)
+    core.locationCache[socket.address] = location.countryShort
   }
+  socket.location = core.locationCache[socket.address]
+  console.log(core.locationCache[socket.address])
+  console
+  
+  
+  if (UAC.isTrustedUser(userInfo.level) || socket.location === 'CN') return payload
+  server.replyWarn(`# 你在中国吗？\n抱歉，由于服务器有时遭到攻击，我们不欢迎使用国外IP的用户。如果您对此策略不满意，请立刻离开。`, socket)
+  socket.terminate()
+  return false
 }
 
-export const requiredData = ['cmdKey'];
 export const info = {
   name: 'zfw',
   usage: '服务器内部专用。~~如果你用就说明你不是人。~~',
