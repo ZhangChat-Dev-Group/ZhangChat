@@ -560,6 +560,7 @@ var COMMANDS = {
 
 		if (!nick || !text) return
 		nick.textContent = '[已撤回]' + nick.textContent
+		nick.oncontextmenu = e => e.preventDefault()
 		text.innerHTML = '该信息已被撤回。如果此功能被滥用，请立刻报告管理员。'
 	}
 }
