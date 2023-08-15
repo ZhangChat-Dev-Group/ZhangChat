@@ -270,7 +270,7 @@ class MainServer extends WsServer {
       payload = JSON.parse(data);
     } catch (e) {
       // Client sent malformed json, gtfo
-      socket.close();
+      socket.terminate();
     }
 
     if (payload === null) {
