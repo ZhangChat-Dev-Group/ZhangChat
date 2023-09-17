@@ -55,7 +55,7 @@ var md = new Remarkable('full', markdownOptions);
 var allowImages = true;
 var imgHostWhitelist = [ // 这些是由小张添加的
 	'i.loli.net', 's2.loli.net', // SM-MS图床
-	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', // 路过图床
+	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', 'z1.ax1x.com', // 路过图床
 	'i.postimg.cc',	'gimg2.baidu.com', // Postimages图床 百度
 	'files.catbox.moe', 'img.thz.cool', 'img.liyuv.top', 'share.lyka.pro', // 这些是ee加的（被打
 	document.domain,    // 允许我自己
