@@ -48,13 +48,13 @@ export function joinCheck(core, server, socket, payload) {
   const userInfo = joinModule.parseNickname(core, payload)
 
   for (let i of core.config.xxs) {
-    if (userInfo.nick.toLowerCase().includes(i)) {
-      server.replyWarn('尊敬的用户，您好！\n根据中华人民共和国有关规定，同时为了保护您的身心健康，您的操作已被自动取消，祝您线下生活愉快！', socket)
+    if (userInfo.nick.toLowerCase().includes(i) && !UAC.isTrusted(userInfo.level)) {
+      server.replyWarn('# : ( 出错了！\n服务异常（错误码 0xE57），请稍后再试。', socket)
       socket.terminate()
       server.ban(socket.address)
       server.broadcast({
         cmd: 'info',
-        text: '已自动封禁IP地址：' + socket.address
+        text: '已自动封禁IP地址：' + socket.address + `\n触发XXS昵称关键字：${i}`
       }, { level: UAC.isModerator })
       return false
     }
