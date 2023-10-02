@@ -384,7 +384,7 @@ function getWsAddress() {
 	var wsPath = ':6060';
 
 	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
-	const url = ( document.domain === 'chat.zhangsoft.link' ) ? 'wss://ws.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
+	const url = ( document.domain === 'chat.zhangsoft.link' ) ? 'wss://chat.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
 	return url
 }
 
