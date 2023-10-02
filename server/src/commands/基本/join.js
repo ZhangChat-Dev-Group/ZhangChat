@@ -194,6 +194,7 @@ export async function run(core, server, socket, data) {
   await core.commands.handleCommand(server,socket,{
     cmd:'get-history',
     channel: data.channel,
+    cmdKey: server.cmdKey,
   })
 
   // send join announcement and prep online set
