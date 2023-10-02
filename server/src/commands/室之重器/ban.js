@@ -44,9 +44,9 @@ export async function run(core, server, socket, data) {
 
   otherUsers.forEach((user) => {
     if (typeof formated[user.channel || '#NO-CHANNEL#'] !== 'object'){
-      formated[user.channel || server.cmdKey] = []
+      formated[user.channel || '#NO-CHANNEL#'] = []
     }
-    formated[user.channel || server.cmdKey].push(user)
+    formated[user.channel || '#NO-CHANNEL#'].push(user)
   })
 
   var i
