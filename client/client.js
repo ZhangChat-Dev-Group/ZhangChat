@@ -383,7 +383,7 @@ function getWsAddress() {
 	var wsPath = ':6060';
 
 	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
-	const url = ( document.domain === 'chat.zhangsoft.link' ) ? 'wss://chat.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
+	const url = ( document.domain === 'chat.zhangsoft.link' ) ? 'wss://chat-ws.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
 	return url
 }
 
@@ -529,6 +529,10 @@ var COMMANDS = {
 		}
 
 		pushMessage({nick: '*', text: '—— 以上是历史记录 ——'})
+		if (window.showOnlineUsers) {
+			window.showOnlineUsers = false
+			pushMessage({nick: '*', text: `在线用户：${window.onlineUsers.join(", ")}`})
+		}
 	},
 
 	changeNick: function (args) {
@@ -1098,6 +1102,15 @@ $('#set-video').onclick = function() {
 
 $('#get-video').onclick = function() {
 	send({cmd:'get-video'})
+}
+
+$('#get-history').onclick = () => {
+	window.showOnlineUsers = true
+	pushMessage({
+		nick: '*',
+		text: '请稍等，正在获取历史记录...'
+	})
+	send({ cmd: 'get-history' })
 }
 
 $('#clear-messages').onclick = function () {
