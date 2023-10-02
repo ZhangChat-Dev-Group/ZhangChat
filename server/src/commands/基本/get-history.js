@@ -11,7 +11,7 @@ export async function run(core,server,socket,data){
   var channel
   if (data.channel) {
     // 如果提供了channel参数，那么就必须验证cmdKey以确认是服务器自己调用
-    if (data.cmdKey !== server.cmdKey) return server.replyWarn('只有服务器自身才能指定channel参数')
+    if (data.cmdKey !== server.cmdKey) return server.replyWarn('你不是服务器，凭什么指定频道？', socket)
     channel = data.channel
   } else channel = socket.channel
   // channel的格式已经被严格限制，不可能出现SQL注入
@@ -25,7 +25,7 @@ export async function run(core,server,socket,data){
         trip: (ret[i].trip === '无识别码' ? '' : ret[i].trip) || '',
         head: ret[i].head,
         text: ret[i].content,
-        time: ret[i].ctime,
+        time: Date.parse(ret[i].ctime),
       })
     }
     server.reply({
