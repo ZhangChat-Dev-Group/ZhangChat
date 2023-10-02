@@ -55,7 +55,7 @@ var md = new Remarkable('full', markdownOptions);
 var allowImages = true;
 var imgHostWhitelist = [ // 这些是由小张添加的
 	'i.loli.net', 's2.loli.net', // SM-MS图床
-	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', // 路过图床
+	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', 'z1.ax1x.com', // 路过图床
 	'i.postimg.cc',	'gimg2.baidu.com', // Postimages图床 百度
 	'files.catbox.moe', 'img.thz.cool', 'img.liyuv.top', 'share.lyka.pro', // 这些是ee加的（被打
 	document.domain,    // 允许我自己
@@ -193,8 +193,9 @@ function buildHome() {
 			`您也可以自己创建频道，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
 			`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
 			'---',
-			'本聊天室依照中华人民共和国相关法律，保存并公布您的聊天记录。',
+			'本聊天室依照中华人民共和国相关法律，保存您的聊天记录。',
 			'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内相关规定。',
+			'本站坚决不欢迎盲目自大、言论弱智的人。',
 			'您如果对本聊天室不满意或认为受到不公平对待，则可以选择向管埋员申诉或选择离开。',
 			'---',
 			'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室。',

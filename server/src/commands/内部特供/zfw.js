@@ -27,10 +27,7 @@ export function checkLocation(core, server, socket, payload) {
     core.locationCache[socket.address] = location.countryShort
   }
   socket.location = core.locationCache[socket.address]
-  console.log(core.locationCache[socket.address])
-  console
-  
-  
+
   if (UAC.isTrustedUser(userInfo.level) || socket.location === 'CN') return payload
   server.replyWarn(`# 你在中国吗？\n抱歉，由于服务器有时遭到攻击，我们不欢迎使用国外IP的用户。如果您对此策略不满意，请立刻离开。`, socket)
   socket.terminate()
