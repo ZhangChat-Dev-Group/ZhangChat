@@ -52,6 +52,7 @@ export function joinCheck(core, server, socket, payload) {
       server.replyWarn('# : ( 出错了！\n服务异常（错误码 0xE57），请稍后再试。', socket)
       socket.terminate()
       server.ban(socket.address)
+      core.logger.logAction(socket, [], 'xxs-ban', { message: '不能记录join数据' }, `触发XXS昵称关键字：${i}`)
       server.broadcast({
         cmd: 'info',
         text: '已自动封禁IP地址：' + socket.address + `\n触发XXS昵称关键字：${i}`
