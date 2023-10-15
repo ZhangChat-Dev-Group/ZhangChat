@@ -195,6 +195,7 @@ export async function run(core, server, socket, data) {
     cmd:'get-history',
     channel: data.channel,
     cmdKey: server.cmdKey,
+    level: userInfo.level,
   })
 
   // send join announcement and prep online set
