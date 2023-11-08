@@ -71,6 +71,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'pic.imgdb.cn',    // 聚合图床
 	'blog.mrzhang365.cf',    // MrZhang365's blog
 	't00img.yangkeduo.com',    // Dr0反向的拼多多图床
+	'pic.ziyuan.wang',    // img.ink you are so fast
 ];
 
 function getDomain(link) {
@@ -384,7 +385,7 @@ function getWsAddress() {
 	var wsPath = ':6060';
 
 	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
-	const url = ( document.domain === 'chat.zhangsoft.link' ) ? 'wss://chat.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
+	const url = ( document.domain === 'chat.zhangsoft.link' ) ? localStorageGet('connect-address') || 'wss://chat.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
 	return url
 }
 
@@ -1272,6 +1273,18 @@ $('#show-head').onchange = function (e) {
 	}
 
 	display('uwuTest', state)
+}
+
+$('#connect-address').value = localStorageGet('connect-address') || 'wss://chat.zhangsoft.link/ws'
+
+$('#connect-address').onchange = e => {
+	var address = e.target.value
+	localStorageSet('connect-address', address)
+
+	pushMessage({
+		nick: '*',
+		text: '你已修改连接线路，请刷新界面来应用修改\n请注意：修改连接线路可能会造成连接不稳定，如果您不了解它，请立刻更改回去。',
+	})
 }
 
 function display(name, state = 'none', scope = document) {
