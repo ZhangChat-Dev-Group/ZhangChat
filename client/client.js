@@ -604,7 +604,7 @@ function buildReplyText(user, text) {
 	return replyText
 }
 
-window.captchaCallback = token => {
+function captchaCallback(token) {
 	// 验证码回调函数
 	$('#captcha').remove()    // 删除验证码元素，防止后面验证码自动重置导致页面自动滚动（新XChat开发时的经验）
 	pushMessage({
@@ -639,10 +639,11 @@ function pushCaptcha(sitekey){
 	nickLinkEl.title = date.toLocaleString();
 	nickSpanEl.appendChild(nickLinkEl);
 
-	hcaptcha.render(messageEl, {
+	turnstile.render(messageEl, {
 		sitekey,
+		callback: captchaCallback,
 		theme: 'dark',
-		callback: 'captchaCallback',
+		language: 'zh-cn',
 	})
 
 	// Scroll to bottom

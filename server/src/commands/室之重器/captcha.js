@@ -5,12 +5,12 @@ export async function init(core) {
     core.captcha = []
   }
 
-  core.enabledCaptcha = (c) => typeof c.config.sitekey === 'string' && !!c.config.sitekey && typeof c.config.secret === 'string' && !!c.config.secret
+  core.enabledCaptcha = c => typeof c.config.sitekey === 'string' && !!c.config.sitekey && typeof c.config.secret === 'string' && !!c.config.secret
 }
 
 // module main
 export async function run(core, server, socket, data) {
-  if (!core.enabledCaptcha(core)) return server.replyWarn(`当前网站尚未配置 hCaptcha`, socket)
+  if (!core.enabledCaptcha(core)) return server.replyWarn(`当前，站长尚未配置人机验证，故无法启用。\n如果您是站长，请在 config.json 里添加 \`sitekey\` 和 \`secret\`，它们分别对应着 Cloudflare Turnstile 验证码的站点密钥和密钥，添加完成后需要重启网站程序以重新加载配置文件。`, socket)
   const mode = !core.captcha.includes(socket.channel)
 
   if (mode) core.captcha.push(socket.channel)

@@ -4,7 +4,7 @@
   "description": "小张聊天室",
   "main": "index.js",
   "engines": {
-    "node": ">= 10.15.1",
+    "node": ">= 17.5.0",
     "npm": ">= 6.7.0"
   },
   "scripts": {
@@ -17,7 +17,7 @@
     "postinstall": "cd ./server && npm install && npm run config"
   },
   "author": "MrZhang365",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "crypto-js": "^4.1.1",
     "esm": "^3.2.25",

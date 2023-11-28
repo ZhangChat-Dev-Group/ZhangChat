@@ -3,8 +3,6 @@
 */
 
 import * as UAC from '../utility/UAC/_info';
-const hCaptcha = require('hcaptcha')
-
 // module support functions
 const crypto = require('crypto');
 
@@ -146,7 +144,11 @@ export async function run(core, server, socket, data) {
     // 请看 captcha.js 的 joinCheck
     var success = false
     try{
-      const result = await hCaptcha.verify(core.config.secret, data.captcha, socket.address, core.config.sitekey)
+      let formData = new FormData()
+      formData.append('secret', core.config.secret)
+      formData.append('response', data.captcha)
+      formData.append('remoteip', socket.address)
+      const result = await (await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: formData, })).json()
       success = result.success
     } catch(e) {
       return server.replyWarn('无法请求人机验证API，请稍后再试', socket)
