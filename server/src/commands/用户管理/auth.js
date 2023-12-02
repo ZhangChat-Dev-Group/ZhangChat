@@ -22,7 +22,7 @@ export async function run(core, server, socket, data) {
   }
 
   const trip = data.trip
-  const auth = data.text.trim() || ''
+  const auth = (data.text || '').trim()
 
   if (!auth) {
     // 模式：删除

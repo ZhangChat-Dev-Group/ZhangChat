@@ -18,6 +18,7 @@ export function initHooks(server) {
 }
 
 export function checkLocation(core, server, socket, payload) {
+  if (socket.address === '127.0.0.1') return payload    // 自己直连，跳过
   const joinModule = core.commands.get('join')
   const userInfo = joinModule.parseNickname(core, payload)
   if (typeof userInfo === 'string') return payload
