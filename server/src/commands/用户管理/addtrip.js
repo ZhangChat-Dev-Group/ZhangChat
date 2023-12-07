@@ -46,7 +46,6 @@ export async function run(core, server, socket, data) {
   core.logger.logAction(socket,[],'addtrip',data)
 }
 
-export const requiredData = ['trip','new_trip'];
 export const info = {
   name: 'addtrip',
   description: '替换识别码',
@@ -59,7 +58,12 @@ export const info = {
       name: 'trip',
       required: true,
       verify: UAC.verifyTrip,
-    }
+    },
+    {
+      name: 'new_trip',
+      required: true,
+      verify: UAC.verifyTrip,
+    },
   ],
   level: UAC.levels.admin,
 };
