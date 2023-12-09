@@ -89,28 +89,29 @@ export async function run(core, server, socket, data) {
   })
 
 
-  server.reply({
+  if (!data.quiet) server.reply({
     cmd: 'onlineSet',
     nicks,
     users,
   }, badClient);
 
-  badClient.channel = data.channel;
+  if (!data.quiet) badClient.channel = data.channel;    // 非静默模式，立刻改变频道以让目标用户收到频道被更改的通知
   server.broadcast({
     cmd: 'info',
     text: `${badClient.nick} 被管理员移入 ?${data.channel}`,
   }, { channel: data.channel, level: (l) => l < UAC.levels.moderator });
   server.broadcast({
     cmd: 'info',
-    text: `${badClient.nick} 被 ${socket.nick} 从 ?${socket.channel} 移入 ?${data.channel}`,
+    text: `${badClient.nick} 被 ${socket.nick} 从 ?${socket.channel} 移入 ?${data.channel} 静默模式状态：${data.quiet ? '开' : '关'}`,
   }, { channel: data.channel, level: UAC.isModerator });
+  if (data.quiet) badClient.channel = data.channel;    // 静默模式，广播完毕后再修改频道
   server.broadcast({
     cmd: 'info',
     text:`${badClient.nick} 被移出该频道`
   },{ channel: socket.channel, level: (level) => level < UAC.levels.moderator })
   server.broadcast({
     cmd:'info',
-    text:`${badClient.nick} 被 ${socket.nick} 移入 ?${data.channel}`
+    text:`${badClient.nick} 被 ${socket.nick} 移入 ?${data.channel} 静默模式状态：${data.quiet ? '开' : '关'}`
   },{ channel: socket.channel, level: UAC.isModerator })
   server.broadcast({
     cmd: 'onlineRemove',
@@ -125,10 +126,10 @@ export async function run(core, server, socket, data) {
 export const requiredData = ['nick', 'channel'];
 export const info = {
   name: 'moveuser',
-  description: '将目标用户正常移动到指定的频道',
+  description: '将目标用户正常移动到指定的频道，可选择开启静默模式，即不告知目标用户被移动',
   usage: `
-    API: { cmd: 'moveuser', nick: '<target nick>', channel: '<new channel>' }
-    文本：以聊天形式发送 /moveuser 目标昵称 目标频道`,
+    API: { cmd: 'moveuser', nick: '<target nick>', channel: '<new channel>', quiet: true || false }
+    文本：以聊天形式发送 /moveuser 目标昵称 目标频道 （如果在目标频道后面加一个空格，再加上随机的字符串，则开启静默模式）`,
   runByChat: true,
   dataRules: [
     {
@@ -142,6 +143,9 @@ export const info = {
       required: true,
       verify: UAC.verifyChannel,
       errorMessage: UAC.nameLimit.channel,
+    },
+    {
+      name: 'quiet',
     }
   ],
   level: UAC.levels.moderator,
