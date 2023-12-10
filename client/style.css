@@ -96,6 +96,9 @@ ul li {
 	margin: 0;
 	margin-left: 1em;
 }
+.katex .text {
+	margin:0;
+}
 .text p {
 	margin: 0;
 	word-break: break-all;
