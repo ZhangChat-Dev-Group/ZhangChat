@@ -255,7 +255,6 @@ export async function run(core, server, socket, data) {
   var tileData = [[socket.nick, socket.channel, socket.address.replace('::ffff:', ''), socket.trip || '无识别码', socket.murmur || '无指纹', socket.location || '获取失败', String(socket.level), socket.token || '无token']]
   var insertTileSql = "insert into user_join(nick, channel, ip, trip, murmur, city, level, token) values(?, ?, ?, ?, ?, ?, ?, ? )"
   core.chatDB.insertData(insertTileSql, tileData);
-
   return true;
 }
 
