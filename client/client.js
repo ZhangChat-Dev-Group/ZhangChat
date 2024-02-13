@@ -262,7 +262,6 @@ function localStorageSet(key, val) {
 }
 
 var ws;
-var myMurmur = '';
 var myNick = localStorageGet('my-nick') || '';
 var myChannel = decodeURI(window.location.search.replace(/^\?/, ''));
 var lastSent = [""];
@@ -497,8 +496,8 @@ var COMMANDS = {
 			if (localStorageGet('fun-system') == 'false') {
 				var joinNotice = `${nick} 加入了聊天室`
 			} else {
-				const test = ['活蹦乱跳','可爱','美丽','快乐','活泼','美味']
-				const test2 = ["误入","闯入","跳进","飞进","滚进","掉进"]
+				const test = ['活蹦乱跳','可爱','美丽','快乐','活泼','美味', '野生']
+				const test2 = ["误入","闯入","跳进","飞进","滚进","掉进", '跑进']
 				var joinNotice = `${test[Math.round(Math.random()*(test.length - 1))]}的 ${nick} ${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
 			}
 
@@ -1191,8 +1190,8 @@ if (localStorageGet('rainbow-nick') == 'true') {
 	$('#rainbow-nick').checked = true;
 }
 
-if (localStorageGet('allow-html') == 'true') {
-	$('#allow-html').checked = true;
+if (localStorageGet('allow-html') == 'false') {
+	$('#allow-html').checked = false;
 }
 
 if (localStorageGet('show-head') == 'false') {
@@ -1222,8 +1221,8 @@ $('#allow-html').onchange = function (e) {
 	localStorageSet('allow-html', !!e.target.checked);
 	if (!!!e.target.checked) return
 	pushMessage({
-		nick: '!',
-		text: 'HTML信息给我们带来了很多欢乐，但同时，也有一些安全风险，请慎用！\nMrZhang365：这件[事](https://hiyoteam.github.io/ChatroomHistoryBook/#html%E6%BC%8F%E6%B4%9E)确确实实是吓到我了，以至于我现在还有点心理阴影！',
+		nick: '*',
+		text: '安全提醒：虽然小张聊天室的HTML功能写得比较安全，只能发送限定的内容，但只要是人写的代码，都会有漏洞，我们无法保证本功能永远安全。因此，如果本功能出现安全漏洞，那么请立刻将其关闭。',
 	})
 }
 
