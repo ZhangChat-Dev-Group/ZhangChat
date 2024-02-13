@@ -55,7 +55,7 @@ var md = new Remarkable('full', markdownOptions);
 var allowImages = true;
 var imgHostWhitelist = [ // 这些是由小张添加的
 	'i.loli.net', 's2.loli.net', // SM-MS图床
-	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', 'z1.ax1x.com', // 路过图床
+	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com', 's11.ax1x.com', 'z1.ax1x.com', // 路过图床
 	'i.postimg.cc',	'gimg2.baidu.com', // Postimages图床 百度
 	'files.catbox.moe', 'img.thz.cool', 'img.liyuv.top', 'share.lyka.pro', // 这些是ee加的（被打
 	document.domain,    // 允许我自己
@@ -72,6 +72,8 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	't00img.yangkeduo.com',    // Dr0反向的拼多多图床
 	'pic.ziyuan.wang',    // img.ink you are so fast
 	'cmd.zzcm.fun',    // cmd1152's
+	'cdn.discordapp.com',    // discord
+	'fs-im-kefu.7moor-fs1.com',    // 涟漪文件直链
 ];
 
 function getDomain(link) {
@@ -183,6 +185,10 @@ function getHome() {
 
 function buildHome() {
 	getHome().then(data => {
+		if (data.forbiddenReferer.includes(document.referrer)) return pushMessage({
+			nick: '!',
+			text: '# 很抱歉...\n基于您的来源，您已被禁止访问本站\n如有疑问，请联系 MrZhang365@outlook.com'
+		})
 		const frontpage = [
 			'# 小张聊天室',
 			'---',
@@ -465,6 +471,10 @@ var COMMANDS = {
 	},
 
 	onlineSet: function (args) {
+		if (args.forbiddenReferer.includes(document.referrer)) {
+			location.href = 'https://chat.zhangsoft.link/'
+			return
+		}
 		var users = args.users;
 		usersClear();
 

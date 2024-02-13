@@ -27,7 +27,7 @@ export async function run(core, server, socket,data) {
   }else{
     server.broadcast({
       cmd:'info',
-      text:`[${socket.trip || '无识别码'}] ${socket.nick} 在 ?${socket.channel} 成功执行了提权操作。\n该用户IP地址：${socket.address}\n如果您认为本次操作不安全，请立刻执行 \`clearpower\` 命令并立刻通知所有管理员，同时请联系 Xiao_Zhang_123@outlook.com`
+      text:`[${socket.trip || '无识别码'}] ${socket.nick} 在 ?${socket.channel} 成功执行了提权操作。\n该用户IP地址：${socket.address}\n如果您认为本次操作不安全，请立刻执行 \`clearpower\` 命令并立刻通知所有管理员和站长，也可以发送电子邮件到 MrZhang365@outlook.com`
     },{level:UAC.isModerator})
     server.reply({
       cmd:'info',
