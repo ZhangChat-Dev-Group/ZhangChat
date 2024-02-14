@@ -64,6 +64,10 @@ export async function run(core, server, socket, data) {
     payload.trip = socket.trip;
   }
 
+  if (data.topic) {
+    payload.topic = data.topic.toLowerCase()
+  }
+
   if ((text.match(/[\n]/g) || '').length > 5 || text.length > 250){
     server.broadcast({
       cmd:'info',
@@ -113,6 +117,8 @@ export function commandCheckIn(core, server, socket, payload) {
     return false;
   }else if (payload.text.startsWith('/shrug')){
     payload.text = '¯\\\\\\_(ツ)\\_/¯'
+  } else if (payload.text.startsWith('/fire')) {
+    payload.text = '火火火\n火ee火\n火火火'
   }
 
   return payload;
@@ -169,6 +175,11 @@ export const info = {
       all: true,
       errorMessage: '大哥，别用无效的信息玩我，OK？',
       required: true,
-    }
+    },
+    {
+      name: 'topic',
+      verify: (text) => typeof text === 'string' && !!parseText(text),
+      errorMessage: '话题无效'
+    },
   ],
 };

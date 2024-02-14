@@ -882,7 +882,7 @@ function pushWelcomeButton(text) {
 	buttonEl.textContent = text
 
 	buttonEl.onclick = () => {
-		var hiyo = 'hi y'
+		var hiyo = 'hi yo'
 		var max = Math.round(Math.random()*20)
 
 		for (var i = 0; i < max; i++) { // @ee 你想累死我啊
@@ -897,16 +897,16 @@ function pushWelcomeButton(text) {
 	textEl.appendChild(buttonEl)
 	messageEl.appendChild(textEl);
 	$('#messages').appendChild(messageEl);
-	autoBottom()
+	autoBottom(false)
 }
 
-function autoBottom() {
+function autoBottom(add = true) {
 	// 滚动到底部
 	if (isAtBottom() && !!myChannel) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
-	unread += 1;
+	if (add) unread += 1;
 	updateTitle();
 }
 
