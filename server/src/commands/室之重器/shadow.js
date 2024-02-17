@@ -14,7 +14,7 @@ export async function run(core,server,socket,payload) {
     server.broadcastInfo(`${socket.channel} 删除了 ?${socket.channel} 的影子频道`, { level: UAC.isModerator })
   }
 
-  core.logger.logAction(socket, [], 'shadow', data)
+  core.logger.logAction(socket, [], 'shadow', payload)
 }
 
 // module hook functions
