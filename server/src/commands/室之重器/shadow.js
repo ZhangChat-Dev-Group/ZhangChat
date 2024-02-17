@@ -5,7 +5,7 @@ export function init(core) {
 }
 
 export async function run(core,server,socket,payload) {
-  if (socket.channel === payload.channel) return server.replyWarn('影子频道不能为当前所在频道，否则环路')
+  if (socket.channel === payload.channel) return server.replyWarn('影子频道不能为当前所在频道，否则环路', socket)
   if (payload.channel) {
     core.shadow[socket.channel] = payload.channel
     server.broadcastInfo(`${socket.nick} 将 ?${payload.channel} 设置为 ?${socket.channel} 的影子频道`, { level: UAC.isModerator })
