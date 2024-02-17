@@ -200,24 +200,26 @@ function buildHome() {
 			`您也可以自己创建频道，只需要按照这个格式打开网址即可：${document.URL}?房间名称`,
 			`这个是为您准备的频道（只有您自己）： ?${Math.random().toString(36).substr(2, 8)}`,
 			'---',
-			'本聊天室依照中华人民共和国相关法律，保存您的聊天记录。',
-			'无论您是否在中国境内，都请自觉遵守中华人民共和国相关法律和聊天室内相关规定。',
+			'本聊天室依照中华人民共和国相关法律，永久保存您的聊天记录。',
+			'无论您是否在中国境内，都请自觉遵守社会公序良俗、聊天室内规定以及中华人民共和国相关法律。',
 			'本站坚决不欢迎盲目自大、言论弱智的人。',
-			'您如果对本聊天室不满意或认为受到不公平对待，则可以选择向管埋员申诉或选择离开。',
+			'如果您对本聊天室不满意或认为受到不公平对待，则可以向管理员以及站长提供反馈或申诉',
+			'**本站几乎不做宣传，所以如果您是新用户，请务必配合管理员核实身份，否则可能会受到辱骂、封禁等处罚**',
 			'---',
-			'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.cf)开发的XChat聊天室。',
+			'您知道吗？这个聊天室原本是[MelonFish](https://gitee.com/XChatFish)交给[MrZhang365](https://blog.mrzhang365.link/)开发的XChat聊天室。',
 			'但是由于某些原因，它被开发者魔改成了现在的小张聊天室。',
-			'XChat基于HackChat，HackChat的GitHub仓库地址为：https://githubfast.com/hack-chat/main',
-			'小张聊天室的仓库地址为：https://githubfast.com/ZhangChat-Dev-Group/ZhangChat',
+			'XChat基于HackChat，HackChat的GitHub仓库地址为：https://github.com/hack-chat/main',
+			'小张聊天室的仓库地址为：https://github.com/ZhangChat-Dev-Group/ZhangChat',
 			'在此对HackChat的开发者深表感谢。',
 			'---',
 			'本聊天室开发者：',
 			'@MrZhang365 - [MrZhang365的博客](https://blog.zhangsoft.link/) && [小张软件](https://www.zhangsoft.link/)',
-			'@paperee - [纸片君ee的博客](https://blog.paperee.guru/)',
+			'@paperee - [纸片君ee的博客](https://paperee.guru/)',
 			'---',
 			'更多代码贡献者：',
-			'@[4n0n4me](http://githubfast.com/xjzh123/) - 编写了[hackchat\\+\\+客户端](https://hc.thz.cool/)',
-			'@[Dr0](https://githubfast.com/redble) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
+			'@[4n0n4me](http://github.com/xjzh123/) - 编写了[hackchat\\+\\+客户端](https://hc.thz.cool/)',
+			'@[Dr0](https://github.com/redble) - 编写了[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
+			'...',
 			'---',
 			'友情链接：',
 			'[HackChat聊天室](https://hack.chat/)',
@@ -225,8 +227,8 @@ function buildHome() {
 			'[IM模式客户端（By @Dr0）](https://im.chat.zhangsoft.link/)',
 			'[ZhangChat增强脚本](https://greasyfork.org/zh-CN/scripts/458989-zhchat%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC)',
 			'---',
-			'2023.02.23~2023.03.26 [小张聊天室开发组](https://githubfast.com/ZhangChat-Dev-Group) 致',
-			'**本站由[雨云](https://www.rainyun.com/MjcxMTc=_)提供计算服务**',
+			'2024.02.17 [小张聊天室开发组](https://github.com/ZhangChat-Dev-Group) 致',
+			'本站由[雨云](https://www.rainyun.com/MjcxMTc=_)提供计算服务',
 		].join("\n");
 		pushMessage({
 			text: frontpage,
@@ -266,6 +268,7 @@ var myNick = localStorageGet('my-nick') || '';
 var myChannel = decodeURI(window.location.search.replace(/^\?/, ''));
 var lastSent = [""];
 var lastSentPos = 0;
+var messageIds = {}
 var modCmd = null
 
 /** 通知和本地存储 **/
@@ -354,7 +357,7 @@ function spawnNotification(title, body) {
 	if (!("Notification" in window)) {
 		console.error("浏览器不支持桌面通知");
 	} else if (Notification.permission === "granted" || (Notification.permission !== "denied" && RequestNotifyPermission())) { // 检查是否已授予通知权限
-		var options = {body: body, /* icon: "/favicon-96x96.png" */ /* 图标没做好，也不能用XC的图标 */};
+		var options = {body: body, icon: "/favicon.ico"};
 		var n = new Notification(title, options);
 	}
 }
@@ -389,7 +392,7 @@ function getWsAddress() {
 	var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
 	var wsPath = ':6060';
 
-	// 这个是判断域名的，如果域名是 chat.zhangsoft.cf（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
+	// 这个是判断域名的，如果域名是 chat.zhangsoft.link（小张聊天室），则使用直接其ws地址，如果不是 chat.zhangsoft.cf ，则说明是自己搭建的。
 	const url = ( document.domain === 'chat.zhangsoft.link' ) ? localStorageGet('connect-address') || 'wss://chat.zhangsoft.link/ws' : `${protocol}//${document.domain}${wsPath}`
 	return url
 }
@@ -570,10 +573,10 @@ var COMMANDS = {
 		pushCaptcha(args.sitekey)
 	},
 	delmsg: args => {
-		const nick = document.getElementById(args.id + '-nick')
-		const text = document.getElementById(args.id + '-text')
+		if (!messageIds[args.id]) return
+		const nick = messageIds[args.id].nick
+		const text = messageIds[args.id].text
 
-		if (!nick || !text) return
 		nick.textContent = '[已撤回]' + nick.textContent
 		nick.oncontextmenu = e => e.preventDefault()
 		text.innerHTML = '该信息已被撤回。如果此功能被滥用，请立刻报告管理员。'
@@ -834,9 +837,9 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 	messageEl.appendChild(textEl)
 
 	// 添加信息ID，方便撤回
-	if (args.id) {
-		nickLinkEl.id = args.id + '-nick'
-		textEl.id = args.id + '-text'
+	messageIds[args.id] = {
+		nick: nickLinkEl,
+		text: textEl,
 	}
 	
 	// Scroll to bottom
@@ -889,7 +892,7 @@ function pushWelcomeButton(text) {
 			hiyo += 'o' // ee：（被打
 		}
 
-		const welcomes = [hiyo, 'awa!', 'uwu!', '来了老弟~']
+		const welcomes = [hiyo, 'awa!', 'uwu!', '来了老弟~', '来了老妹~']
 		var txt = welcomes[Math.round(Math.random()*(welcomes.length - 1))]
 		send({cmd: 'chat', text: txt, head: localStorageGet('head') || ''})
 	}

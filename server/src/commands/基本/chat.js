@@ -65,7 +65,7 @@ export async function run(core, server, socket, data) {
   }
 
   if (data.topic) {
-    payload.topic = data.topic.toLowerCase()
+    payload.topic = data.topic.toLowerCase().trim()
   }
 
   if ((text.match(/[\n]/g) || '').length > 5 || text.length > 250){
