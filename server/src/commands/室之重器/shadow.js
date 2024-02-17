@@ -11,7 +11,7 @@ export async function run(core,server,socket,payload) {
     server.broadcastInfo(`${socket.nick} 将 ?${payload.channel} 设置为 ?${socket.channel} 的影子频道`, { level: UAC.isModerator })
   } else {
     delete core.shadow[socket.channel]
-    server.broadcastInfo(`${socket.channel} 删除了 ?${socket.channel} 的影子频道`, { level: UAC.isModerator })
+    server.broadcastInfo(`${socket.nick} 删除了 ?${socket.channel} 的影子频道`, { level: UAC.isModerator })
   }
 
   core.logger.logAction(socket, [], 'shadow', payload)
