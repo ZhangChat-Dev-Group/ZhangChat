@@ -20,9 +20,12 @@ export async function run(core,server,socket,payload) {
 // module hook functions
 export function initHooks(server) {
   server.registerHook('out', 'chat', this.forward.bind(this),99999);
+  server.registerHook('out', 'onlineAdd', this.forward.bind(this),99999);
+  server.registerHook('out', 'onlineRemove', this.forward.bind(this),99999);
+  
 }
 
-export function forward(core,server,socket,payload) {
+export function forward(core, server, socket, payload) {
   if (payload.forwarded) return payload
   payload.forwarded = true
 
