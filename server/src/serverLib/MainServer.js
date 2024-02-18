@@ -197,7 +197,9 @@ class MainServer extends WsServer {
     const newSocket = socket;
 
     newSocket.address = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
-    socket.headers = request.headers
+    newSocket.headers = request.headers
+    newSocket.connectTime = Date.now()
+    
     if (newSocket.address.startsWith('::ffff:')){    //去除IPv4里面多余的东西，防止后面识别IP的代码报错。
       newSocket.address = newSocket.address.replace('::ffff:','')
     }
