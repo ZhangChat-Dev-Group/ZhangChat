@@ -116,18 +116,20 @@
 				<h4>等级标识</h4>
 				<select id="prefix-selector"></select>
 			</p>
-			<p>
-				<h4>只看话题</h4>
-				<select id="topic-selector">
-					<option value="---">---</option>
-				</select>
-			</p>
 			<hr>
 				<h4>连接线路</h4>
 				<select id="connect-address">
 					<option value="wss://chat.zhangsoft.link/ws">主线路（Cloudflare Tunnel）</option>
 					<option value="wss://rain.chat.zhangsoft.link/ws">备用线路（RainCDN）</option>
 				</select>
+			<hr>
+			<p>
+				<h4>只看话题</h4>
+				<select id="topic-selector">
+					<option value="---">---</option>
+				</select>
+				<button id="create-topic">自定义话题</button>
+			</p>
 			<hr>
 			<p>
 				<button id="set-head">设置头像</button>
