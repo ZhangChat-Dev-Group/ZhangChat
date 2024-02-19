@@ -1195,6 +1195,22 @@ $('#set-head').onclick = function () {
 	localStorageSet('head', newHead || '')
 }
 
+$('#create-topic').onclick = () => {
+	const userInput = prompt('请输入话题：')
+	if (!userInput) return
+
+	const topic = userInput.toLocaleLowerCase().trim()
+	
+	topics.push(topic);
+	topicMessages[topic] = [];
+	addTopic(topic)
+
+	pushMessage({
+		chat: '*',
+		text: `已添加话题 ${topic}`
+	})
+}
+
 // 从本地存储还原设置
 
 $('#auto-login').checked = localStorageGet('auto-login') == 'true';
