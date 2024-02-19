@@ -178,7 +178,7 @@ export const info = {
     },
     {
       name: 'topic',
-      verify: (text) => typeof text === 'string' && !!parseText(text),
+      verify: (text) => typeof text === 'string' && !!parseText(text) && text !== '---',
       errorMessage: '话题无效'
     },
   ],

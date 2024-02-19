@@ -270,6 +270,10 @@ var lastSent = [""];
 var lastSentPos = 0;
 var messageIds = {}
 var modCmd = null
+var topics = []
+var topicMessages = {}
+var currentTopic = '---'
+var incrementId = 0
 
 /** 通知和本地存储 **/
 var notifySwitch = document.getElementById("notify-switch")
@@ -380,6 +384,21 @@ function notify(args) {
 	}
 }
 
+function deepCopy(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+        return obj;
+    }
+
+    let copy = Array.isArray(obj) ? [] : {};
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            copy[key] = deepCopy(obj[key]);
+        }
+    }
+
+    return copy;
+}
+
 function getNick() {
 	return myNick.split('#')[0]
 }
@@ -459,6 +478,8 @@ var COMMANDS = {
 		if (ignoredUsers.indexOf(args.nick) >= 0) {
 			return;
 		}
+
+		if (args.topic && !topics.includes(args.topic)) { topics.push(args.topic); topicMessages[args.topic] = []; addTopic(args.topic) }
 		pushMessage(args);
 	},
 
@@ -841,6 +862,20 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		nick: nickLinkEl,
 		text: textEl,
 	}
+
+	messageEl.id = String(incrementId)
+	incrementId += 1
+
+	if (args.topic) {
+		topicMessages[args.topic].push(deepCopy(messageEl))
+	}
+
+	if (args.topic && args.topic !== currentTopic && currentTopic !== '---') {
+		messageEl.className = 'message info'
+		nickLinkEl.textContent = '*'
+
+		textEl.innerHTML = md.render(`已为您隐藏来自 ${args.nick}#${args.trip || ''} 的无关信息`)
+	}
 	
 	// Scroll to bottom
 	var atBottom = isAtBottom();
@@ -1000,7 +1035,7 @@ $('#chatinput').onkeydown = function (e) {
 			var text = e.target.value;
 			e.target.value = '';
 
-			send({cmd: 'chat', text: text, head: localStorageGet('head') || ''});
+			send({cmd: 'chat', text: text, head: localStorageGet('head') || '', topic: currentTopic === '---' ? undefined : currentTopic});
 
 			lastSent[0] = text;
 			lastSent.unshift("");
@@ -1316,6 +1351,23 @@ $('#connect-address').onchange = e => {
 	})
 }
 
+$('#topic-selector').onchange = e => {
+	currentTopic = e.target.value
+
+	for (let topic in topicMessages) {
+		for (let msg of topicMessages[topic]) {
+			if (topic === currentTopic || currentTopic === '---') {
+				document.getElementById(msg.id).style.display = 'block'
+				document.getElementById(msg.id).innerHTML = msg.innerHTML
+				document.getElementById(msg.id).className = msg.className
+			}
+			else {
+				document.getElementById(msg.id).style.display = 'none'
+			}
+		}
+	}
+}
+
 function display(name, state = 'none', scope = document) {
 	let uwuClass = scope.getElementsByClassName(name)
 	
@@ -1529,6 +1581,14 @@ function setPrefix(scheme) {
 	if (scheme && scheme != 'none') {
 		display(scheme, 'inline')
 	}
+}
+
+function addTopic(text) {
+	var option = document.createElement('option')
+	option.textContent = text
+	option.value = encodeURI(text)
+
+	$('#topic-selector').appendChild(option)
 }
 
 // 添加主题到下拉条
