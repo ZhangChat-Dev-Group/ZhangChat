@@ -74,6 +74,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'cmd.zzcm.fun',    // cmd1152's
 	'cdn.discordapp.com',    // discord
 	'fs-im-kefu.7moor-fs1.com',    // 涟漪文件直链
+	'img.duan.ee',    // 阿段图床
 ];
 
 function getDomain(link) {
