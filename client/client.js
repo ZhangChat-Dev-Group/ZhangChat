@@ -385,21 +385,6 @@ function notify(args) {
 	}
 }
 
-function deepCopy(obj) {
-    if (typeof obj !== 'object' || obj === null) {
-        return obj;
-    }
-
-    let copy = Array.isArray(obj) ? [] : {};
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            copy[key] = deepCopy(obj[key]);
-        }
-    }
-
-    return copy;
-}
-
 function getNick() {
 	return myNick.split('#')[0]
 }
@@ -863,19 +848,14 @@ function pushMessage(args, cls = undefined, html = false) { // cls指定messageE
 		nick: nickLinkEl,
 		text: textEl,
 	}
-
-	messageEl.id = String(incrementId)
-	incrementId += 1
+	messageEl.id = args.id
 
 	if (args.topic) {
-		topicMessages[args.topic].push(deepCopy(messageEl))
-	}
-
-	if (args.topic && args.topic !== currentTopic && currentTopic !== '---') {
-		messageEl.className = 'message info'
-		nickLinkEl.textContent = '*'
-
-		textEl.innerHTML = md.render(`已为您隐藏来自 ${args.nick}#${args.trip || ''} 的无关信息`)
+		topicMessages[args.topic].push(messageEl)
+		if (currentTopic !== '---') {
+			if (args.topic !== currentTopic) { messageEl.style.display = 'none' }
+			else messageEl.style.display = 'block'
+		}
 	}
 	
 	// Scroll to bottom
@@ -1207,7 +1187,7 @@ $('#create-topic').onclick = () => {
 	addTopic(topic)
 
 	pushMessage({
-		chat: '*',
+		nick: '*',
 		text: `已添加话题 ${topic}`
 	})
 }
@@ -1369,16 +1349,13 @@ $('#connect-address').onchange = e => {
 }
 
 $('#topic-selector').onchange = e => {
-	currentTopic = e.target.value
+	currentTopic = decodeURI(e.target.value)
 
 	for (let topic in topicMessages) {
 		for (let msg of topicMessages[topic]) {
 			if (topic === currentTopic || currentTopic === '---') {
 				document.getElementById(msg.id).style.display = 'block'
-				document.getElementById(msg.id).innerHTML = msg.innerHTML
-				document.getElementById(msg.id).className = msg.className
-			}
-			else {
+			} else {
 				document.getElementById(msg.id).style.display = 'none'
 			}
 		}
