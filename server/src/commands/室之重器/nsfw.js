@@ -37,6 +37,7 @@ export function initHooks(server) {
   // TODO: add whisper hook, need hook priorities todo finished first
 }
 export function joinCheck(core, server, socket, payload) {
+  if (socket.isBot) return payload
   if (socket.nsfw) return payload
   if (payload.channel===undefined || !payload.channel){
     return payload
