@@ -54,7 +54,7 @@ export function joinCheck(core, server, socket, payload) {
 
   socket.nsfw = true
   socket.nsfwPayload = payload
-  server.replyWarn('# ！警告！\n该频道已被标记为NSFW频道，可能包含成人内容\n如果您已经成年，请发送 `nsfw` 来继续加入\n否则请退出', socket)
+  server.replyWarn('# :)\n该频道已被标记为NSFW频道，可能包含成人内容\n如果您已经成年，请发送 `nsfw` 来继续加入\n否则请退出', socket)
 
   return false
 }
