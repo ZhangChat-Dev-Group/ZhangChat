@@ -8,7 +8,7 @@ export async function init(core) {
 
 // module main
 export async function run(core, server, socket,data) {
-  const isNsfw = core.lockedrooms.includes(socket.channel)
+  const isNsfw = core.nsfw.includes(socket.channel)
   var mode = isNsfw ? '解除标记' : '标记'
 
   if (isNsfw) {
