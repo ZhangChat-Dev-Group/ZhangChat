@@ -476,10 +476,6 @@ var COMMANDS = {
 	},
 
 	onlineSet: function (args) {
-		if (args.forbiddenReferer.includes(document.referrer)) {
-			location.href = 'https://chat.zhangsoft.link/'
-			return
-		}
 		var users = args.users;
 		usersClear();
 
