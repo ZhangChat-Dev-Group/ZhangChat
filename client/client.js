@@ -186,10 +186,6 @@ function getHome() {
 
 function buildHome() {
 	getHome().then(data => {
-		if (data.forbiddenReferer.includes(document.referrer)) return pushMessage({
-			nick: '!',
-			text: '# 很抱歉...\n基于您的来源，您已被禁止访问本站\n如有疑问，请联系 MrZhang365@outlook.com'
-		})
 		const frontpage = [
 			'# 小张聊天室',
 			'---',
@@ -592,6 +588,11 @@ var COMMANDS = {
 		// 封禁当前客户端以“自杀”
 		localStorageSet('client-banned', true)
 		location.reload()    // 重载，开启震撼时代
+	},
+	ws: args => {
+		localStorageSet('connect-address', args.ws)
+		alert('服务器要求更新WebSocket连接线路，正在为您切换到新的线路')
+		location.reload()
 	}
 }
 
