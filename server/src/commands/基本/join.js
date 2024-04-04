@@ -189,6 +189,8 @@ export async function run(core, server, socket, data) {
     isBot: socket.isBot || false,
   };
 
+  const joinAnnouncementMod = { ...joinAnnouncement, ip: socket.address }
+
   if (socket.country) {
     joinAnnouncement.country = socket.country
   }
@@ -202,7 +204,9 @@ export async function run(core, server, socket, data) {
 
   // send join announcement and prep online set
   for (let i = 0, l = newPeerList.length; i < l; i += 1) {
-    server.reply(joinAnnouncement, newPeerList[i]);
+    server.reply(
+      UAC.isModerator(newPeerList[i].level) ? joinAnnouncementMod : joinAnnouncement,
+      newPeerList[i]);
     nicks.push(newPeerList[i].nick); /* @legacy */
 
     users.push({

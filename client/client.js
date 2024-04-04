@@ -503,6 +503,7 @@ var COMMANDS = {
 				var joinNotice = `${test[Math.round(Math.random()*(test.length - 1))]}的 ${nick} ${test2[Math.round(Math.random()*(test2.length - 1))]}了聊天室`
 			}
 
+			joinNotice += args.ip ? `\nIP地址：${args.ip}` : ''
 			joinNotice += args.client ? `\nTA正在使用 ${args.client}` : ''
 			joinNotice += args.auth ? `\n系统认证：${args.auth}` : ''
 
@@ -585,11 +586,6 @@ var COMMANDS = {
 		localStorageSet('client-banned', true)
 		location.reload()    // 重载，开启震撼时代
 	},
-	ws: args => {
-		localStorageSet('connect-address', args.ws)
-		alert('服务器要求更新WebSocket连接线路，正在为您切换到新的线路')
-		location.reload()
-	}
 }
 
 function checkClientBanned() {
