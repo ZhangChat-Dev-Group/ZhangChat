@@ -189,11 +189,11 @@ export async function run(core, server, socket, data) {
     isBot: socket.isBot || false,
   };
 
-  const joinAnnouncementMod = { ...joinAnnouncement, ip: socket.address }
-
   if (socket.country) {
     joinAnnouncement.country = socket.country
   }
+
+  const joinAnnouncementMod = { ...joinAnnouncement, ip: socket.address }
   
   await core.commands.handleCommand(server,socket,{
     cmd:'get-history',
