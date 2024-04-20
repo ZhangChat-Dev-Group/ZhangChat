@@ -70,7 +70,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'pic.imgdb.cn',    // 聚合图床
 	'blog.zhangsoft.link',    // MrZhang365's blog
 	't00img.yangkeduo.com',    // Dr0反向的拼多多图床
-	'pic.ziyuan.wang',    // img.ink you are so fast
+	'pic.ziyuan.wang', 'pic2.ziyuan.wang',    // img.ink you are so fast
 	'cmd.zzcm.fun',    // cmd1152's
 	'cdn.discordapp.com',    // discord
 	'fs-im-kefu.7moor-fs1.com',    // 涟漪文件直链
