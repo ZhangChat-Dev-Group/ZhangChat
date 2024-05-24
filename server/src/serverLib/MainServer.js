@@ -207,7 +207,7 @@ class MainServer extends WsServer {
     if (this.isBanned(newSocket.address)){    //检查是否被封禁
       this.send({
         cmd:'warn',
-        text:'您已经被全境封禁，目前无法连接服务器。'
+        text: `您已经被全境封禁，目前无法连接服务器。\n若要解封，请向管理员说明情况并提供此IP地址：\n${newSocket.address}`
       },newSocket)
       newSocket.terminate()    //强制断开连接
       return false    //不要向下执行
