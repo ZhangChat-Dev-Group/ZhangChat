@@ -901,7 +901,7 @@ function pushWelcomeButton(text) {
 			hiyo += 'o' // ee：（被打
 		}
 
-		const welcomes = [hiyo, 'awa!', 'uwu!', '来了老弟~', '来了老妹~']
+		const welcomes = [hiyo, 'awa!', 'uwu!', '来了老弟~', '来了老妹~', '来了牢弟~']
 		var txt = welcomes[Math.round(Math.random()*(welcomes.length - 1))]
 		send({cmd: 'chat', text: txt, head: localStorageGet('head') || ''})
 	}
