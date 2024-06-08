@@ -23,6 +23,18 @@ export async function init(core) {
   }
 }
 
+export function verifyCidr(cidr) {
+  const splited = cidr.split('/')
+  if (splited.length != 2) return false
+
+  const ip = splited[0]
+  const len = Number(splited[1])
+
+  if (!checkIPv4(ip)) return false
+  if (isNaN(len) || len % 8 !== 0 || len > 32) return false
+  return true
+}
+
 // module main
 export async function run(core, server, socket, data) {
   if (!data.cidr) {
@@ -38,15 +50,6 @@ export async function run(core, server, socket, data) {
 
   const cidr = data.cidr.toLowerCase().trim()
   const mode = core.config.cidr.includes(cidr) ? false : true
-
-  if (function (c) {
-    let splited = c.split('/')
-    if (splited.lenght != 2) return false
-
-    if (!checkIPv4(splited[0])) return false
-    if (Number(splited[1]) % 8 === 0 && Number(splited[1]) <= 32) return true
-    else return false
-  }(cidr)) return server.replyWarn('抱歉，因技术问题，当前只接受 IPv4 CIDR', socket)
 
   if (mode) core.config.cidr.push(cidr)
   else core.config.cidr = core.config.cidr.filter(c => c !== cidr)
@@ -96,6 +99,8 @@ export const info = {
   dataRules: [
     {
       name: 'cidr',
+      verify: verifyCidr,
+      errorMessage: '抱歉，因技术限制，当前仅允许传入 IPv4 CIDR',
     }
   ],
   level: UAC.levels.moderator
