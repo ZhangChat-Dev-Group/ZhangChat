@@ -30,7 +30,7 @@ export function checkLocation(core, server, socket, payload) {
   socket.location = core.locationCache[socket.address]
 
   if (UAC.isTrustedUser(userInfo.level) || socket.location === 'CN') return payload
-  server.replyWarn(`# 你在中国吗？\n抱歉，由于服务器有时遭到攻击，我们不欢迎使用国外IP的用户。如果您对此策略不满意，请立刻离开。`, socket)
+  server.replyWarn(`# 你在中国大陆地区吗？\n抱歉，由于服务器有时遭到攻击，我们不欢迎使用非中国大陆IP的用户。如果您对此策略不满意，请立刻离开。`, socket)
   socket.terminate()
   return false
 }
