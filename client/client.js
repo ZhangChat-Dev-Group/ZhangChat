@@ -75,6 +75,7 @@ var imgHostWhitelist = [ // 这些是由小张添加的
 	'cdn.discordapp.com',    // discord
 	'fs-im-kefu.7moor-fs1.com',    // 涟漪文件直链
 	'img.duan.ee',    // 阿段图床
+	'i.gyazo.com',    //gyazo
 ];
 
 function getDomain(link) {
