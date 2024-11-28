@@ -357,7 +357,7 @@ class CommandManager {
     } catch (err) {
       const errID = this.core.logger.logError(err.stack, '执行命令', socket, [])    //生成错误日志，获取事件ID
       //const errText = `无法执行 ${command.info.name} 命令：`;
-      const errText = `# :(\n# 非常无语，服务器在执行 ${command.info.name} 命令时出现了未知错误，无法为您提供相应的服务。\n### 小张聊天室的部分技术暂不成熟，出错是在所难免的，敬请谅解。\n您可以将错误ID \`${errID}\` 报告给开发者以帮助我们改进服务器。`;
+      const errText = `# :(\n# 非常无语，服务器在执行 ${command.info.name} 命令时出现了未知错误，无法为您提供相应的服务。\n### 小张聊天室的部分技术暂不成熟，出错是在所难免的，敬请谅解。\n您可以将错误ID \`${errID}\` 报告给开发者以帮助我们改进服务器。\n电子邮箱: ${this.core.config.email}`;
 
       // 此段代码已被弃用，因为 EventsLogger.js 可以更好地实现错误处理功能
 

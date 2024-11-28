@@ -41,6 +41,13 @@ const Questions = {
       description: 'WebSocket端口号',
       default: '6060',
     },
+
+    email: {
+      type: 'string',
+      message: '请输入您的电子邮箱地址 因为 MrZhang365 不想管你的聊天室',
+      description: '电子邮箱',
+      default: '(quq 站长懒得写电子邮箱)',
+    }
   },
 };
 

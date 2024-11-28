@@ -674,7 +674,7 @@ class MainServer extends WsServer {
 
             const errText = `类型：${type}\n命令：${command}\n错误信息：\n${err.stack}\n处理数据：\n${JSON.stringify(newPayload,undefined,2)}`;
             const errID = this.core.logger.logError(errText,'执行Hook',socket,[])
-            return `# :(\n# 非常无语，服务器在处理数据时出现了未知错误，无法为您提供相应的服务。\n### 小张聊天室的部分技术暂不成熟，出错是在所难免的，敬请谅解。\n您可以将错误ID \`${errID}\` 报告给开发者以帮助我们改进服务器。`;
+            return `# :(\n# 非常无语，服务器在处理数据时出现了未知错误，无法为您提供相应的服务。\n### 小张聊天室的部分技术暂不成熟，出错是在所难免的，敬请谅解。\n您可以将错误ID \`${errID}\` 报告给开发者以帮助我们改进服务器。\nEmail: ${this.core.config.email}`;
           }
 
           // A hook function may choose to return false to prevent all further processing

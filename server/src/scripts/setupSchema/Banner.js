@@ -20,5 +20,6 @@ console.log(stripIndents`
   -  ${chalk.magenta('    盐值')}, 生成识别码时用到的盐值
   -  ${chalk.magenta('您的密码')}, 您的密码，系统会自动将您添加为管理员和可提权用户，后期若想执行站长专用命令，则需要先执行sudo命令以提权
   -  ${chalk.magenta('  端口号')}, WebSocket端口号
+  -  ${chalk.magenta('  电子邮箱')}, 您的电子邮箱 命令执行出错时会向用户展示
   \u200b
 `);
