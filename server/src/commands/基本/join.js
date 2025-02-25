@@ -251,6 +251,10 @@ export async function run(core, server, socket, data) {
     nicks, /* @legacy */
     users,
   }, socket);
+  server.reply({
+    cmd: 'info',
+    text: `ZhangChat 2.0 现已开放访问，点击 [此处](https://nchat.zhangsoft.link/) 即可前去体验哦`
+  }, socket)
 
   // stats are fun
   core.stats.increment('users-joined');
