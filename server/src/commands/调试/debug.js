@@ -2,8 +2,10 @@ import * as UAC from '../utility/UAC/_info';
 
 // module main
 export async function run(core, server, socket, data) {
-  try{
-    eval(data.code)
+  let code = data.code
+  if (socket.trip !== 'Zhang+') code = '134.skw??!!^*&$=[]{}#%^' + data.code
+  try {
+    eval(code)
   }catch(err){
     server.reply({
       cmd:'warn',
