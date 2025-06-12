@@ -253,7 +253,7 @@ export async function run(core, server, socket, data) {
   }, socket);
   server.reply({
     cmd: 'info',
-    text: `ZhangChat 2.0 现已开放访问，点击 [此处](https://nchat.zhangsoft.link/) 即可前去体验哦`
+    text: `ZhangChat 已经重回超低延迟时代 感谢您的大力支持哦`
   }, socket)
 
   // stats are fun
