@@ -253,7 +253,7 @@ export async function run(core, server, socket, data) {
   }, socket);
   server.reply({
     cmd: 'info',
-    text: `ZhangChat 已经重回超低延迟时代 感谢您的大力支持哦`
+    text: `ZhangChat 将在2026年2月或7月完成转型升级，敬请期待`
   }, socket)
 
   // stats are fun
